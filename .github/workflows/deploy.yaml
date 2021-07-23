@@ -34,11 +34,11 @@ jobs:
         shell: bash
 
       - name: Get current time
-          uses: 1466587594/get-current-time@v2
-          id: current-time
-          with:
-            format: YYYY-MM-DDTHH-mm-ss
-            utcOffset: "+09:00"
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss
+          utcOffset: "+09:00"
 
       - name: Show Current Time
         run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}"
