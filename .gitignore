@@ -37,3 +37,4 @@ out/
 .vscode/
 
 /src/main/resources/application-aws-rds.yaml
+/src/main/resources/application-aws-s3.yaml
