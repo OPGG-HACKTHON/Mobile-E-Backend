@@ -12,7 +12,7 @@ public class GMakersServerApplication {
 					"classpath:/application-aws-rds.yaml";
 
 	public static void main(String[] args) {
-		SpringApplication.run(GMakersServerApplication.class, args);
+		new SpringApplicationBuilder(GMakersServerApplication.class).properties(APPLICATION).run(args);
 	}
 
 }
