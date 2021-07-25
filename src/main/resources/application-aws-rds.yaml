@@ -1,0 +1,19 @@
+spring:
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database: mysql
+    show-sql: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL55Dialect
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.MySQL5InnoDBDialect
+
+  datasource:
+    url: jdbc:mysql://opgg-database.cbiekociyknb.ap-northeast-2.rds.amazonaws.com:3306/opgg?characterEncoding=UTF-8&serverTimezone=UTC
+    username: admin
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
