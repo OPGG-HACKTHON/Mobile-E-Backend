@@ -6,6 +6,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 
 @SpringBootApplication
 public class GMakersServerApplication {
+	private static final String APPLICATION=
+					"spring.config.location="+
+					"classpath:/application.yaml,"+
+					"classpath:/application-aws-rds.yaml";
 
 	public static void main(String[] args) {
 		SpringApplication.run(GMakersServerApplication.class, args);
