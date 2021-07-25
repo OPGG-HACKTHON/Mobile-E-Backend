@@ -1,0 +1,27 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database: mysql
+    show-sql: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL55Dialect
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.MySQL5InnoDBDialect
+  # 업로드 용량 설정
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
