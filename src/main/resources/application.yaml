@@ -14,3 +14,27 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database: mysql
+    show-sql: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL55Dialect
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.MySQL5InnoDBDialect
+
+  datasource:
+    url: ENC(ueXGvUYWEkJ8WbXXhgyuW7YfRVbvL3048qGkV54xsn/dI9LBAYCQfuIV+ih5O2H9m64SsugwavGWEXVCQYQZVvyvRrQEX1zLsf64vPklIayGl26k+3vCRE4eEQoCD+x9Taj1q5r118SzuWWe9fAGz/7AJtAvt0S0XDElAzyo8c9BiQu+EXlHAQ==)
+    username: ENC(k0adCxNYTVoVuEN2ZL+KLw==)
+    password: ENC(v1xplHEJwcipeT7g2pk4Ujqgc2XEH3F+)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+    password: p[

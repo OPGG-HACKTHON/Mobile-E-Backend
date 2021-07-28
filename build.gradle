@@ -38,6 +38,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.1.RELEASE'
+    implementation group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter', version: '3.0.3'
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.68'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
@@ -59,6 +61,7 @@ test {
     useJUnitPlatform()
     finalizedBy 'jacocoTestReport'
     systemProperty "file.encoding", "utf-8"
+    systemProperty "jasypt.encryptor.password", "opgg"
 }
 
 jar {
