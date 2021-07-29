@@ -14,60 +14,56 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import opgg.backend.gmakersserver.error.exception.common.ExceptionStatus;
 
 @Getter
-@Setter
-@ToString
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ErrorResponse<T> {
+public class ExceptionResponse {
 
 	private String message;
 	private String status;
-	private T errors;
+	private List<ExceptionDetailResponse> errors;
 
-	private ErrorResponse(ExceptionStatus exceptionStatus, T errors) {
+	private ExceptionResponse(ExceptionStatus exceptionStatus, List<ExceptionDetailResponse> errors) {
 		this.message = exceptionStatus.getMessage();
 		this.status = String.valueOf(exceptionStatus.getStatus());
 		this.errors = errors;
 	}
 
-	public static ErrorResponse of(ExceptionStatus code, BindingResult bindingResult) {
-		return new ErrorResponse(code, ErrorDetailResponse.from(bindingResult));
+	public static ExceptionResponse of(ExceptionStatus code, BindingResult bindingResult) {
+		return new ExceptionResponse(code, ExceptionDetailResponse.from(bindingResult));
 	}
 
-	public static ErrorResponse of(MethodArgumentTypeMismatchException ex) {
+	public static ExceptionResponse of(MethodArgumentTypeMismatchException ex) {
 		String value = ex.getValue() == null ? "" : ex.getValue().toString();
-		List<ErrorDetailResponse> errors = ErrorDetailResponse.of(ex.getName(), value, ex.getErrorCode());
-		return new ErrorResponse(ExceptionStatus.INVALID_TYPE_VALUE_EXCEPTION, errors);
+		List<ExceptionDetailResponse> errors = ExceptionDetailResponse.of(ex.getName(), value, ex.getErrorCode());
+		return new ExceptionResponse(ExceptionStatus.INVALID_TYPE_VALUE_EXCEPTION, errors);
 	}
 
-	public static ErrorResponse of(InvalidFormatException ex) {
+	public static ExceptionResponse of(InvalidFormatException ex) {
 		String field = Arrays.stream(Objects.requireNonNull(ex.getTargetType().getFields()))
 				.map(Field::getName)
 				.collect(Collectors.joining(", "));
 		String getTargetType = ex.getTargetType().toString();
-		List<ErrorDetailResponse> errors = ErrorDetailResponse.of(
+		List<ExceptionDetailResponse> errors = ExceptionDetailResponse.of(
 				ex.getPath().size() == 0 ? "지원 Enum = " + field : ex.getPath().get(0).getFieldName(),
 				ex.getValue().toString(),
 				getTargetType.contains("$") ? getTargetType.substring('$' + 1) : getTargetType);
-		return new ErrorResponse(ExceptionStatus.INVALID_FORMAT_EXCEPTION, errors);
+		return new ExceptionResponse(ExceptionStatus.INVALID_FORMAT_EXCEPTION, errors);
 	}
 
-	public static ErrorResponse of(HttpRequestMethodNotSupportedException ex) {
+	public static ExceptionResponse of(HttpRequestMethodNotSupportedException ex) {
 		String supportedMethods = Arrays.stream(Objects.requireNonNull(ex.getSupportedMethods()))
 				.map(String::toString)
 				.collect(Collectors.joining(", "));
-		List<ErrorDetailResponse> details = ErrorDetailResponse.of(ex.getLocalizedMessage(),
+		List<ExceptionDetailResponse> details = ExceptionDetailResponse.of(ex.getLocalizedMessage(),
 				"입력한 HTTP Method = " + ex.getMethod(),
 				"지원 가능한 HTTP Method = " + supportedMethods);
-		return new ErrorResponse(ExceptionStatus.METHOD_NOT_SUPPORT_EXCEPTION, details);
+		return new ExceptionResponse(ExceptionStatus.METHOD_NOT_SUPPORT_EXCEPTION, details);
 	}
-
-
 }

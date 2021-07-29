@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
 import opgg.backend.gmakersserver.error.exception.common.BusinessException;
 import opgg.backend.gmakersserver.error.exception.common.ExceptionStatus;
-import opgg.backend.gmakersserver.error.exception.response.ErrorResponse;
+import opgg.backend.gmakersserver.error.exception.response.ExceptionResponse;
 import opgg.backend.gmakersserver.error.exception.response.ExceptionResponseInfo;
 
 @Slf4j
@@ -27,9 +27,9 @@ public class ExceptionHandlerController {
 	 */
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	private ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+	private ExceptionResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
 		errorLogging(exception);
-		return ErrorResponse.of(ExceptionStatus.INVALID_INPUT_VALUE_EXCEPTION,
+		return ExceptionResponse.of(ExceptionStatus.INVALID_INPUT_VALUE_EXCEPTION,
 			exception.getBindingResult());
 	}
 
@@ -38,9 +38,9 @@ public class ExceptionHandlerController {
 	 */
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	private ErrorResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
+	private ExceptionResponse handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
 		errorLogging(exception);
-		return ErrorResponse.of(exception);
+		return ExceptionResponse.of(exception);
 	}
 
 	/**
@@ -48,9 +48,9 @@ public class ExceptionHandlerController {
 	 */
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(BindException.class)
-	private ErrorResponse handleBindException(BindException exception) {
+	private ExceptionResponse handleBindException(BindException exception) {
 		errorLogging(exception);
-		return ErrorResponse.of(ExceptionStatus.INVALID_TYPE_VALUE_EXCEPTION,
+		return ExceptionResponse.of(ExceptionStatus.INVALID_TYPE_VALUE_EXCEPTION,
 			exception.getBindingResult());
 	}
 
@@ -59,9 +59,9 @@ public class ExceptionHandlerController {
 	 */
 	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	private ErrorResponse handleHttpRequestMethodNotSupportedException(
+	private ExceptionResponse handleHttpRequestMethodNotSupportedException(
 		HttpRequestMethodNotSupportedException exception) {
-		return ErrorResponse.of(exception);
+		return ExceptionResponse.of(exception);
 	}
 
 	@ExceptionHandler(BusinessException.class)
@@ -77,9 +77,9 @@ public class ExceptionHandlerController {
 	 */
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(InvalidFormatException.class)
-	private ErrorResponse handleInvalidFormatException(InvalidFormatException exception) {
+	private ExceptionResponse handleInvalidFormatException(InvalidFormatException exception) {
 		errorLogging(exception);
-		return ErrorResponse.of(exception);
+		return ExceptionResponse.of(exception);
 	}
 
 	private void errorLogging(Exception ex) {
