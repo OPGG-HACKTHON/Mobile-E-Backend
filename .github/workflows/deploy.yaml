@@ -20,8 +20,8 @@ jobs:
         uses: samin/mysql-action@v1
         with:
           character set server: 'utf8'
-          mysql database: 'jdbc:mysql://opgg-database.cbiekociyknb.ap-northeast-2.rds.amazonaws.com:3306/opgg?characterEncoding=UTF-8&serverTimezone=UTC'
-          mysql user: 'admin'
+          mysql database: ${{ secrets.MYSQL_DATABASE }}
+          mysql user: ${{ secrets.MYSQL_USERNAME }}
           mysql password: ${{ secrets.MYSQL_PASSWORD }}
 
       - name: Checkout
