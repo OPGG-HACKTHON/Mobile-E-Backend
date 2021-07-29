@@ -7,6 +7,19 @@ server:
       enabled: true
       force: true
 
+cloud:
+  aws:
+    s3:
+      bucket: opggbucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      instance-profile: true
+      access-key: ENC(7sbfvXDIkJEOSR+bAeB0Q6lyhcAEd/4yOJfPpFd6oKA=)
+      secret-key: ENC(R7k0I+j59XctP24RUkLH/U13G3f19hTUnXyj1SOrvKTm58scftS0sW+VY51H1LGqWNUqgRDH1G8=)
+
 spring:
 
   # 업로드 용량 설정
@@ -29,12 +42,11 @@ spring:
           physical-strategy: org.hibernate.boot.model.naming.MySQL5InnoDBDialect
 
   datasource:
-    url: ENC(ueXGvUYWEkJ8WbXXhgyuW7YfRVbvL3048qGkV54xsn/dI9LBAYCQfuIV+ih5O2H9m64SsugwavGWEXVCQYQZVvyvRrQEX1zLsf64vPklIayGl26k+3vCRE4eEQoCD+x9Taj1q5r118SzuWWe9fAGz/7AJtAvt0S0XDElAzyo8c9BiQu+EXlHAQ==)
-    username: ENC(k0adCxNYTVoVuEN2ZL+KLw==)
-    password: ENC(v1xplHEJwcipeT7g2pk4Ujqgc2XEH3F+)
+    url: ENC(TzyO3uuGMmvFFo0F34G6uJe60d4O9+MjdeE5dhM3v2tniPxPxf8ZfnZr4hSl1sLPmCUilJk/p4gispiBnoSq1VQ33YXdkBCIg21npM0cEntugoDcZPVl7nHL6yUH/VRaNG1KJU9zd7U4UnrVtQfh1QgvIgOmleDF/Ol+k60lQdA3kGHzng2Nyw==)
+    username: ENC(vZh9JmcBsOFhIJd1Qwysqg==)
+    password: ENC(FRRd8u3kaevtlplO0WZFQ2P7k013/9CL)
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-    password: p[
