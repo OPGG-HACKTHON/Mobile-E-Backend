@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Setup MySQL
-      - uses: mirromutth/mysql-action@v1.1
+        uses: mirromutth/mysql-action@v1.1
         with:
           container port: 3306
           character set server: 'utf8'
