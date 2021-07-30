@@ -14,7 +14,7 @@
 - resolved: #1
 
 ### Feature description
-<br><br>
+
 
 ### Checklist
 
@@ -23,11 +23,7 @@
 Example
 - [ ] Work
 
-
-<br><br>
-
 ### dependency
-<br><br>
+
 
 ### Screenshots
-<br><br>

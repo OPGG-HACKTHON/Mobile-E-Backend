@@ -9,13 +9,9 @@ assignees: ''
 
 ### Description
 
-### As-IS
-- first Issue
-- sencond Issue
-
 ### To-Be
 - fix first Issue
-- not yet sencond Issue
+- not yet second Issue
 
 ### Todo
 - [ ] select
