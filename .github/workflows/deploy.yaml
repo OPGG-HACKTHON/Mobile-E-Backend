@@ -19,7 +19,10 @@ jobs:
       - name: Setup MySQL
         uses: samin/mysql-action@v1
         with:
+          host port : 3306
           character set server: 'utf8'
+          collation server: 'utf8_general_ci'
+          mysql version: '5.7.34'
           mysql database: ${{ secrets.MYSQL_DATABASE }}
           mysql user: ${{ secrets.MYSQL_USERNAME }}
           mysql password: ${{ secrets.MYSQL_PASSWORD }}
