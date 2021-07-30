@@ -1,5 +1,10 @@
 name: G-Makers-server-CI
 
+env:
+  DB_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+  DB_USER: ${{ secrets.MYSQL_USERNAME }}
+  DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+
 on:
   push:
     branches:
@@ -17,12 +22,9 @@ jobs:
 
     steps:
       - name: Setup MySQL
-        uses: samin/mysql-action@v1
-        with:
-          mysql version: '5.7.34'
-          mysql database: ${{ secrets.MYSQL_DATABASE }}
-          mysql user: ${{ secrets.MYSQL_USERNAME }}
-          mysql password: ${{ secrets.MYSQL_PASSWORD }}
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
 
       - name: Checkout
         uses: actions/checkout@v2
