@@ -25,16 +25,9 @@ jobs:
         run: sudo service mysql stop
 
       - name: Setup MySQL
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          container port: 3306
-          character set server: 'utf8'
-          collation server: 'utf8_general_ci'
-          mysql version: '8.0'
-          mysql database: ${{ secrets.MYSQL_DATABASE }}
-          mysql user: ${{ secrets.MYSQL_USERNAME }}
-          mysql password: ${{ secrets.MYSQL_PASSWORD }}
-#        run: |
+        run: |
+          sudo docker pull mysql:5.7.34
+          sudo docker run -d -p 3306:3306 mysql:5.7.34
 #          sudo /etc/init.d/mysql start
 #          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
 
