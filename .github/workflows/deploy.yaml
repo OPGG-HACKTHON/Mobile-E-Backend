@@ -21,14 +21,14 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-      - name: Shutdown Ubuntu MySQL (SUDO)
-        run: sudo service mysql stop
-
-      - name: Setup MySQL
-        run: |
-          sudo docker pull mysql:5.7.34
-          sudo docker run -d -p 3306:3306 --env MYSQL_DATABASE=opgg --env MYSQL_USER=admin --env MYSQL
-               _ROOT_PASSWORD=opggmobile5! --env MYSQL_ALLOW_EMPTY_PASSWORD=yes mysql:5.7.34
+#      - name: Shutdown Ubuntu MySQL (SUDO)
+#        run: sudo service mysql stop
+#
+#      - name: Setup MySQL
+#        run: |
+#          sudo docker pull mysql:5.7.34
+#          sudo docker run -d -p 3306:3306 --env MYSQL_DATABASE=opgg --env MYSQL_USER=admin --env MYSQL
+#               _ROOT_PASSWORD=opggmobile5! --env MYSQL_ALLOW_EMPTY_PASSWORD=yes mysql:5.7.34
 
 
       - name: Checkout
