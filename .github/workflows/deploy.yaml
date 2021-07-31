@@ -27,11 +27,7 @@ jobs:
       - name: Setup MySQL
         run: |
           sudo docker pull mysql:5.7.34
-          sudo docker run -d -p 3306:3306 \
-            --env MYSQL_DATABASE=${{env.DB_DATABASE}} \
-            --env MYSQL_USER=${{env.DB_USER}} \
-            --env MYSQL_ROOT_PASSWORD=${{env.DB_PASSWORD}} \
-            mysql:5.7.34
+          sudo docker run -d -p 3306:3306 --env MYSQL_DATABASE=${{env.DB_DATABASE}} --env MYSQL_USER=${{env.DB_USER}} --env MYSQL_ROOT_PASSWORD=${{env.DB_PASSWORD}} mysql:5.7.34
 
       - name: Checkout
         uses: actions/checkout@v2
