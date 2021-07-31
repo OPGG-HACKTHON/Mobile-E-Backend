@@ -44,9 +44,9 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-#      - name : Build with Gradle
-#        run: ./gradlew clean build
-#        shell: bash
+      - name : Build with Gradle
+        run: ./gradlew clean build
+        shell: bash
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
