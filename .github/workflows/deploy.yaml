@@ -27,7 +27,11 @@ jobs:
       - name: Setup MySQL
         run: |
           sudo docker pull mysql:5.7.34
-          sudo docker run -d -p 3306:3306 mysql:5.7.34
+          sudo docker run -d -p 3306:3306 \
+            -e MYSQL_DATABASE=${{env.DB_DATABASE}} \
+            -e MYSQL_USER=${{env.DB_USER}} \
+            -e MYSQL_ROOT_PASSWORD=${{env.DB_PASSWORD}} \
+            mysql:5.7.34
 #          sudo /etc/init.d/mysql start
 #          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
 
