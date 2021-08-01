@@ -20,9 +20,9 @@ spring:
           physical-strategy: org.hibernate.boot.model.naming.MySQL5InnoDBDialect
 
   datasource:
-    url: ENC(TzyO3uuGMmvFFo0F34G6uJe60d4O9+MjdeE5dhM3v2tniPxPxf8ZfnZr4hSl1sLPmCUilJk/p4gispiBnoSq1VQ33YXdkBCIg21npM0cEntugoDcZPVl7nHL6yUH/VRaNG1KJU9zd7U4UnrVtQfh1QgvIgOmleDF/Ol+k60lQdA3kGHzng2Nyw==)
-    username: ENC(vZh9JmcBsOFhIJd1Qwysqg==)
-    password: ENC(FRRd8u3kaevtlplO0WZFQ2P7k013/9CL)
+    url: jdbc:mysql://localhost:3306/opgg?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: admin
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 cloud:
@@ -38,8 +38,6 @@ cloud:
       access-key: ENC(7sbfvXDIkJEOSR+bAeB0Q6lyhcAEd/4yOJfPpFd6oKA=)
       secret-key: ENC(R7k0I+j59XctP24RUkLH/U13G3f19hTUnXyj1SOrvKTm58scftS0sW+VY51H1LGqWNUqgRDH1G8=)
 
-
-
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
@@ -52,15 +50,3 @@ server:
       charset: UTF-8
       enabled: true
       force: true
-
----
-
-spring:
-  profiles:
-    active: local
-
----
-
-spring:
-  profiles:
-    active: dev

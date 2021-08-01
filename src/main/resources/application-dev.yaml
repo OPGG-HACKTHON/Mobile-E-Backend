@@ -52,15 +52,3 @@ server:
       charset: UTF-8
       enabled: true
       force: true
-
----
-
-spring:
-  profiles:
-    active: local
-
----
-
-spring:
-  profiles:
-    active: dev
