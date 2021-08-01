@@ -1,9 +1,7 @@
 name: G-Makers-server-CI
 
 env:
-  DB_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-  DB_USER: ${{ secrets.MYSQL_USERNAME }}
-  DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+  JASYPT_PASSWORD: ${{ secrets.JASYPT_PASSWORD }}
 
 on:
   push:
