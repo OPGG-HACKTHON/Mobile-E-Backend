@@ -7,6 +7,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Builder
+@Table(name = "account")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account {
@@ -15,9 +16,9 @@ public class Account {
     @Column(name = "Account_id")
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 30)
+    @Column(name = "login_id", nullable = false, unique = true, length = 30)
     private String loginId;
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 }
