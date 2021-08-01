@@ -24,9 +24,6 @@ jobs:
 
       - name: create mysql docker container
         run: |
-          sudo yum install -y docker
-          sudo systemctl start docker
-          sudo chmod 666 /var/run/docker.sock
           sudo docker pull mysql
           sudo docker run -d -p 3306:3306 --env MYSQL_DATABASE=opgg --env MYSQL_USER=admin --env MYSQL_ROOT_PASSWORD=1234 --env MYSQL_ALLOW_EMPTY_PASSWORD=yes mysql
 
