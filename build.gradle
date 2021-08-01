@@ -12,6 +12,22 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+bootRun {
+    String activeProfile = System.properties['spring.profiles.active']
+    println "zone: $activeProfile"
+    systemProperty "spring.profiles.active", activeProfile
+}
+
+ext.profile = (!project.hasProperty('profile') || !profile) ? 'local' : profile
+
+sourceSets {
+    main {
+        resources {
+            srcDirs "src/main/resources", "src/main/resources-env/${profile}"
+        }
+    }
+}
+
 group = 'opgg.backend'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
@@ -24,21 +40,6 @@ configurations {
 
 repositories {
     mavenCentral()
-}
-
-bootRun {
-    String activeProfile = System.properties['spring.profiles.active']
-    systemProperty "spring.profiles.active", activeProfile
-}
-
-ext.profile = (!project.hasProperty('profile') || !profile) ? 'local' : profile
-
-sourceSets {
-    main {
-        resources {
-            srcDirs "src/main/resources", "src/main/resources-env/${profile}"
-        }
-    }
 }
 
 ext {

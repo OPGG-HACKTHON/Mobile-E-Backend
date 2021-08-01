@@ -38,7 +38,7 @@ jobs:
         shell: bash
 
       - name : Build with Gradle
-        run: ./gradlew clean build -Dspring.profiles.active=local
+        run: ./gradlew clean build --args='--spring.profiles.active=local'
         shell: bash
 
       - name: Set up Docker Buildx
