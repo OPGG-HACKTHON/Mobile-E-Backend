@@ -23,7 +23,7 @@ ext.profile = (!project.hasProperty('profile') || !profile) ? 'local' : profile
 sourceSets {
     main {
         resources {
-            srcDirs "src/main/resources", "src/main/resources-env/${profile}"
+            srcDirs("src/main/resources", "src/main/resources/profiles", "src/main/resources/${profile}")
         }
     }
 }
