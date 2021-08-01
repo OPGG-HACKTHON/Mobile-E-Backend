@@ -53,14 +53,3 @@ server:
       enabled: true
       force: true
 
----
-
-spring:
-  profiles:
-    active: local
-
----
-
-spring:
-  profiles:
-    active: dev
