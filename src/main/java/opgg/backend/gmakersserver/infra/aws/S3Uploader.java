@@ -59,9 +59,8 @@ public class S3Uploader {
 		log.info("File delete fail");
 	}
 
-	//Todo : mac os 환경에서 되는지 확인
 	private File convert(MultipartFile multipartFile) throws IOException {
-		File convertFile = new File(System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename());
+		File convertFile = new File(System.getProperty("user.home") + File.separator + System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename());
 		if (convertFile.createNewFile()) {
 			try (FileOutputStream fos = new FileOutputStream(convertFile)) {
 				fos.write(multipartFile.getBytes());
