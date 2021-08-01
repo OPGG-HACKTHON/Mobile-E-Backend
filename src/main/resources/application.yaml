@@ -20,9 +20,12 @@ spring:
           physical-strategy: org.hibernate.boot.model.naming.MySQL5InnoDBDialect
 
   datasource:
-    url: ENC(TzyO3uuGMmvFFo0F34G6uJe60d4O9+MjdeE5dhM3v2tniPxPxf8ZfnZr4hSl1sLPmCUilJk/p4gispiBnoSq1VQ33YXdkBCIg21npM0cEntugoDcZPVl7nHL6yUH/VRaNG1KJU9zd7U4UnrVtQfh1QgvIgOmleDF/Ol+k60lQdA3kGHzng2Nyw==)
-    username: ENC(vZh9JmcBsOFhIJd1Qwysqg==)
-    password: ENC(FRRd8u3kaevtlplO0WZFQ2P7k013/9CL)
+#    url: ENC(TzyO3uuGMmvFFo0F34G6uJe60d4O9+MjdeE5dhM3v2tniPxPxf8ZfnZr4hSl1sLPmCUilJk/p4gispiBnoSq1VQ33YXdkBCIg21npM0cEntugoDcZPVl7nHL6yUH/VRaNG1KJU9zd7U4UnrVtQfh1QgvIgOmleDF/Ol+k60lQdA3kGHzng2Nyw==)
+#    username: ENC(vZh9JmcBsOFhIJd1Qwysqg==)
+#    password: ENC(FRRd8u3kaevtlplO0WZFQ2P7k013/9CL)
+    url: jdbc:mysql://127.0.0.1:3306/opgg?useUnicod=true&characterEncoding=utf8&useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: opgg
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 cloud:

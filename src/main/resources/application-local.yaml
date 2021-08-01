@@ -21,7 +21,7 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/opgg?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-    username: admin
+    username: opgg
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
