@@ -1,0 +1,22 @@
+POST {{url}}/accounts
+Content-Type: application/json
+Accept: application/json
+
+{
+  "loginId": "test",
+  "password": "test"
+}
+
+###
+
+GET {{url}}/accounts
+Content-Type: application/json
+Accept: application/json
+
+
+{
+  "loginId": "test",
+  "password": "test"
+}
+
+###
