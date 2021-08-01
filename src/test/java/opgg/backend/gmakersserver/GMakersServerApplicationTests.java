@@ -6,6 +6,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class GMakersServerApplicationTests {
 
+	@Test
+	void contextLoads() {
+
+	}
+
 }
 
 

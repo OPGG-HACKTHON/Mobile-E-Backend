@@ -1,25 +1,3 @@
-server:
-  port: 8080
-  servlet:
-    context-path: /
-    encoding:
-      charset: UTF-8
-      enabled: true
-      force: true
-
-cloud:
-  aws:
-    s3:
-      bucket: opggbucket
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
-    credentials:
-      instance-profile: true
-      access-key: ENC(7sbfvXDIkJEOSR+bAeB0Q6lyhcAEd/4yOJfPpFd6oKA=)
-      secret-key: ENC(R7k0I+j59XctP24RUkLH/U13G3f19hTUnXyj1SOrvKTm58scftS0sW+VY51H1LGqWNUqgRDH1G8=)
-
 spring:
 
   # 업로드 용량 설정
@@ -47,6 +25,30 @@ spring:
     password: ENC(FRRd8u3kaevtlplO0WZFQ2P7k013/9CL)
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+cloud:
+  aws:
+    s3:
+      bucket: opggbucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      instance-profile: true
+      access-key: ENC(7sbfvXDIkJEOSR+bAeB0Q6lyhcAEd/4yOJfPpFd6oKA=)
+      secret-key: ENC(R7k0I+j59XctP24RUkLH/U13G3f19hTUnXyj1SOrvKTm58scftS0sW+VY51H1LGqWNUqgRDH1G8=)
+
+
+
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
