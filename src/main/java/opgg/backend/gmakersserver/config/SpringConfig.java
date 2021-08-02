@@ -1,4 +1,4 @@
-package opgg.backend.gmakersserver.spring;
+package opgg.backend.gmakersserver.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

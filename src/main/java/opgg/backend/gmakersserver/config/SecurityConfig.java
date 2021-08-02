@@ -1,4 +1,4 @@
-package opgg.backend.gmakersserver.security;
+package opgg.backend.gmakersserver.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
