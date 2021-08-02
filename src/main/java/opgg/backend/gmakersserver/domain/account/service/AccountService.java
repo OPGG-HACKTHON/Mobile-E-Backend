@@ -5,7 +5,8 @@ import opgg.backend.gmakersserver.domain.account.dto.SignInDto;
 import opgg.backend.gmakersserver.domain.account.dto.SignUpDto;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
-import opgg.backend.gmakersserver.error.exception.common.account.AccountNotFoundException;
+import opgg.backend.gmakersserver.error.exception.account.AccountDuplicateIdException;
+import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +20,13 @@ public class AccountService {
 
     @Transactional
     public void signUp(SignUpDto signUpDto) {
-        Account account = Account.builder()
-                .loginId(signUpDto.getLoginId())
-                .password(passwordEncoder.encode(signUpDto.getPassword()))
-                .build();
-        accountRepository.save(account);
+        accountRepository.findByLoginId(signUpDto.getLoginId()).ifPresent(account -> {
+            throw new AccountDuplicateIdException(account.getLoginId());
+        });
+        accountRepository.save(Account.builder()
+                                        .loginId(signUpDto.getLoginId())
+                                        .password(passwordEncoder.encode(signUpDto.getPassword()))
+                                        .build());
     }
 
     @Transactional(readOnly = true)
