@@ -44,9 +44,17 @@ public class AccountController {
 		return "signUp success";
 	}
 
-    @GetMapping("/accounts")
-    public String signIn(@Valid @RequestBody SignInDto signInDto) {
-        accountService.signIn(signInDto);
-        return "signIn success";
-    }
+	@Operation(summary = "로그인", tags = {"account"})
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "로그인 성공"),
+			@ApiResponse(responseCode = "400", description = "로그인 실패"),
+			@ApiResponse(responseCode = "4001", description = "존재하지 않는 회원",
+					content = @Content(schema = @Schema(implementation = ExceptionResponseInfo.class)))
+	})
+	@GetMapping("/accounts")
+	public String signIn(@Valid @RequestBody SignInDto signInDto) {
+		accountService.signIn(signInDto);
+		return "signIn success";
+	}
+
 }
