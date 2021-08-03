@@ -20,7 +20,7 @@ spring:
           physical-strategy: org.hibernate.boot.model.naming.MySQL5InnoDBDialect
 
   datasource:
-    url: ENC(TzyO3uuGMmvFFo0F34G6uJe60d4O9+MjdeE5dhM3v2tniPxPxf8ZfnZr4hSl1sLPmCUilJk/p4gispiBnoSq1VQ33YXdkBCIg21npM0cEntugoDcZPVl7nHL6yUH/VRaNG1KJU9zd7U4UnrVtQfh1QgvIgOmleDF/Ol+k60lQdA3kGHzng2Nyw==)
+    url: ENC(bnKYMNFelP1qxyDgoNdoOm0Q+XcFM3tDWHUEUUAbfcv+5eAiXvmvmlbnE1ki/a0PDuCSkpRD/KFdQDkk4MDXnx59JigB3WY5f1gueFOEYBfE5f6bE3vcjUVgK82o/kT3h53xlonIku4DxD3E30ZeNAyW0KfbMs5ZVxiYjgGj9SJTMuV7KZKPWw==)
     username: ENC(vZh9JmcBsOFhIJd1Qwysqg==)
     password: ENC(FRRd8u3kaevtlplO0WZFQ2P7k013/9CL)
     driver-class-name: com.mysql.cj.jdbc.Driver
