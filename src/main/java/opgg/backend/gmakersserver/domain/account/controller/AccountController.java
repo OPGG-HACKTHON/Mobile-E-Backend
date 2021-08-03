@@ -51,7 +51,7 @@ public class AccountController {
 			@ApiResponse(responseCode = "4001", description = "존재하지 않는 회원",
 					content = @Content(schema = @Schema(implementation = ExceptionResponseInfo.class)))
 	})
-	@GetMapping("/accounts")
+	@PostMapping("/accounts/sign-in")
 	public String signIn(@Valid @RequestBody SignInDto signInDto) {
 		accountService.signIn(signInDto);
 		return "signIn success";

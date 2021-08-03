@@ -9,7 +9,7 @@ spring:
   # JPA Configuration
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     database: mysql
     show-sql: true
     generate-ddl: true

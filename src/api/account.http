@@ -3,8 +3,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "loginId": "test",
-  "password": "test"
+  "loginId": "testtest",
+  "password": "testtest"
 }
 
 ###
@@ -15,8 +15,8 @@ Accept: application/json
 
 
 {
-  "loginId": "test",
-  "password": "test"
+  "loginId": "testtest",
+  "password": "testtest"
 }
 
 ###
