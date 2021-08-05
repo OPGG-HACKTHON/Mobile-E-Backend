@@ -1,21 +1,21 @@
-POST {{url}}/accounts
+POST {{url}}/accounts/sign-up
 Content-Type: application/json
 Accept: application/json
 
 {
-  "loginId": "testtest",
-  "password": "testtest"
+  "username" : "testtest",
+  "password" : "testtest",
+  "nickname" : "nicknameTest"
 }
 
 ###
 
-GET {{url}}/accounts
+POST {{url}}/accounts/sign-in
 Content-Type: application/json
 Accept: application/json
 
-
 {
-  "loginId": "testtest",
+  "username": "testtest",
   "password": "testtest"
 }
 

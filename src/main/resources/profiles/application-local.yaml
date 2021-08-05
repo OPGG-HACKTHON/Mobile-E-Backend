@@ -9,7 +9,7 @@ spring:
   # JPA Configuration
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     database: mysql
     show-sql: true
     generate-ddl: true
@@ -50,3 +50,11 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+
+jwt:
+  token:
+    header-type: JWT
+    header: Authorization
+    secret: ENC(kKx3i7T0o6l28CUvJO78BqdFdOQu6vKn55ZufjT0huaHsogaIZQjrXobpRkD6ROyiXBjWHs2SPAXm3twEEv+bxluTmjlZY0QNeBdWTVxJdfJqZVEwvYC4NYGUAIeZsjUkDZ78DU+rTBGj/BYDoK56JYt5fcHVTjIeXf0uTEGZ5s/gCFR9wdabPAcxiGt5/dn)
+    access-time: 1800000 # 30분
+    issuer: opgg
