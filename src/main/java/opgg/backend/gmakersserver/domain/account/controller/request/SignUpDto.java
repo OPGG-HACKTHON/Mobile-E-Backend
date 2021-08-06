@@ -28,9 +28,5 @@ public class SignUpDto {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @NotBlank
-    @Size(min = 4, max = 16)
-    private String nickname;
-
 
 }

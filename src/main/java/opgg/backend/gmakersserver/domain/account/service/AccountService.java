@@ -29,7 +29,6 @@ public class AccountService {
         accountRepository.save(Account.builder()
                                         .username(signUpDto.getUsername())
                                         .password(passwordEncoder.encode(signUpDto.getPassword()))
-                                        .nickname(signUpDto.getNickname())
                                         .role(Role.ROLE_USER)
                                         .activated(true)
                                         .build());

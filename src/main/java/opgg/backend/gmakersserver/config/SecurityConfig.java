@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring()
                 .antMatchers(
                         "/favicon.ico"
-                        ,"/error"
+                        ,"/error", "/swagger-ui/**", "/v3/api-docs/**"
                 );
     }
 
@@ -56,10 +56,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/accounts").permitAll()
-                .antMatchers("/api/authenticate").permitAll()
-                .antMatchers("/api/accounts/sign-up").permitAll()
-                .antMatchers("/api/accounts/sign-in").permitAll()
+                .antMatchers("/api/accounts/sign-up","/api/accounts/sign-in").permitAll()
+                .antMatchers("/swagger/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/swagger-ui.html/**").permitAll()
 
                 .anyRequest().authenticated()
 

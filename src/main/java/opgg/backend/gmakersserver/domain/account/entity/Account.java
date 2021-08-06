@@ -40,9 +40,6 @@ public class Account {
 	@Column(name = "password", nullable = false, length = 100)
 	private String password;
 
-	@Column(name = "nickname", length = 50)
-	private String nickname;
-
 	@JsonIgnore
 	@Column(name = "activated")
 	private boolean activated;
