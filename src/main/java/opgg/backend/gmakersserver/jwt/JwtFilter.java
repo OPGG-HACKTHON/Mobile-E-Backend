@@ -7,41 +7,44 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtFilter extends GenericFilterBean {
+@Component
+public class JwtFilter extends OncePerRequestFilter {
 
 	public static final String AUTHORIZATION_HEADER = "Authorization";
-	private final TokenProvider tokenProvider;
+	private final JjwtService jjwtService;
 
 	@Override
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-			throws IOException, ServletException {
-		HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-		String jwt = resolveToken(httpServletRequest);
-		String requestURI = httpServletRequest.getRequestURI();
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+			FilterChain filterChain) throws ServletException, IOException {
+		String jwt = resolveToken(request);
+		String requestURI = request.getRequestURI();
 
-		if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-			JwtAuthentication authentication = tokenProvider.getAuthentication(jwt);
+		if (StringUtils.hasText(jwt) && jjwtService.getAccount(jwt) != null) {
+			JwtAuthentication authentication = jjwtService.getAuthentication(jwt);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			log.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
 		} else {
 			log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
 		}
 
-		filterChain.doFilter(servletRequest, servletResponse);
+		filterChain.doFilter(request, response);
 	}
 
 	private String resolveToken(HttpServletRequest request) {
-		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+		final String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
 			return bearerToken.substring(7);
 		}

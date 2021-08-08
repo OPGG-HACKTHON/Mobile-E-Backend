@@ -66,4 +66,5 @@ public class ExceptionResponse {
 				"지원 가능한 HTTP Method = " + supportedMethods);
 		return new ExceptionResponse(ExceptionStatus.METHOD_NOT_SUPPORT_EXCEPTION, details);
 	}
+
 }

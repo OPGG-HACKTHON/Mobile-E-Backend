@@ -6,8 +6,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -20,23 +22,37 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import lombok.extern.slf4j.Slf4j;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
+import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
+import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
 import opgg.backend.gmakersserver.error.exception.jwt.AuthorityInfoNotFoundException;
+import opgg.backend.gmakersserver.error.exception.jwt.ExpiredJwtTokenException;
+import opgg.backend.gmakersserver.error.exception.jwt.InvalidJwtSignatureException;
+import opgg.backend.gmakersserver.error.exception.jwt.InvalidJwtTokenException;
+import opgg.backend.gmakersserver.error.exception.jwt.UnsupportedJwtTokenException;
 
 @Slf4j
-public class TokenProvider {
+@Component
+public class JjwtService {
 
 	private static final String AUTHORITIES_KEY = "auth";
 	private final long accessTime;
 	private final String headerType;
 	private final Key key;
 	private final String issuer;
+	private final AccountRepository accountRepository;
 
-	public TokenProvider(String headerType, String issuer, String secret, long accessTime) {
+	public JjwtService(@Value("${jwt.token.header-type}") String headerType,
+			@Value("${jwt.token.issuer}") String issuer,
+			@Value("${jwt.token.secret}") String secret,
+			@Value("${jwt.token.access-time}") long accessTime,
+			AccountRepository accountRepository) {
+
 		byte[] keyBytes = Decoders.BASE64.decode(secret);
 		this.key = Keys.hmacShaKeyFor(keyBytes);
 		this.headerType = headerType;
 		this.issuer = issuer;
 		this.accessTime = accessTime;
+		this.accountRepository = accountRepository;
 	}
 
 	public String createToken(Account account) {
@@ -77,24 +93,24 @@ public class TokenProvider {
 		}
 	}
 
-	public boolean validateToken(String token) {
+	public Account getAccount(String token) {
 		try {
-			Jwts.parserBuilder()
+			Claims claims = Jwts.parserBuilder()
 					.setSigningKey(key)
 					.build()
-					.parseClaimsJws(token);
-
-			return true;
+					.parseClaimsJws(token)
+					.getBody();
+			Long accountId = Long.parseLong(claims.getSubject());
+			return accountRepository.findByAccountId(accountId).orElseThrow(AccountNotFoundException::new);
 		} catch (SecurityException | MalformedJwtException e) {
-			log.info("잘못된 JWT 서명입니다.");
+			throw new InvalidJwtSignatureException();
 		} catch (ExpiredJwtException e) {
-			log.info("만료된 JWT 토큰입니다.");
+			throw new ExpiredJwtTokenException();
 		} catch (UnsupportedJwtException e) {
-			log.info("지원되지 않는 JWT 토큰입니다.");
+			throw new UnsupportedJwtTokenException();
 		} catch (IllegalArgumentException e) {
-			log.info("JWT 토큰이 잘못되었습니다.");
+			throw new InvalidJwtTokenException();
 		}
-		return false;
 	}
 
 }

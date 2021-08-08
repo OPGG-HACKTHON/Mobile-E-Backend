@@ -9,9 +9,11 @@ import org.springframework.data.repository.query.Param;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    @Query("select a from Account a where a.username = :username")
-    Optional<Account> findByUsername(@Param("username") String username);
+	@Query("select a from Account a where a.username = :username")
+	Optional<Account> findByUsername(@Param("username") String username);
 
 	Optional<Account> findOneWithRoleByUsername(String username);
+
+	Optional<Account> findByAccountId(Long accountId);
 
 }

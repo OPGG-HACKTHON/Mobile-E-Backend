@@ -1,5 +1,7 @@
 package opgg.backend.gmakersserver.config;
 
+import static org.springframework.http.HttpMethod.*;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Bean;
@@ -15,16 +17,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.filter.CorsFilter;
 
 import lombok.RequiredArgsConstructor;
+import opgg.backend.gmakersserver.jwt.ExceptionHandlerFilter;
+import opgg.backend.gmakersserver.jwt.JjwtService;
+import opgg.backend.gmakersserver.jwt.JwtFilter;
 import opgg.backend.gmakersserver.jwt.JwtSecurityConfig;
-import opgg.backend.gmakersserver.jwt.TokenProvider;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final TokenProvider tokenProvider;
+    private final JjwtService jjwtService;
     private final CorsFilter corsFilter;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
+    private final JwtFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -45,18 +51,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .csrf()
                 .disable()
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-
                 .exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-                .accessDeniedHandler((request, response, accessDeniedException) -> response.sendError(HttpServletResponse.SC_FORBIDDEN))
+                .authenticationEntryPoint(
+        (request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+                .accessDeniedHandler((request, response, accessDeniedException) -> response.sendError(
+                        HttpServletResponse.SC_FORBIDDEN))
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/accounts/sign-up","/api/accounts/sign-in").permitAll()
+                .antMatchers(POST, "/api/accounts/sign-up", "/api/accounts/sign-in").permitAll()
                 .antMatchers("/swagger/**").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/swagger-ui.html/**").permitAll()
@@ -64,6 +70,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
 
                 .and()
-                .apply(new JwtSecurityConfig(tokenProvider));
+                .apply(new JwtSecurityConfig(jjwtService));
+        httpSecurity.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(exceptionHandlerFilter, JwtFilter.class);
     }
 }

@@ -24,5 +24,4 @@ public class BusinessException extends RuntimeException{
 		return String.valueOf(responseStatus.getStatus());
 	}
 
-
 }

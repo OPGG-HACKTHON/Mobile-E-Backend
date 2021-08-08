@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.service.AccountService;
 import opgg.backend.gmakersserver.error.exception.response.ExceptionResponseInfo;
 import opgg.backend.gmakersserver.jwt.JwtFilter;
-import opgg.backend.gmakersserver.jwt.TokenProvider;
+import opgg.backend.gmakersserver.jwt.JjwtService;
 
 @RestController
 @RequestMapping("/api")
@@ -33,7 +34,7 @@ import opgg.backend.gmakersserver.jwt.TokenProvider;
 @Tag(name = "account", description = "the Account API")
 public class AccountController {
 
-	private final TokenProvider tokenProvider;
+	private final JjwtService jjwtService;
 	private final AccountService accountService;
 
 	@Operation(summary = "회원가입", tags = {"account"})
@@ -60,7 +61,7 @@ public class AccountController {
 	@PostMapping("/accounts/sign-in")
 	public ResponseEntity<TokenDto> authorize(@Valid @RequestBody SignInDto signInDto) {
 		Account account = accountService.login(signInDto);
-		String jwt = tokenProvider.createToken(account);
+		String jwt = jjwtService.createToken(account);
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 		return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);

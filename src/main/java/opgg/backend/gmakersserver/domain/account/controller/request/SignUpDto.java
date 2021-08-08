@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class SignUpDto {
 
     @NotBlank

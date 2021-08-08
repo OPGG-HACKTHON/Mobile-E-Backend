@@ -5,7 +5,8 @@ import opgg.backend.gmakersserver.error.exception.common.ExceptionStatus;
 
 public class AccountNotFoundException extends BusinessException {
 
-    public AccountNotFoundException() {
-        super(ExceptionStatus.ACCOUNT_NOT_FOUND_EXCEPTION);
-    }
+	public AccountNotFoundException() {
+		super(ExceptionStatus.ACCOUNT_NOT_FOUND_EXCEPTION);
+	}
+
 }
