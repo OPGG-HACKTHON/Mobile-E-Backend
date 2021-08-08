@@ -4,8 +4,7 @@ Accept: application/json
 
 {
   "username" : "testtest",
-  "password" : "testtest",
-  "nickname" : "nicknameTest"
+  "password" : "testtest"
 }
 
 ###
