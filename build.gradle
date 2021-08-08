@@ -57,10 +57,14 @@ dependencies {
     implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.68'
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.3'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

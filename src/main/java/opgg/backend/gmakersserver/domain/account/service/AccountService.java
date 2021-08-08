@@ -1,15 +1,18 @@
 package opgg.backend.gmakersserver.domain.account.service;
 
-import lombok.RequiredArgsConstructor;
-import opgg.backend.gmakersserver.domain.account.dto.SignInDto;
-import opgg.backend.gmakersserver.domain.account.dto.SignUpDto;
-import opgg.backend.gmakersserver.domain.account.entity.Account;
-import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
-import opgg.backend.gmakersserver.error.exception.account.AccountDuplicateIdException;
-import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import opgg.backend.gmakersserver.domain.account.controller.request.SignInDto;
+import opgg.backend.gmakersserver.domain.account.controller.request.SignUpDto;
+import opgg.backend.gmakersserver.domain.account.entity.Account;
+import opgg.backend.gmakersserver.domain.account.entity.Role;
+import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
+import opgg.backend.gmakersserver.error.exception.account.AccountDuplicateIdException;
+import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
+import opgg.backend.gmakersserver.error.exception.account.AccountPasswordNotMatchException;
 
 @Service
 @RequiredArgsConstructor
@@ -20,18 +23,25 @@ public class AccountService {
 
     @Transactional
     public void signUp(SignUpDto signUpDto) {
-        accountRepository.findByLoginId(signUpDto.getLoginId()).ifPresent(account -> {
-            throw new AccountDuplicateIdException(account.getLoginId());
+        accountRepository.findByUsername(signUpDto.getUsername()).ifPresent(account -> {
+            throw new AccountDuplicateIdException(account.getUsername());
         });
         accountRepository.save(Account.builder()
-                                        .loginId(signUpDto.getLoginId())
+                                        .username(signUpDto.getUsername())
                                         .password(passwordEncoder.encode(signUpDto.getPassword()))
+                                        .role(Role.ROLE_USER)
+                                        .activated(true)
                                         .build());
     }
 
     @Transactional(readOnly = true)
-    public void signIn(SignInDto signInDto) {
-        accountRepository.findByLoginId(signInDto.getLoginId()).orElseThrow(AccountNotFoundException::new);
+    public Account login(SignInDto signInDto){
+        Account account = accountRepository.findByUsername(signInDto.getUsername())
+                .orElseThrow(AccountNotFoundException::new);
+        if (!passwordEncoder.matches(signInDto.getPassword(), account.getPassword())) {
+            throw new AccountPasswordNotMatchException();
+        }
+        return account;
     }
 
 }

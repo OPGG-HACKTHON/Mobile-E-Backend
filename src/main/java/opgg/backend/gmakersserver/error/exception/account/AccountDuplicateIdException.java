@@ -8,4 +8,5 @@ public class AccountDuplicateIdException extends BusinessException {
 	public AccountDuplicateIdException(String id) {
 		super(ExceptionStatus.ACCOUNT_DUPLICATE_ID_EXCEPTION, id + "는 " + ExceptionStatus.ACCOUNT_DUPLICATE_ID_EXCEPTION.getMessage());
 	}
+
 }
