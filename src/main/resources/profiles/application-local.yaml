@@ -58,3 +58,15 @@ jwt:
     secret: ENC(kKx3i7T0o6l28CUvJO78BqdFdOQu6vKn55ZufjT0huaHsogaIZQjrXobpRkD6ROyiXBjWHs2SPAXm3twEEv+bxluTmjlZY0QNeBdWTVxJdfJqZVEwvYC4NYGUAIeZsjUkDZ78DU+rTBGj/BYDoK56JYt5fcHVTjIeXf0uTEGZ5s/gCFR9wdabPAcxiGt5/dn)
     access-time: 1800000 # 30분
     issuer: opgg
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    #operations-sorter: alpha
+    tags-sorter: alpha
+    url: /openapi
+    display-query-params-without-oauth2: true
+  #paths-to-match:
+    #- /api/v1/**
+    #- /test/**

@@ -37,13 +37,6 @@ public class AccountController {
 	private final JjwtService jjwtService;
 	private final AccountService accountService;
 
-	@Operation(summary = "회원가입", tags = {"account"})
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "201", description = "회원가입 성공"),
-			@ApiResponse(responseCode = "400", description = "회원가입 실패"),
-			@ApiResponse(responseCode = "4003", description = "중복된 아이디",
-					content = @Content(schema = @Schema(implementation = ExceptionResponseInfo.class)))
-	})
 	@PostMapping("/accounts/sign-up")
 	@ResponseStatus(HttpStatus.CREATED)
 	public String signUp(@Valid @RequestBody SignUpDto signUpDto) {
@@ -51,13 +44,6 @@ public class AccountController {
 		return "signUp success";
 	}
 
-	@Operation(summary = "로그인", tags = {"account"})
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "로그인 성공"),
-			@ApiResponse(responseCode = "400", description = "로그인 실패"),
-			@ApiResponse(responseCode = "4001", description = "존재하지 않는 회원",
-					content = @Content(schema = @Schema(implementation = ExceptionResponseInfo.class)))
-	})
 	@PostMapping("/accounts/sign-in")
 	public ResponseEntity<TokenDto> authorize(@Valid @RequestBody SignInDto signInDto) {
 		Account account = accountService.login(signInDto);
