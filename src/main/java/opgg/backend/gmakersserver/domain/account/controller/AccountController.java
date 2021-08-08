@@ -1,22 +1,5 @@
 package opgg.backend.gmakersserver.domain.account.controller;
 
-import javax.validation.Valid;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.account.controller.request.SignInDto;
@@ -24,9 +7,14 @@ import opgg.backend.gmakersserver.domain.account.controller.request.SignUpDto;
 import opgg.backend.gmakersserver.domain.account.controller.response.TokenDto;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.service.AccountService;
-import opgg.backend.gmakersserver.error.exception.response.ExceptionResponseInfo;
-import opgg.backend.gmakersserver.jwt.JwtFilter;
 import opgg.backend.gmakersserver.jwt.JjwtService;
+import opgg.backend.gmakersserver.jwt.JwtFilter;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
