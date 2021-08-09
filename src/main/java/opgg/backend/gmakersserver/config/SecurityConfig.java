@@ -63,10 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(POST, "/api/accounts/sign-up", "/api/accounts/sign-in").permitAll()
-                .antMatchers("/swagger/**").permitAll()
-                .antMatchers("/swagger-ui/**").permitAll()
-                .antMatchers("/swagger-ui.html/**").permitAll()
-
+                .antMatchers("/swagger/**", "/swagger-ui/**", "/swagger-ui.html/**", "/openapi.yml/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

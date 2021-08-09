@@ -63,10 +63,4 @@ springdoc:
   api-docs:
     enabled: false
   swagger-ui:
-    #operations-sorter: alpha
-    tags-sorter: alpha
-    url: /openapi
-    display-query-params-without-oauth2: true
-  #paths-to-match:
-    #- /api/v1/**
-    #- /test/**
+    url: /openapi.yml

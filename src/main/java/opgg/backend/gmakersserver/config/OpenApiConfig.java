@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
-    @Bean
+
+   @Bean
     public SpringDocConfiguration springDocConfiguration() {
         return new SpringDocConfiguration();
     }
@@ -16,5 +17,6 @@ public class OpenApiConfig {
     public SpringDocConfigProperties springDocConfigProperties() {
         return new SpringDocConfigProperties();
     }
+
 }
 
