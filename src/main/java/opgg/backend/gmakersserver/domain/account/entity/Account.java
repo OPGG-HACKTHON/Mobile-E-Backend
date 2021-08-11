@@ -17,15 +17,22 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
 
 @Entity
 @Getter
-@Setter
-@Builder
 @Table(name = "account")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Account {
+public class Account extends BaseEntity {
+
+	@Builder
+	public Account(String username, String password, boolean activated, Role role) {
+		this.username = username;
+		this.password = password;
+		this.activated = activated;
+		this.role = role;
+	}
 
 	@JsonIgnore
 	@Id
