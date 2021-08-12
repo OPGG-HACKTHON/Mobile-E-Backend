@@ -16,4 +16,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
 	Optional<Account> findByAccountId(Long accountId);
 
+	@Query("select a from Account a join fetch a.profile where a.accountId = :accountId and a.profile = :summonerName")
+	Optional<Account> findBySummonerNameAndAccountId(@Param("summonerName") String summonerName, @Param("accountId") Long accountId);
+
 }
