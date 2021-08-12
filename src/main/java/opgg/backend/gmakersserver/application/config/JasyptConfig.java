@@ -1,4 +1,4 @@
-package opgg.backend.gmakersserver.config;
+package opgg.backend.gmakersserver.application.config;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;

@@ -17,6 +17,11 @@ public enum ExceptionStatus{
 	ACCOUNT_DUPLICATE_ID_EXCEPTION(4003, "중복된 아이디 입니다.", BAD_REQUEST),
 	ACCOUNT_PASSWORD_NOT_MATCH_EXCEPTION(4004, "비밀번호 불일치", BAD_REQUEST),
 
+	// Profile
+	PROFILE_EXIST_EXCEPTION(4050, "이미 존재한 프로필 입니다.", BAD_REQUEST),
+
+	// RiotAPI
+	SUMMONER_NOT_FOUNT_EXCEPTION(4100, "존재하지 않는 소환사 입니다.", BAD_REQUEST),
 
 	// Common
 	RUN_TIME_EXCEPTION(500, "런타임 에러", INTERNAL_SERVER_ERROR),

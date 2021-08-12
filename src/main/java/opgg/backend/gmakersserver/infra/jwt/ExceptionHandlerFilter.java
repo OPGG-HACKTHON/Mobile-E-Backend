@@ -1,4 +1,4 @@
-package opgg.backend.gmakersserver.jwt;
+package opgg.backend.gmakersserver.infra.jwt;
 
 import java.io.IOException;
 
@@ -19,7 +19,7 @@ import opgg.backend.gmakersserver.error.exception.jwt.ExpiredJwtTokenException;
 import opgg.backend.gmakersserver.error.exception.jwt.InvalidJwtSignatureException;
 import opgg.backend.gmakersserver.error.exception.jwt.InvalidJwtTokenException;
 import opgg.backend.gmakersserver.error.exception.jwt.UnsupportedJwtTokenException;
-import opgg.backend.gmakersserver.error.exception.response.ExceptionResponseInfo;
+import opgg.backend.gmakersserver.error.exception.common.response.ExceptionResponseInfo;
 
 @Slf4j
 @Component

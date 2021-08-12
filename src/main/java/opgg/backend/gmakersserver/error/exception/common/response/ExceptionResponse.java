@@ -1,4 +1,4 @@
-package opgg.backend.gmakersserver.error.exception.response;
+package opgg.backend.gmakersserver.error.exception.common.response;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package opgg.backend.gmakersserver.config;
+package opgg.backend.gmakersserver.application.config;
 
 import static org.springframework.http.HttpMethod.*;
 
@@ -17,10 +17,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.filter.CorsFilter;
 
 import lombok.RequiredArgsConstructor;
-import opgg.backend.gmakersserver.jwt.ExceptionHandlerFilter;
-import opgg.backend.gmakersserver.jwt.JjwtService;
-import opgg.backend.gmakersserver.jwt.JwtFilter;
-import opgg.backend.gmakersserver.jwt.JwtSecurityConfig;
+import opgg.backend.gmakersserver.infra.jwt.ExceptionHandlerFilter;
+import opgg.backend.gmakersserver.infra.jwt.JjwtService;
+import opgg.backend.gmakersserver.infra.jwt.JwtFilter;
+import opgg.backend.gmakersserver.infra.jwt.JwtSecurityConfig;
 
 @EnableWebSecurity
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package opgg.backend.gmakersserver.config;
+package opgg.backend.gmakersserver.application.config;
 
 import org.springdoc.core.SpringDocConfigProperties;
 import org.springdoc.core.SpringDocConfiguration;

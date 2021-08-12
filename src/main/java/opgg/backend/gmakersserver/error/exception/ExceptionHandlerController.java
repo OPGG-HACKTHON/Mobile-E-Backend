@@ -15,8 +15,8 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
 import opgg.backend.gmakersserver.error.exception.common.BusinessException;
 import opgg.backend.gmakersserver.error.exception.common.ExceptionStatus;
-import opgg.backend.gmakersserver.error.exception.response.ExceptionResponse;
-import opgg.backend.gmakersserver.error.exception.response.ExceptionResponseInfo;
+import opgg.backend.gmakersserver.error.exception.common.response.ExceptionResponse;
+import opgg.backend.gmakersserver.error.exception.common.response.ExceptionResponseInfo;
 
 @Slf4j
 @RestControllerAdvice

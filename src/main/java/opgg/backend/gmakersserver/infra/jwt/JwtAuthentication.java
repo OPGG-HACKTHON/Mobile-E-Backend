@@ -1,4 +1,4 @@
-package opgg.backend.gmakersserver.jwt;
+package opgg.backend.gmakersserver.infra.jwt;
 
 import java.util.Collection;
 
