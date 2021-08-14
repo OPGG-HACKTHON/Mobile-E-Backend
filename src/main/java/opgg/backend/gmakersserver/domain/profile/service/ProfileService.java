@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import com.merakianalytics.orianna.types.common.Region;
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +26,35 @@ public class ProfileService {
 
 	private final ProfileRepository profileRepository;
 	private final AccountRepository accountRepository;
+
+	private int getRandomIconId(int profileIconId) {
+		Random random = new Random();
+		random.setSeed(System.currentTimeMillis());
+		int iconId = profileIconId;
+		while (iconId == profileIconId) {
+			iconId = random.nextInt(28);
+		}
+		return iconId;
+	}
+
+	private boolean isReliable(Profile profile) {
+		Summoner summoner = Summoner.withId(profile.getSummonerInfo().getSummonerId()).get();
+		int summonerProfileIconId = summoner.getProfileIcon().getId();
+		if (profile.isAuthorizable(summonerProfileIconId)) {
+			profile.changeIsCertified(true);
+			profile.changeAuthProfileIconId(-1);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isAuthProfile(Profile profile) {
+		return !profile.isCertified() && !isReliable(profile);
+	}
+
+	private boolean isAuthConfirm(Profile profile) {
+		return profile.isCertified() || isReliable(profile);
+	}
 
 	@Transactional
 	public void createProfile(ProfileRequest.Create profileRequest, Long id) {
@@ -59,43 +87,25 @@ public class ProfileService {
 	}
 
 	@Transactional
-	public ProfileResponse authProfile(ProfileRequest.Auth auth, Long id) {
+	public ProfileResponse.Auth authProfile(ProfileRequest.Auth auth, Long id) {
 		String summonerId = auth.getSummonerId();
 		Profile profile = profileRepository.findBySummonerIdAndAccountId(summonerId, id)
 				.orElseThrow(SummonerNotFoundException::new);
-
-		if (profile.isCertified()) {
-			return ProfileResponse.builder()
-					.iconId(-1)
-					.isCertified(true)
-					.build();
+		int iconId = -1;
+		if (isAuthProfile(profile)) {
+			int profileIconId = profile.getSummonerInfo().getProfileIconId();
+			iconId = getRandomIconId(profileIconId);
+			profile.changeAuthProfileIconId(iconId);
 		}
-		Summoner summoner = Summoner.withId(profile.getSummonerInfo().getSummonerId()).get();
-		int summonerProfileIconId = summoner.getProfileIcon().getId();
-		if (profile.isAuthenticable(summonerProfileIconId)) {
-			profile.changeIsCertified(true);
-			return ProfileResponse.builder()
-					.iconId(-1)
-					.isCertified(true)
-					.build();
-		}
-		int profileIconId = profile.getSummonerInfo().getProfileIconId();
-		int iconId = getRandomIconId(profileIconId);
-		profile.changeAuthProfileIconId(iconId);
-		return ProfileResponse.builder()
-				.iconId(iconId)
-				.isCertified(false)
-				.build();
+		return new ProfileResponse.Auth(iconId);
 	}
 
-	private int getRandomIconId(int profileIconId) {
-		Random random = new Random();
-		random.setSeed(System.currentTimeMillis());
-		int iconId = profileIconId;
-		while (iconId == profileIconId) {
-			iconId = random.nextInt(28);
-		}
-		return iconId;
+	@Transactional
+	public ProfileResponse.AuthConfirm authConfirm(ProfileRequest.Auth auth, Long id) {
+		String summonerId = auth.getSummonerId();
+		Profile profile = profileRepository.findBySummonerIdAndAccountId(summonerId, id)
+				.orElseThrow(SummonerNotFoundException::new);
+		return new ProfileResponse.AuthConfirm(isAuthConfirm(profile));
 	}
 
 }

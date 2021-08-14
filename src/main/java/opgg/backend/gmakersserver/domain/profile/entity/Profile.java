@@ -65,7 +65,7 @@ public class Profile extends BaseEntity {
 		this.isCertified = isCertified;
 	}
 
-	public boolean isAuthenticable(int summonerProfileIconId) {
+	public boolean isAuthorizable(int summonerProfileIconId) {
 		return authProfileIconId != null && authProfileIconId == summonerProfileIconId;
 	}
 

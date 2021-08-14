@@ -35,8 +35,12 @@ public class ProfileController {
 	}
 
 	@PatchMapping("/profile/auth")
-	public ProfileResponse authProfile(@Valid @RequestBody ProfileRequest.Auth auth, @AuthenticationPrincipal Long id) {
+	public ProfileResponse.Auth authProfile(@Valid @RequestBody ProfileRequest.Auth auth, @AuthenticationPrincipal Long id) {
 		return profileService.authProfile(auth, id);
 	}
 
+	@PatchMapping("/profile/auth-confirm")
+	public ProfileResponse.AuthConfirm authConfirm(@Valid @RequestBody ProfileRequest.Auth auth, @AuthenticationPrincipal Long id) {
+		return profileService.authConfirm(auth, id);
+	}
 }
