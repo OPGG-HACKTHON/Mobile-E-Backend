@@ -1,12 +1,18 @@
 package opgg.backend.gmakersserver.domain.profile.controller.response;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class ProfileResponse {
 
-	private String url;
+	@Builder
+	public ProfileResponse(boolean isCertified, int iconId) {
+		this.isCertified = isCertified;
+		this.iconId = iconId;
+	}
+
+	private final boolean isCertified;
+	private final int iconId;
 
 }

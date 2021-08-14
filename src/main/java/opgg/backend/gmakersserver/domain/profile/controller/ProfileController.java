@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
+import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileResponse;
 import opgg.backend.gmakersserver.domain.profile.service.ProfileService;
 
 @RestController
@@ -34,7 +35,7 @@ public class ProfileController {
 	}
 
 	@PatchMapping("/profile/auth")
-	public String authProfile(@Valid @RequestBody ProfileRequest.Auth auth, @AuthenticationPrincipal Long id) {
+	public ProfileResponse authProfile(@Valid @RequestBody ProfileRequest.Auth auth, @AuthenticationPrincipal Long id) {
 		return profileService.authProfile(auth, id);
 	}
 

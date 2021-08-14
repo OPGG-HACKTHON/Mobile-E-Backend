@@ -11,9 +11,10 @@ import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
 public interface ProfileRepository extends JpaRepository<Profile , Long> {
 
+	@Query("select p from Profile p join fetch p.account where p.account = :account and p.summonerInfo.summonerName = :summonerName")
 	Profile findByAccountAndSummonerName(Account account, String summonerName);
 
-	@Query("select p from Profile p join fetch p.account where p.summonerId = :summonerId and p.account.accountId = :accountId")
+	@Query("select p from Profile p join fetch p.account where p.summonerInfo.summonerId = :summonerId and p.account.accountId = :accountId")
 	Optional<Profile> findBySummonerIdAndAccountId(@Param("summonerId") String summonerId, @Param("accountId") Long accountId);
 
 }

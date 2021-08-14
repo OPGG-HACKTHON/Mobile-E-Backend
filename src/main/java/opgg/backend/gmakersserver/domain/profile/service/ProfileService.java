@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
+import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileResponse;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
+import opgg.backend.gmakersserver.domain.profile.entity.SummonerInfo;
 import opgg.backend.gmakersserver.domain.profile.repository.ProfileRepository;
 import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileExistException;
@@ -43,35 +45,57 @@ public class ProfileService {
 
 		int profileIconId = summoner.getProfileIcon().getId();
 		String summonerId = summoner.getId();
+		SummonerInfo summonerInfo = SummonerInfo.builder()
+				.summonerId(summonerId)
+				.profileIconId(profileIconId)
+				.summonerName(summonerName)
+				.build();
 		profileRepository.save(Profile.builder()
-										.account(account)
-										.isCertified(false)
-										.summonerName(summonerName)
-										.profileIconId(profileIconId)
-										.summonerId(summonerId)
-										.authProfileIconId(null)
-										.build());
+				.account(account)
+				.isCertified(false)
+				.summonerInfo(summonerInfo)
+				.authProfileIconId(null)
+				.build());
 	}
 
 	@Transactional
-	public String authProfile(ProfileRequest.Auth auth, Long id) {
+	public ProfileResponse authProfile(ProfileRequest.Auth auth, Long id) {
 		String summonerId = auth.getSummonerId();
-		Profile findProfile = profileRepository.findBySummonerIdAndAccountId(summonerId, id)
+		Profile profile = profileRepository.findBySummonerIdAndAccountId(summonerId, id)
 				.orElseThrow(SummonerNotFoundException::new);
 
-		Summoner summoner = Summoner.withId(findProfile.getSummonerId()).withRegion(Region.KOREA).get();
+		if (profile.isCertified()) {
+			return ProfileResponse.builder()
+					.iconId(-1)
+					.isCertified(true)
+					.build();
+		}
+		Summoner summoner = Summoner.withId(profile.getSummonerInfo().getSummonerId()).withRegion(Region.KOREA).get();
 		int summonerProfileIconId = summoner.getProfileIcon().getId();
-		findProfile.changeAuthProfileIconId(summonerProfileIconId);
-		int profileIconId = findProfile.getProfileIconId();
+		if (profile.isAuthenticable(summonerProfileIconId)) {
+			profile.changeIsCertified(true);
+			return ProfileResponse.builder()
+					.iconId(-1)
+					.isCertified(true)
+					.build();
+		}
+		int profileIconId = profile.getSummonerInfo().getProfileIconId();
+		int iconId = getRandomIconId(profileIconId);
+		profile.changeAuthProfileIconId(iconId);
+		return ProfileResponse.builder()
+				.iconId(iconId)
+				.isCertified(false)
+				.build();
+	}
 
+	private int getRandomIconId(int profileIconId) {
 		Random random = new Random();
 		random.setSeed(System.currentTimeMillis());
 		int iconId = profileIconId;
 		while (iconId == profileIconId) {
 			iconId = random.nextInt(28);
 		}
-		String url = "https://ddragon.leagueoflegends.com/cdn/11.15.1/img/profileicon/" + iconId + ".png";
-		return url;
+		return iconId;
 	}
 
 }
