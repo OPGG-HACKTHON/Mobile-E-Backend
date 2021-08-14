@@ -20,13 +20,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
+import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
 
 @Entity
 @Getter
 @Table(name = "PROFILE")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Profile {
+public class Profile extends BaseEntity {
 
 	@Builder
 	public Profile(Account account, boolean isCertified, Integer authProfileIconId,

@@ -37,7 +37,7 @@ public class ProfileService {
 		}
 
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
-		Profile profile = profileRepository.findByAccountAndSummonerName(account, summonerName);
+		Profile profile = profileRepository.findByAccountAndSummonerName(account.getAccountId(), summonerName);
 
 		if (!ObjectUtils.isEmpty(profile)) {
 			throw new ProfileExistException();

@@ -1,22 +1,8 @@
 package opgg.backend.gmakersserver.domain.account.repository;
 
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
 import opgg.backend.gmakersserver.domain.account.entity.Account;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AccountRepository extends JpaRepository<Account, Long> {
-	@Query("select a from Account a where a.username = :username")
-	Optional<Account> findByUsername(@Param("username") String username);
-
-	Optional<Account> findOneWithRoleByUsername(String username);
-
-	Optional<Account> findByAccountId(Long accountId);
-
-	@Query("select a from Account a join fetch a.profile where a.accountId = :accountId and a.profile = :summonerName")
-	Optional<Account> findBySummonerNameAndAccountId(@Param("summonerName") String summonerName, @Param("accountId") Long accountId);
+public interface AccountRepository extends JpaRepository<Account, Long>, AccountRepositoryCustom {
 
 }
