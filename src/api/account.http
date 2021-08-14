@@ -1,3 +1,4 @@
+### 회원가입
 POST {{url}}/accounts/sign-up
 Content-Type: application/json
 Accept: application/json
@@ -7,8 +8,7 @@ Accept: application/json
   "password" : "testtest"
 }
 
-###
-
+### 로그인
 POST {{url}}/accounts/sign-in
 Content-Type: application/json
 Accept: application/json
@@ -18,4 +18,34 @@ Accept: application/json
   "password": "testtest"
 }
 
-###
+> {%
+ client.global.set("Authorization", response.headers.valueOf("Authorization"));
+ client.log(client.global.get("Authorization"));
+ %}
+
+### 프로필 생성
+POST {{url}}/profile
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "summonerName" : "게약혜지"
+}
+
+### 프로필 인증
+PATCH {{url}}/profile/auth
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "summonerId" : "YLhKPSvcrbAGV4_oiKMtLZLlAC7dITaXxBUtxkStn9qHqGU"
+}
+
+### 프로필 인증확인
+PATCH {{url}}/profile/auth-confirm
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "summonerId" : "YLhKPSvcrbAGV4_oiKMtLZLlAC7dITaXxBUtxkStn9qHqGU"
+}
