@@ -22,6 +22,7 @@ public class OriannaConfig {
 		Orianna.setRiotAPIKey(riotAPIKey);
 		Orianna.setDefaultPlatform(KOREA);
 		Orianna.setDefaultRegion(Region.KOREA);
+		Orianna.setDefaultLocale("ko_KR");
 
 	}
 

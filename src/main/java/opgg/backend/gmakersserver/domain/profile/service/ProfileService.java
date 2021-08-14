@@ -31,7 +31,7 @@ public class ProfileService {
 	@Transactional
 	public void createProfile(ProfileRequest.Create profileRequest, Long id) {
 		String summonerName = profileRequest.getSummonerName();
-		Summoner summoner = Summoner.named(summonerName).withRegion(Region.KOREA).get();
+		Summoner summoner = Summoner.named(summonerName).get();
 		if (ObjectUtils.isEmpty(summoner.getProfileIcon())) {
 			throw new SummonerNotFoundException();
 		}
@@ -70,7 +70,7 @@ public class ProfileService {
 					.isCertified(true)
 					.build();
 		}
-		Summoner summoner = Summoner.withId(profile.getSummonerInfo().getSummonerId()).withRegion(Region.KOREA).get();
+		Summoner summoner = Summoner.withId(profile.getSummonerInfo().getSummonerId()).get();
 		int summonerProfileIconId = summoner.getProfileIcon().getId();
 		if (profile.isAuthenticable(summonerProfileIconId)) {
 			profile.changeIsCertified(true);
