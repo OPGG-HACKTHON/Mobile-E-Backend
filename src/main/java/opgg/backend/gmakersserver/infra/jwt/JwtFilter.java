@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtFilter extends OncePerRequestFilter {
 
 	public static final String AUTHORIZATION_HEADER = "Authorization";
+	public static final String AUTHORIZATION_HEADER_BEARER = "Bearer ";
 	private final JjwtService jjwtService;
 
 	@Override
@@ -42,8 +43,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
 	private String resolveToken(HttpServletRequest request) {
 		final String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-			return bearerToken.substring(7);
+		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(AUTHORIZATION_HEADER_BEARER)) {
+			return bearerToken.substring(AUTHORIZATION_HEADER_BEARER.length());
 		}
 		return null;
 	}

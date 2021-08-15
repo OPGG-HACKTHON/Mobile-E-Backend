@@ -35,6 +35,7 @@ import opgg.backend.gmakersserver.error.exception.jwt.UnsupportedJwtTokenExcepti
 public class JjwtService {
 
 	private static final String AUTHORITIES_KEY = "auth";
+	private static final String JWT_HEADER_PARAM_TYPE = "typ";
 	private final long accessTime;
 	private final String headerType;
 	private final Key key;
@@ -61,7 +62,7 @@ public class JjwtService {
 		Date expiration = new Date(now + accessTime);
 		return Jwts.builder()
 				.signWith(key, SignatureAlgorithm.HS512)
-				.setHeaderParam("typ", headerType)
+				.setHeaderParam(JWT_HEADER_PARAM_TYPE, headerType)
 				.setIssuer(issuer)
 				.setSubject(String.valueOf(account.getAccountId()))
 				.setExpiration(expiration)

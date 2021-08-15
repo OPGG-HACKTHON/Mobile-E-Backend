@@ -49,3 +49,12 @@ Content-Type: application/json
 {
   "summonerId" : "YLhKPSvcrbAGV4_oiKMtLZLlAC7dITaXxBUtxkStn9qHqGU"
 }
+
+### API Change
+PUT {{url}}/key
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "key" : "RGAPI-926d21f8-6009-495e-941b-f84fdb320b70"
+}
