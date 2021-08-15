@@ -1,26 +1,19 @@
 package opgg.backend.gmakersserver.domain.profile.entity;
 
-import static javax.persistence.FetchType.*;
-
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import opgg.backend.gmakersserver.domain.Position.entity.Position;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
+import opgg.backend.gmakersserver.domain.champion.entity.Champion;
+import opgg.backend.gmakersserver.domain.leagueposition.entity.LeaguePosition;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -30,11 +23,14 @@ import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
 public class Profile extends BaseEntity {
 
 	@Builder
-	public Profile(Account account, boolean isCertified, Integer authProfileIconId,
-			SummonerInfo summonerInfo) {
+	public Profile(Account account, boolean isCertified, Integer authProfileIconId, String summonerAccountId, List<LeaguePosition> leaguePosition, List<Champion> champions, List<Position> positions, SummonerInfo summonerInfo) {
 		this.account = account;
 		this.isCertified = isCertified;
 		this.authProfileIconId = authProfileIconId;
+		this.summonerAccountId = summonerAccountId;
+		this.leaguePosition = leaguePosition;
+		this.champions = champions;
+		this.positions = positions;
 		this.summonerInfo = summonerInfo;
 	}
 
@@ -53,6 +49,18 @@ public class Profile extends BaseEntity {
 
 	@Column(name = "AUTH_PROFILE_ICON_ID")
 	private Integer authProfileIconId;
+
+	@Column(name = "SUMMONER_ACCOUNT_ID")
+	private String summonerAccountId;
+
+	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
+	private List<LeaguePosition> leaguePosition = new ArrayList<>();
+
+	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
+	private List<Champion> champions = new ArrayList<>();
+
+	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
+	private List<Position> positions = new ArrayList<>();
 
 	@Embedded
 	private SummonerInfo summonerInfo;

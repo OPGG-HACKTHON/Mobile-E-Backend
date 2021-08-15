@@ -1,9 +1,13 @@
 package opgg.backend.gmakersserver.domain.profile.controller.request;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileRequest {
 
@@ -13,6 +17,10 @@ public class ProfileRequest {
 
 		@NotBlank
 		private String summonerName;
+
+		private List<Integer> preferChampionIds = new ArrayList<>();
+
+		private List<String> preferPositions = new ArrayList<>();
 
 	}
 

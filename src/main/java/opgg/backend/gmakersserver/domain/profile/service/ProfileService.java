@@ -2,6 +2,12 @@ package opgg.backend.gmakersserver.domain.profile.service;
 
 import java.util.Random;
 
+import com.merakianalytics.orianna.types.core.league.LeaguePositions;
+import opgg.backend.gmakersserver.domain.leagueposition.entity.LeaguePosition;
+import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
+import opgg.backend.gmakersserver.domain.leagueposition.entity.Tier;
+import opgg.backend.gmakersserver.domain.leagueposition.entity.TierLevel;
+import opgg.backend.gmakersserver.domain.leagueposition.repository.LeaguePositionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -26,6 +32,11 @@ public class ProfileService {
 
 	private final ProfileRepository profileRepository;
 	private final AccountRepository accountRepository;
+	private final LeaguePositionRepository leaguePositionRepository;
+
+	private int getWinRate(int wins, int losses) {
+		return (int) Math.floor((double) wins / (wins + losses) * 100);
+	}
 
 	private int getRandomIconId(int profileIconId) {
 		Random random = new Random();
@@ -64,10 +75,10 @@ public class ProfileService {
 			throw new SummonerNotFoundException();
 		}
 
-		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
-		Profile profile = profileRepository.findByAccountAndSummonerName(account.getAccountId(), summonerName);
+		Account findAccount = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
+		Profile findProfile = profileRepository.findByAccountAndSummonerName(findAccount.getAccountId(), summonerName);
 
-		if (!ObjectUtils.isEmpty(profile)) {
+		if (!ObjectUtils.isEmpty(findProfile)) {
 			throw new ProfileExistException();
 		}
 
@@ -75,15 +86,46 @@ public class ProfileService {
 		String summonerId = summoner.getId();
 		SummonerInfo summonerInfo = SummonerInfo.builder()
 				.summonerId(summonerId)
-				.profileIconId(profileIconId)
 				.summonerName(summonerName)
+				.profileIconId(profileIconId)
 				.build();
-		profileRepository.save(Profile.builder()
-				.account(account)
+
+		Profile profile = Profile.builder()
+				.account(findAccount)
 				.isCertified(false)
-				.summonerInfo(summonerInfo)
 				.authProfileIconId(null)
-				.build());
+				.summonerInfo(summonerInfo)
+				.build();
+
+		profileRepository.saveAndFlush(profile);
+
+		//TODO: Champion, Position 엔티티 생성해야 함
+
+		LeaguePositions leaguePositions = summoner.getLeaguePositions();
+		if (!leaguePositions.isEmpty()) {
+			leaguePositions.forEach(leaguePosition -> {
+				int leaguePoint = leaguePosition.getLeaguePoints();
+				String tier = String.valueOf(leaguePosition.getTier());
+				TierLevel tierLevel = TierLevel.valueOf(String.valueOf(leaguePosition.getDivision()));
+				int level = summoner.getLevel();
+				int wins = leaguePosition.getWins();
+				int losses = leaguePosition.getLosses();
+				int winRate = getWinRate(wins, losses);
+
+				Queue queue = Queue.valueOf(String.valueOf(leaguePosition.getQueue()));
+				leaguePositionRepository.save(LeaguePosition.builder()
+						.profile(profile)
+						.tier(Tier.valueOf(tier))
+						.tierLevel(tierLevel)
+						.level(level)
+						.winGames(wins)
+						.loseGames(losses)
+						.winRate(winRate)
+						.leaguePoint(leaguePoint)
+						.queue(queue)
+						.build());
+			});
+		}
 	}
 
 	@Transactional
