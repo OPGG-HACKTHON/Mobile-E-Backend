@@ -1,14 +1,14 @@
+### 회원가입
 POST {{url}}/accounts/sign-up
 Content-Type: application/json
 Accept: application/json
 
 {
-  "username" : "testtest",
-  "password" : "testtest"
+  "username": "testtest",
+  "password": "testtest"
 }
 
-###
-
+### 로그인
 POST {{url}}/accounts/sign-in
 Content-Type: application/json
 Accept: application/json
@@ -18,4 +18,63 @@ Accept: application/json
   "password": "testtest"
 }
 
-###
+> {%
+ client.global.set("Authorization", response.headers.valueOf("Authorization"));
+ client.log(client.global.get("Authorization"));
+ %}
+
+### 프로필 생성
+POST {{url}}/profile
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "summonerName": "게약혜지",
+  "preferChampions": [
+    {
+      "priority": 1,
+      "championId": 76
+    },
+    {
+      "priority": 2,
+      "championId": 11
+    }
+  ],
+  "preferLines": [
+    {
+      "priority": 1,
+      "line": "TOP"
+    },
+    {
+      "priority": 2,
+      "line": "AD"
+    }
+  ]
+}
+
+### 프로필 인증
+PATCH {{url}}/profile/auth
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "summonerId": "YLhKPSvcrbAGV4_oiKMtLZLlAC7dITaXxBUtxkStn9qHqGU"
+}
+
+### 프로필 인증확인
+PATCH {{url}}/profile/auth-confirm
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "summonerId": "YLhKPSvcrbAGV4_oiKMtLZLlAC7dITaXxBUtxkStn9qHqGU"
+}
+
+### API Change
+PUT {{url}}/key
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "key": "RGAPI-efeb2a5b-b526-4797-883a-105ecc5715e9"
+}

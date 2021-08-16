@@ -66,3 +66,7 @@ springdoc:
     enabled: false
   swagger-ui:
     url: /openapi.yml
+
+riot:
+  api:
+    key: RGAPI-8df1ac96-cf1a-43da-9265-9598a4dbc911

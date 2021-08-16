@@ -15,6 +15,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import opgg.backend.gmakersserver.error.exception.s3.NotImageFileException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,20 +23,16 @@ import lombok.extern.slf4j.Slf4j;
 public class S3Uploader {
 
 	private final AmazonS3Client amazonS3Client;
+	private static final String IMAGE = "image";
 
 	@Value("${cloud.aws.s3.bucket}")
 	public String bucket;
 
-	//Todo : CustomException 생성시 처리
-	public String upload(MultipartFile multipartFile, String dirName) throws IOException {
-		if (!multipartFile.getContentType().startsWith("image")) {
-			throw new RuntimeException("이미지 파일만 업로드 가능합니다.");
-		}
-		return upload(dirName, multipartFile);
-	}
-
 	// S3로 파일 업로드하기
-	private String upload(String dirName, MultipartFile multipartFile) throws IOException {
+	public String upload(String dirName, MultipartFile multipartFile) throws IOException {
+		if (!multipartFile.getContentType().startsWith(IMAGE)) {
+			throw new NotImageFileException();
+		}
 		String originalFilename = multipartFile.getOriginalFilename();
 		String fileName = dirName + "/" + UUID.randomUUID() + "_" + originalFilename;
 		String uploadImageUrl = putS3(fileName, multipartFile);

@@ -11,12 +11,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ExceptionStatus{
 
-	// Account
+	// Account, 4000
 	ACCOUNT_NOT_FOUND_EXCEPTION(4001, "유저가 존재하지 않습니다.", NOT_FOUND),
 	ACCOUNT_SAVE_FAILED_EXCEPTION(4002, "회원가입을 실패했습니다.", BAD_REQUEST),
 	ACCOUNT_DUPLICATE_ID_EXCEPTION(4003, "중복된 아이디 입니다.", BAD_REQUEST),
 	ACCOUNT_PASSWORD_NOT_MATCH_EXCEPTION(4004, "비밀번호 불일치", BAD_REQUEST),
 
+	// Profile, 4050
+	PROFILE_EXIST_EXCEPTION(4050, "이미 존재한 프로필 입니다.", BAD_REQUEST),
+
+	// RiotAPI, 4100
+	SUMMONER_NOT_FOUNT_EXCEPTION(4100, "존재하지 않는 소환사 입니다.", BAD_REQUEST),
+
+	// S3 , 4150
+	NOT_IMAGE_FILE_EXCEPTION(4150, "이미지 파일만 업로드 가능합니다.", BAD_REQUEST),
 
 	// Common
 	RUN_TIME_EXCEPTION(500, "런타임 에러", INTERNAL_SERVER_ERROR),

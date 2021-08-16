@@ -12,13 +12,14 @@ servers:
   - url: http://localhost:8080/api
     description: local
   - url: http://52.79.197.237:8080/api
-    description: dev
+    description: prod
 
 tags:
   - name: Account
     description: Account resource
 
 paths:
+  ### Account ###
   /accounts/sign-up:
     post:
       summary: 회원가입
@@ -29,7 +30,7 @@ paths:
         content:
           "application/json":
             schema:
-              $ref: '#/components/schemas/SignUpDto'
+              $ref: '#/components/schemas/SignUpRequest'
       responses:
         '201':
           description: 회원가입 성공
@@ -55,7 +56,6 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
-
   /accounts/sign-in:
     post:
       summary: 로그인
@@ -66,7 +66,7 @@ paths:
         content:
           "application/json":
             schema:
-              $ref: '#/components/schemas/SignInDto'
+              $ref: '#/components/schemas/SignInRequest'
       responses:
         '200':
           description: 로그인 성공
@@ -89,8 +89,100 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
+  ### Profile ###
+  /profile:
+    post:
+      summary: 프로필 생성
+      tags:
+        - Profile
+      requestBody:
+        description: summonerName = LoL 소환사명
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/ProfileRequest'
+      responses:
+        '200':
+          description: 프로필 생성 성공
+          content:
+            application/json:
+              schema:
+                type: string
+                writeOnly: true
+                example: create profile
+        '400':
+          description: 프로필 생성 실패
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /profile/auth:
+    patch:
+      summary: 프로필 인증
+      tags:
+        - Profile
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/ProfileAuthRequest'
+      responses:
+        '200':
+          description: 랜덤 프로필 아이콘 아이디 값
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileAuthResponse'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /profile/auth-confirm:
+    patch:
+      summary: 프로필 인증 확인
+      tags:
+        - Profile
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/ProfileAuthRequest'
+      responses:
+        '200':
+          description: 인증 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileAuthConfirmResponse'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+
 components:
   schemas:
+    ### Exception ###
     ExceptionDetailResponse:
       type: object
       readOnly: true
@@ -111,15 +203,9 @@ components:
           type: string
         errors:
           $ref: '#/components/schemas/ExceptionDetailResponse'
-    ExceptionResponseInfo:
-      type: object
-      readOnly: true
-      properties:
-        message:
-          type: string
-        status:
-          type: string
-    SignUpDto:
+
+    ### Account ###
+    SignUpRequest:
       type: object
       writeOnly: true
       properties:
@@ -135,7 +221,7 @@ components:
           minLength: 8
           pattern: ^[A-Za-z0-9]{8,20}$
           example: opggmobile!
-    SignInDto:
+    SignInRequest:
       type: object
       writeOnly: true
       properties:
@@ -158,12 +244,36 @@ components:
         token:
           type: string
           example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJvnGdnIiwic3ViIjoiMSIsImV4cCI6MTYyODQzMTMwNCwiaWF0IjoxNjI4NDI5NTA0LCJhdXRoIjoiUk9MRV9VU0VSIn0.qRWiKpHKBF13M7Tw485NaDPveVF2iRh9vZ39YRJvItW16ikg7pHmmP3QwEzc732TPntruhgWzny-VrOBBk8LWA
-    TokenDto:
+
+    ### Profile ###
+    ProfileRequest:
       type: object
-      readOnly: true
+      writeOnly: true
       properties:
-        token:
+        summonerName:
           type: string
+          example: Hide on bush
+    ProfileAuthRequest:
+      type: object
+      writeOnly: true
+      properties:
+        summonerId:
+          type: string
+          example: c4ef16ITFOMN9FGfdphixlp8-vSDIOUgsadQqXz2zO9KMO9XqzzHs9_EQ2
+    ProfileAuthResponse:
+      type: object
+      writeOnly: true
+      properties:
+        iconId:
+          type: string
+          example: 5
+    ProfileAuthConfirmResponse:
+      type: object
+      writeOnly: true
+      properties:
+        certified:
+          type: boolean
+          example: true
 
   responses:
     '400':
