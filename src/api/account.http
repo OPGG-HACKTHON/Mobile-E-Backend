@@ -33,11 +33,11 @@ Content-Type: application/json
   "preferChampions": [
     {
       "priority": 1,
-      "championId": 50
+      "championId": 76
     },
     {
       "priority": 2,
-      "championId": 49
+      "championId": 11
     }
   ],
   "preferLines": [

@@ -28,8 +28,9 @@ import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 public class PreferChampion {
 
     @Builder
-    public PreferChampion(Profile profile, int championLevel, int championPoints, int priority) {
+    public PreferChampion(Profile profile, int championId, int championLevel, int championPoints, int priority) {
         this.profile = profile;
+        this.championId = championId;
         this.championLevel = championLevel;
         this.championPoints = championPoints;
         this.priority = priority;
@@ -44,6 +45,9 @@ public class PreferChampion {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "PROFILE_ID")
     private Profile profile;
+
+    @Column(name = "CHAMPION_ID")
+    private int championId;
 
     @Column(name = "CHAMPION_LEVEL")
     private int championLevel;

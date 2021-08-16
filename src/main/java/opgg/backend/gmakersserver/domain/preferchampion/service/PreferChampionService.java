@@ -23,8 +23,9 @@ public class PreferChampionService {
 	public void createPreferChampion(ProfileRequest.Create profileRequest, Profile profile) {
 		Summoner summoner = Summoner.named(profileRequest.getSummonerName()).get();
 		profileRequest.getPreferChampions().forEach(requestPreferChampion -> {
+			int championId = requestPreferChampion.getChampionId();
 			ChampionMastery mastery = ChampionMastery.forSummoner(summoner).withChampion(
-					Champion.withId(requestPreferChampion.getChampionId()).get()).get();
+					Champion.withId(championId).get()).get();
 			preferChampionRepository.save(PreferChampion.builder()
 					.profile(profile)
 					.championLevel(mastery.getLevel())
