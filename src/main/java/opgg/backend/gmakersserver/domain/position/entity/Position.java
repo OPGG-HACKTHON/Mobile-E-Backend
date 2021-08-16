@@ -1,4 +1,4 @@
-package opgg.backend.gmakersserver.domain.Position.entity;
+package opgg.backend.gmakersserver.domain.position.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -16,8 +16,9 @@ import static javax.persistence.FetchType.LAZY;
 public class Position {
 
     @Builder
-    public Position(Profile profile, String preferPosition) {
+    public Position(Profile profile, PreferPosition preferPosition, int priority) {
         this.preferPosition = preferPosition;
+        this.priority = priority;
         changeProfile(profile);
     }
 
@@ -32,7 +33,10 @@ public class Position {
     private Profile profile;
 
     @Column(name = "PREFER_POSITION")
-    private String preferPosition;
+    private PreferPosition preferPosition;
+
+    @Column(name = "PRIORITY")
+    private int priority;
 
     public void changeProfile(Profile profile) {
         this.profile = profile;

@@ -2,7 +2,7 @@ package opgg.backend.gmakersserver.domain.profile.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import opgg.backend.gmakersserver.domain.Position.entity.Position;
+import opgg.backend.gmakersserver.domain.position.entity.Position;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
 import opgg.backend.gmakersserver.domain.champion.entity.Champion;
