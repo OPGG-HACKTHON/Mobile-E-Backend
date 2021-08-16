@@ -106,7 +106,7 @@ public class ProfileService {
 			leaguePositions.forEach(leaguePosition -> {
 				int leaguePoint = leaguePosition.getLeaguePoints();
 				String tier = String.valueOf(leaguePosition.getTier());
-				TierLevel tierLevel = TierLevel.valueOf(String.valueOf(leaguePosition.getDivision()));
+				int tierLevel = TierLevel.valueOf(String.valueOf(leaguePosition.getDivision())).getLevel();
 				int level = summoner.getLevel();
 				int wins = leaguePosition.getWins();
 				int losses = leaguePosition.getLosses();

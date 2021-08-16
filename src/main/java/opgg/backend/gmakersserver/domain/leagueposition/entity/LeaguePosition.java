@@ -16,7 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 public class LeaguePosition {
 
     @Builder
-    public LeaguePosition(Profile profile, Tier tier, TierLevel tierLevel, int level, int winGames, int loseGames, int winRate, int leaguePoint, int championLevel, int championPoints, Queue queue) {
+    public LeaguePosition(Profile profile, Tier tier, int tierLevel, int level, int winGames, int loseGames, int winRate, int leaguePoint, int championLevel, int championPoints, Queue queue) {
         this.profile = profile;
         this.tier = tier;
         this.tierLevel = tierLevel;
@@ -43,8 +43,7 @@ public class LeaguePosition {
     private Tier tier;
 
     @Column(name = "TIER_LEVEL")
-    @Enumerated(EnumType.STRING)
-    private TierLevel tierLevel;
+    private int tierLevel;
 
     @Column(name = "LEVEL")
     private int level;
