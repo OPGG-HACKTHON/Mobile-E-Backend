@@ -20,6 +20,7 @@ import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 import opgg.backend.gmakersserver.domain.profile.entity.SummonerInfo;
 import opgg.backend.gmakersserver.domain.profile.repository.ProfileRepository;
 import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
+import opgg.backend.gmakersserver.error.exception.profile.ProfileBoundsException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileExistException;
 import opgg.backend.gmakersserver.error.exception.riotapi.SummonerNotFoundException;
 
@@ -32,6 +33,10 @@ public class ProfileService {
 	private final LeaguePositionService leaguePositionService;
 	private final PreferLineService preferLineService;
 	private final PreferChampionService preferChampionService;
+
+	private boolean isNotCreateProfile(long count) {
+		return count >= 3;
+	}
 
 	private int getRandomIconId(int profileIconId) {
 		Random random = new Random();
@@ -65,15 +70,20 @@ public class ProfileService {
 	@Transactional
 	public void createProfile(ProfileRequest.Create profileRequest, Long id) {
 
-		// TODO : profile 3개까지 체크
 		String summonerName = profileRequest.getSummonerName();
 		Summoner summoner = Summoner.named(summonerName).get();
 		if (ObjectUtils.isEmpty(summoner.getProfileIcon())) {
 			throw new SummonerNotFoundException();
 		}
 
-		Account findAccount = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
-		Profile findProfile = profileRepository.findByAccountAndSummonerName(findAccount.getAccountId(), summonerName);
+		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
+
+		long profileCount = profileRepository.countByAccount(account);
+		if (isNotCreateProfile(profileCount)) {
+			throw new ProfileBoundsException();
+		}
+
+		Profile findProfile = profileRepository.findByAccountAndSummonerName(account.getAccountId(), summonerName);
 
 		if (!ObjectUtils.isEmpty(findProfile)) {
 			throw new ProfileExistException();
@@ -86,7 +96,7 @@ public class ProfileService {
 				.build();
 
 		Profile profile = Profile.builder()
-				.account(findAccount)
+				.account(account)
 				.isCertified(false)
 				.authProfileIconId(null)
 				.summonerAccountId(summoner.getAccountId())

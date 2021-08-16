@@ -19,9 +19,10 @@ public enum ExceptionStatus{
 
 	// Profile, 4050
 	PROFILE_EXIST_EXCEPTION(4050, "이미 존재한 프로필 입니다.", BAD_REQUEST),
+	PROFILE_BOUNDS_EXCEPTION(4051, "프로필 생성 개수 초과(3개)", BAD_REQUEST),
 
 	// RiotAPI, 4100
-	SUMMONER_NOT_FOUNT_EXCEPTION(4100, "존재하지 않는 소환사 입니다.", BAD_REQUEST),
+	SUMMONER_NOT_FOUND_EXCEPTION(4100, "존재하지 않는 소환사 입니다.", BAD_REQUEST),
 
 	// S3 , 4150
 	NOT_IMAGE_FILE_EXCEPTION(4150, "이미지 파일만 업로드 가능합니다.", BAD_REQUEST),

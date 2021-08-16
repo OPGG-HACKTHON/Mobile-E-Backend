@@ -7,7 +7,7 @@ import opgg.backend.gmakersserver.error.exception.common.BusinessException;
 public class SummonerNotFoundException extends BusinessException {
 
 	public SummonerNotFoundException() {
-		super(SUMMONER_NOT_FOUNT_EXCEPTION);
+		super(SUMMONER_NOT_FOUND_EXCEPTION);
 	}
 
 }
