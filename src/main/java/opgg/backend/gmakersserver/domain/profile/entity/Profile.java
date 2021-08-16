@@ -77,9 +77,4 @@ public class Profile extends BaseEntity {
 		return authProfileIconId != null && authProfileIconId == summonerProfileIconId;
 	}
 
-	public void changeAccount(Account account) {
-		this.account = account;
-		account.getProfile().add(this);
-	}
-
 }

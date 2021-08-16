@@ -64,8 +64,4 @@ public class LeaguePosition {
     @Enumerated(EnumType.STRING)
     private Queue queue;
 
-    public void changeProfile(Profile profile) {
-        this.profile = profile;
-        profile.getLeaguePosition().add(this);
-    }
 }

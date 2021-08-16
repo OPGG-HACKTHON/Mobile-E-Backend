@@ -79,12 +79,10 @@ public class ProfileService {
 			throw new ProfileExistException();
 		}
 
-		int profileIconId = summoner.getProfileIcon().getId();
-		String summonerId = summoner.getId();
 		SummonerInfo summonerInfo = SummonerInfo.builder()
-				.summonerId(summonerId)
+				.summonerId(summoner.getId())
 				.summonerName(summonerName)
-				.profileIconId(profileIconId)
+				.profileIconId(summoner.getProfileIcon().getId())
 				.build();
 
 		Profile profile = Profile.builder()
