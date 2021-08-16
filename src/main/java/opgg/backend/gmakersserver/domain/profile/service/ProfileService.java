@@ -11,6 +11,7 @@ import com.merakianalytics.orianna.types.core.summoner.Summoner;
 import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
+import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
 import opgg.backend.gmakersserver.domain.leagueposition.service.LeaguePositionService;
 import opgg.backend.gmakersserver.domain.preferchampion.service.PreferChampionService;
 import opgg.backend.gmakersserver.domain.preferline.service.PreferLineService;
@@ -69,7 +70,6 @@ public class ProfileService {
 
 	@Transactional
 	public void createProfile(ProfileRequest.Create profileRequest, Long id) {
-
 		String summonerName = profileRequest.getSummonerName();
 		Summoner summoner = Summoner.named(summonerName).get();
 		if (ObjectUtils.isEmpty(summoner.getProfileIcon())) {
@@ -79,8 +79,6 @@ public class ProfileService {
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
 
 		long profileCount = profileRepository.countByAccount(account);
-		System.out.println(profileCount);
-		System.out.println(profileCount);
 		if (isNotCreateProfile(profileCount)) {
 			throw new ProfileBoundsException();
 		}
@@ -111,6 +109,8 @@ public class ProfileService {
 		preferLineService.createPreferLine(profileRequest, profile);
 		leaguePositionService.createLeaguePosition(summoner, profile);
 
+		Queue queue = leaguePositionService.getPreferQueue(profileRequest, profile);
+		profile.changePreferQueue(queue);
 	}
 
 	@Transactional

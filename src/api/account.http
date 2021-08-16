@@ -23,6 +23,15 @@ Accept: application/json
  client.log(client.global.get("Authorization"));
  %}
 
+### API Change
+PUT {{url}}/key
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "key": "RGAPI-efeb2a5b-b526-4797-883a-105ecc5715e9"
+}
+
 ### 프로필 생성
 POST {{url}}/profile
 Authorization: {{Authorization}}
@@ -49,7 +58,8 @@ Content-Type: application/json
       "priority": 2,
       "line": "AD"
     }
-  ]
+  ],
+  "preferQueue" : "RANKED_FLEX"
 }
 
 ### 프로필 인증
@@ -68,13 +78,4 @@ Content-Type: application/json
 
 {
   "summonerId": "YLhKPSvcrbAGV4_oiKMtLZLlAC7dITaXxBUtxkStn9qHqGU"
-}
-
-### API Change
-PUT {{url}}/key
-Authorization: {{Authorization}}
-Content-Type: application/json
-
-{
-  "key": "RGAPI-efeb2a5b-b526-4797-883a-105ecc5715e9"
 }

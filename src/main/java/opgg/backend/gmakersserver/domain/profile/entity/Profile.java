@@ -2,6 +2,7 @@ package opgg.backend.gmakersserver.domain.profile.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
 import opgg.backend.gmakersserver.domain.preferline.entity.PreferLine;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
@@ -53,6 +54,10 @@ public class Profile extends BaseEntity {
 	@Column(name = "SUMMONER_ACCOUNT_ID")
 	private String summonerAccountId;
 
+	@Column(name = "PREFER_QUEUE")
+	@Enumerated(EnumType.STRING)
+	private Queue preferQueue;
+
 	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
 	private List<LeaguePosition> leaguePosition = new ArrayList<>();
 
@@ -75,6 +80,10 @@ public class Profile extends BaseEntity {
 
 	public boolean isAuthorizable(int summonerProfileIconId) {
 		return authProfileIconId != null && authProfileIconId == summonerProfileIconId;
+	}
+
+	public void changePreferQueue(Queue preferQueue) {
+		this.preferQueue = preferQueue;
 	}
 
 }

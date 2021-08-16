@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
 import opgg.backend.gmakersserver.domain.preferline.entity.Line;
 
 public class ProfileRequest {
@@ -27,12 +28,16 @@ public class ProfileRequest {
 		@NotBlank
 		private String summonerName;
 
+		@NotNull
+		private Queue preferQueue;
+
 		@Override
 		public String toString() {
 			return "Create{" +
-					"summonerName='" + summonerName + '\'' +
-					", preferChampions=" + preferChampions +
+					"preferChampions=" + preferChampions +
 					", preferLines=" + preferLines +
+					", summonerName='" + summonerName + '\'' +
+					", preferQueue=" + preferQueue +
 					'}';
 		}
 
