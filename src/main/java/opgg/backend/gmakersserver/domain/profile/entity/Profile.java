@@ -24,7 +24,6 @@ public class Profile extends BaseEntity {
 
 	@Builder
 	public Profile(Account account, boolean isCertified, Integer authProfileIconId, String summonerAccountId, List<LeaguePosition> leaguePosition, List<Champion> champions, List<Position> positions, SummonerInfo summonerInfo) {
-		this.account = account;
 		this.isCertified = isCertified;
 		this.authProfileIconId = authProfileIconId;
 		this.summonerAccountId = summonerAccountId;
@@ -32,6 +31,7 @@ public class Profile extends BaseEntity {
 		this.champions = champions;
 		this.positions = positions;
 		this.summonerInfo = summonerInfo;
+		changeAccount(account);
 	}
 
 	@Id
@@ -75,6 +75,11 @@ public class Profile extends BaseEntity {
 
 	public boolean isAuthorizable(int summonerProfileIconId) {
 		return authProfileIconId != null && authProfileIconId == summonerProfileIconId;
+	}
+
+	public void changeAccount(Account account) {
+		this.account = account;
+		account.getProfile().add(this);
 	}
 
 }

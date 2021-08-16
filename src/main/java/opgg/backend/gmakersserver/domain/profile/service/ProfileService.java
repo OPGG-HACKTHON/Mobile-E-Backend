@@ -1,22 +1,15 @@
 package opgg.backend.gmakersserver.domain.profile.service;
 
-import java.util.Random;
-
 import com.merakianalytics.orianna.types.core.league.LeaguePositions;
+import com.merakianalytics.orianna.types.core.summoner.Summoner;
+import lombok.RequiredArgsConstructor;
+import opgg.backend.gmakersserver.domain.account.entity.Account;
+import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.LeaguePosition;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Tier;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.TierLevel;
 import opgg.backend.gmakersserver.domain.leagueposition.repository.LeaguePositionRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
-
-import com.merakianalytics.orianna.types.core.summoner.Summoner;
-
-import lombok.RequiredArgsConstructor;
-import opgg.backend.gmakersserver.domain.account.entity.Account;
-import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileResponse;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
@@ -25,6 +18,11 @@ import opgg.backend.gmakersserver.domain.profile.repository.ProfileRepository;
 import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileExistException;
 import opgg.backend.gmakersserver.error.exception.riotapi.SummonerNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor

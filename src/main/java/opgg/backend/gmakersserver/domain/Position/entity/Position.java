@@ -1,10 +1,7 @@
 package opgg.backend.gmakersserver.domain.Position.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
 import javax.persistence.*;
@@ -17,6 +14,12 @@ import static javax.persistence.FetchType.LAZY;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Position {
+
+    @Builder
+    public Position(Profile profile, String preferPosition) {
+        this.preferPosition = preferPosition;
+        changeProfile(profile);
+    }
 
     @Id
     @JsonIgnore
@@ -31,4 +34,8 @@ public class Position {
     @Column(name = "PREFER_POSITION")
     private String preferPosition;
 
+    public void changeProfile(Profile profile) {
+        this.profile = profile;
+        profile.getPositions().add(this);
+    }
 }

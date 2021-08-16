@@ -1,10 +1,7 @@
 package opgg.backend.gmakersserver.domain.champion.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
 import javax.persistence.*;
@@ -17,6 +14,13 @@ import static javax.persistence.FetchType.LAZY;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Champion {
+
+    @Builder
+    public Champion(Profile profile, int championLevel, int championPoints) {
+        this.championLevel = championLevel;
+        this.championPoints = championPoints;
+        changeProfile(profile);
+    }
 
     @Id
     @JsonIgnore
@@ -33,5 +37,10 @@ public class Champion {
 
     @Column(name = "CHAMPION_POINTS")
     private int championPoints;
+
+    public void changeProfile(Profile profile) {
+        this.profile = profile;
+        profile.getChampions().add(this);
+    }
 
 }
