@@ -28,6 +28,7 @@ public class PreferChampionService {
 					Champion.withId(championId).get()).get();
 			preferChampionRepository.save(PreferChampion.builder()
 					.profile(profile)
+					.championId(championId)
 					.championLevel(mastery.getLevel())
 					.championPoints(mastery.getPoints())
 					.priority(requestPreferChampion.getPriority())
