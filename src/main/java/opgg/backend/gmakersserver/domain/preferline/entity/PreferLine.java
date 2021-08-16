@@ -1,4 +1,4 @@
-package opgg.backend.gmakersserver.domain.position.entity;
+package opgg.backend.gmakersserver.domain.preferline.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -10,16 +10,16 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@Table(name = "PREFER_POSITION")
+@Table(name = "PREFER_LINE")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Position {
+public class PreferLine {
 
     @Builder
-    public Position(Profile profile, PreferPosition preferPosition, int priority) {
-        this.preferPosition = preferPosition;
+    public PreferLine(Profile profile, Line line, int priority) {
+        this.profile = profile;
+        this.line = line;
         this.priority = priority;
-        changeProfile(profile);
     }
 
     @Id
@@ -32,14 +32,11 @@ public class Position {
     @JoinColumn(name = "PROFILE_ID")
     private Profile profile;
 
-    @Column(name = "PREFER_POSITION")
-    private PreferPosition preferPosition;
+    @Column(name = "LINE")
+    @Enumerated(EnumType.STRING)
+    private Line line;
 
     @Column(name = "PRIORITY")
     private int priority;
 
-    public void changeProfile(Profile profile) {
-        this.profile = profile;
-        profile.getPositions().add(this);
-    }
 }

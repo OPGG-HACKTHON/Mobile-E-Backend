@@ -1,4 +1,4 @@
-package opgg.backend.gmakersserver.domain.champion.entity;
+package opgg.backend.gmakersserver.domain.preferchampion.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -10,23 +10,24 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@Table(name = "CHAMPION")
+@Table(name = "PREFER_CHAMPION")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Champion {
+public class PreferChampion {
 
     @Builder
-    public Champion(Profile profile, int championLevel, int championPoints) {
+    public PreferChampion(Profile profile, int championLevel, int championPoints, int priority) {
+        this.profile = profile;
         this.championLevel = championLevel;
         this.championPoints = championPoints;
-        changeProfile(profile);
+        this.priority = priority;
     }
 
     @Id
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CHAMPION_ID")
-    private Long championId;
+    @Column(name = "PREFER_CHAMPION_ID")
+    private Long preferChampionId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "PROFILE_ID")
@@ -38,9 +39,7 @@ public class Champion {
     @Column(name = "CHAMPION_POINTS")
     private int championPoints;
 
-    public void changeProfile(Profile profile) {
-        this.profile = profile;
-        profile.getChampions().add(this);
-    }
+    @Column(name = "PRIORITY")
+    private int priority;
 
 }

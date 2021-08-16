@@ -17,6 +17,7 @@ public class LeaguePosition {
 
     @Builder
     public LeaguePosition(Profile profile, Tier tier, int tierLevel, int level, int winGames, int loseGames, int winRate, int leaguePoint, int championLevel, int championPoints, Queue queue) {
+        this.profile = profile;
         this.tier = tier;
         this.tierLevel = tierLevel;
         this.level = level;
@@ -25,7 +26,6 @@ public class LeaguePosition {
         this.winRate = winRate;
         this.leaguePoint = leaguePoint;
         this.queue = queue;
-        changeProfile(profile);
     }
 
     @Id

@@ -2,10 +2,10 @@ package opgg.backend.gmakersserver.domain.profile.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import opgg.backend.gmakersserver.domain.position.entity.Position;
+import opgg.backend.gmakersserver.domain.preferline.entity.PreferLine;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
-import opgg.backend.gmakersserver.domain.champion.entity.Champion;
+import opgg.backend.gmakersserver.domain.preferchampion.entity.PreferChampion;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.LeaguePosition;
 
 import javax.persistence.*;
@@ -23,15 +23,15 @@ import static javax.persistence.FetchType.LAZY;
 public class Profile extends BaseEntity {
 
 	@Builder
-	public Profile(Account account, boolean isCertified, Integer authProfileIconId, String summonerAccountId, List<LeaguePosition> leaguePosition, List<Champion> champions, List<Position> positions, SummonerInfo summonerInfo) {
+	private Profile(Account account, boolean isCertified, Integer authProfileIconId, String summonerAccountId, List<LeaguePosition> leaguePosition, List<PreferChampion> preferChampions, List<PreferLine> preferLines, SummonerInfo summonerInfo) {
+		this.account = account;
 		this.isCertified = isCertified;
 		this.authProfileIconId = authProfileIconId;
 		this.summonerAccountId = summonerAccountId;
 		this.leaguePosition = leaguePosition;
-		this.champions = champions;
-		this.positions = positions;
+		this.preferChampions = preferChampions;
+		this.preferLines = preferLines;
 		this.summonerInfo = summonerInfo;
-		changeAccount(account);
 	}
 
 	@Id
@@ -57,10 +57,10 @@ public class Profile extends BaseEntity {
 	private List<LeaguePosition> leaguePosition = new ArrayList<>();
 
 	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
-	private List<Champion> champions = new ArrayList<>();
+	private List<PreferChampion> preferChampions = new ArrayList<>();
 
 	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
-	private List<Position> positions = new ArrayList<>();
+	private List<PreferLine> preferLines = new ArrayList<>();
 
 	@Embedded
 	private SummonerInfo summonerInfo;
