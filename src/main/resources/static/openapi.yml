@@ -101,7 +101,7 @@ paths:
         content:
           "application/json":
             schema:
-              $ref: '#/components/schemas/ProfileRequest'
+              $ref: '#/components/schemas/ProfileCreateRequest'
       responses:
         '200':
           description: 프로필 생성 성공
@@ -246,13 +246,42 @@ components:
           example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJvnGdnIiwic3ViIjoiMSIsImV4cCI6MTYyODQzMTMwNCwiaWF0IjoxNjI4NDI5NTA0LCJhdXRoIjoiUk9MRV9VU0VSIn0.qRWiKpHKBF13M7Tw485NaDPveVF2iRh9vZ39YRJvItW16ikg7pHmmP3QwEzc732TPntruhgWzny-VrOBBk8LWA
 
     ### Profile ###
-    ProfileRequest:
+    ProfileCreateRequest:
       type: object
       writeOnly: true
       properties:
         summonerName:
           type: string
           example: Hide on bush
+        preferChampions:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: integer
+          example:
+            - priority: 1
+              cahmpionId: 10
+            - priority: 2
+              cahmpionId: 13
+        preferLines:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+          example:
+            - priority: 1
+              line: TOP
+            - priority: 2
+              line: AD
+
     ProfileAuthRequest:
       type: object
       writeOnly: true

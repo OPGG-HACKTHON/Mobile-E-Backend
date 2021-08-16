@@ -2,6 +2,7 @@ package opgg.backend.gmakersserver.domain.profile.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
 import java.util.Optional;
@@ -37,4 +38,11 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom{
                                         .fetchOne());
     }
 
+    @Override
+    public long countByAccount(Account account) {
+        return queryFactory
+                    .selectFrom(profile)
+                    .where(profile.account.accountId.eq(account.getAccountId()))
+                    .fetchCount();
+    }
 }

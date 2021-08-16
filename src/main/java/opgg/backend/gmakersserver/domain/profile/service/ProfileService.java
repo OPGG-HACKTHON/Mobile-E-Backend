@@ -79,6 +79,8 @@ public class ProfileService {
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
 
 		long profileCount = profileRepository.countByAccount(account);
+		System.out.println(profileCount);
+		System.out.println(profileCount);
 		if (isNotCreateProfile(profileCount)) {
 			throw new ProfileBoundsException();
 		}
