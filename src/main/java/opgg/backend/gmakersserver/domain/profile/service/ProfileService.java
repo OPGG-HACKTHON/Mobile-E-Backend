@@ -1,9 +1,12 @@
 package opgg.backend.gmakersserver.domain.profile.service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
@@ -91,7 +94,7 @@ public class ProfileService {
 
 		SummonerInfo summonerInfo = SummonerInfo.builder()
 				.summonerId(summoner.getId())
-				.summonerName(summonerName)
+				.summonerName(summoner.getName())
 				.profileIconId(summoner.getProfileIcon().getId())
 				.build();
 
@@ -135,4 +138,16 @@ public class ProfileService {
 		return new ProfileResponse.AuthConfirm(isAuthConfirm(profile));
 	}
 
+	@Transactional(readOnly = true)
+	public List<ProfileResponse.Find> getProfiles(Long id) {
+		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
+		List<Profile> profiles = profileRepository.findByAccount(account);
+		if (CollectionUtils.isEmpty(profiles)) {
+			// TODO : 임시 처리
+			throw new RuntimeException("프로필이 존재하지 않습니다.");
+		}
+
+		System.out.println("profiles = " + profiles.size());
+		return null;
+	}
 }

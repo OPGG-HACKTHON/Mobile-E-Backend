@@ -2,9 +2,12 @@ package opgg.backend.gmakersserver.domain.profile.controller;
 
 import static org.springframework.http.HttpStatus.*;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +27,7 @@ public class ProfileController {
 
 	private final ProfileService profileService;
 
-	@PostMapping("/profile")
+	@PostMapping("/profiles")
 	@ResponseStatus(CREATED)
 	public String createProfile(@Valid @RequestBody ProfileRequest.Create create, @AuthenticationPrincipal
 			Long id) {
@@ -32,13 +35,19 @@ public class ProfileController {
 		return "Create Profile";
 	}
 
-	@PatchMapping("/profile/auth")
+	@PatchMapping("/profiles/auth")
 	public ProfileResponse.Auth authProfile(@Valid @RequestBody ProfileRequest.Auth auth, @AuthenticationPrincipal Long id) {
 		return profileService.authProfile(auth, id);
 	}
 
-	@PatchMapping("/profile/auth-confirm")
+	@PatchMapping("/profiles/auth-confirm")
 	public ProfileResponse.AuthConfirm authConfirm(@Valid @RequestBody ProfileRequest.Auth auth, @AuthenticationPrincipal Long id) {
 		return profileService.authConfirm(auth, id);
 	}
+
+	@GetMapping("/profiles")
+	public List<ProfileResponse.Find> getProfiles(@AuthenticationPrincipal Long id) {
+		return profileService.getProfiles(id);
+	}
+
 }

@@ -29,16 +29,16 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "key": "RGAPI-efeb2a5b-b526-4797-883a-105ecc5715e9"
+  "key": "RGAPI-f01903e1-3e6c-47f1-8061-5f8011a09988"
 }
 
 ### 프로필 생성
-POST {{url}}/profile
+POST {{url}}/profiles
 Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "summonerName": "게약혜지",
+  "summonerName": "Mastery7",
   "preferChampions": [
     {
       "priority": 1,
@@ -59,11 +59,11 @@ Content-Type: application/json
       "line": "AD"
     }
   ],
-  "preferQueue" : "RANKED_FLEX"
+  "preferQueue" : "NONE"
 }
 
 ### 프로필 인증
-PATCH {{url}}/profile/auth
+PATCH {{url}}/profiles/auth
 Authorization: {{Authorization}}
 Content-Type: application/json
 
@@ -72,10 +72,14 @@ Content-Type: application/json
 }
 
 ### 프로필 인증확인
-PATCH {{url}}/profile/auth-confirm
+PATCH {{url}}/profiles/auth-confirm
 Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
   "summonerId": "YLhKPSvcrbAGV4_oiKMtLZLlAC7dITaXxBUtxkStn9qHqGU"
 }
+
+### 프로필 조회
+GET {{url}}/profiles
+Authorization: {{Authorization}}
