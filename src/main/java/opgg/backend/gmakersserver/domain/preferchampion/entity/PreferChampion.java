@@ -28,12 +28,13 @@ import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 public class PreferChampion {
 
     @Builder
-    public PreferChampion(Profile profile, int championId, int championLevel, int championPoints, int priority) {
+    public PreferChampion(Profile profile, int championId, int championLevel, int championPoints, int priority, String championName) {
         this.profile = profile;
         this.championId = championId;
         this.championLevel = championLevel;
         this.championPoints = championPoints;
         this.priority = priority;
+        this.championName = championName;
     }
 
     @Id
@@ -48,6 +49,9 @@ public class PreferChampion {
 
     @Column(name = "CHAMPION_ID")
     private int championId;
+
+    @Column(name = "CHAMPION_NAME")
+    private String championName;
 
     @Column(name = "CHAMPION_LEVEL")
     private int championLevel;
