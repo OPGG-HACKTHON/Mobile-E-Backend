@@ -39,8 +39,8 @@ public class PreferLine {
     @Id
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "POSITION_ID")
-    private Long positionId;
+    @Column(name = "PREFER_LINE_ID")
+    private Long preferLineId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "PROFILE_ID")

@@ -38,7 +38,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "summonerName": "Mastery7",
+  "summonerName": "hideonbush",
   "preferChampions": [
     {
       "priority": 1,
