@@ -1,16 +1,6 @@
 package opgg.backend.gmakersserver.domain.profile.service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
-
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
-
 import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
@@ -19,6 +9,7 @@ import opgg.backend.gmakersserver.domain.leagueposition.service.LeaguePositionSe
 import opgg.backend.gmakersserver.domain.preferchampion.service.PreferChampionService;
 import opgg.backend.gmakersserver.domain.preferline.service.PreferLineService;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
+import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileFindResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileResponse;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 import opgg.backend.gmakersserver.domain.profile.entity.SummonerInfo;
@@ -26,7 +17,15 @@ import opgg.backend.gmakersserver.domain.profile.repository.ProfileRepository;
 import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileBoundsException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileExistException;
+import opgg.backend.gmakersserver.error.exception.profile.ProfileNotExistException;
 import opgg.backend.gmakersserver.error.exception.riotapi.SummonerNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+
+import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -139,15 +138,15 @@ public class ProfileService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<ProfileResponse.Find> getProfiles(Long id) {
+	public List<ProfileFindResponse> getProfiles(Long id) {
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
-		List<Profile> profiles = profileRepository.findByAccount(account);
-		if (CollectionUtils.isEmpty(profiles)) {
-			// TODO : 임시 처리
-			throw new RuntimeException("프로필이 존재하지 않습니다.");
+		List<ProfileFindResponse> profileMainByAccount = profileRepository.findProfileMainByAccount(account);
+
+		if (CollectionUtils.isEmpty(profileMainByAccount)) {
+			throw new ProfileNotExistException();
 		}
 
-		System.out.println("profiles = " + profiles.size());
-		return null;
+		return profileMainByAccount;
 	}
+
 }

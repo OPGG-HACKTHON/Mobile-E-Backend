@@ -19,6 +19,16 @@ tags:
     description: Account resource
 
 paths:
+  ### ChampionInfo ###
+  /champion-info:
+    get:
+      summary: 챔피언 이름과 id값 목록
+      tags:
+        - ChampionInfo
+      responses:
+        '200':
+          description: 성공
+
   ### Account ###
   /accounts/sign-up:
     post:
@@ -40,7 +50,6 @@ paths:
                 type: string
                 writeOnly: true
                 example: signUp success
-
         '400':
           description: 회원가입 실패
           content:
@@ -90,7 +99,7 @@ paths:
           $ref: '#/components/responses/500'
 
   ### Profile ###
-  /profile:
+  /profiles:
     post:
       summary: 프로필 생성
       tags:
@@ -126,7 +135,19 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
-  /profile/auth:
+    get:
+      summary: 프로필 메인 정보 조회
+      tags:
+        - Profile
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileFindResponse'
+
+  /profiles/auth:
     patch:
       summary: 프로필 인증
       tags:
@@ -153,7 +174,7 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
-  /profile/auth-confirm:
+  /profiles/auth-confirm:
     patch:
       summary: 프로필 인증 확인
       tags:
@@ -281,7 +302,6 @@ components:
               line: TOP
             - priority: 2
               line: AD
-
     ProfileAuthRequest:
       type: object
       writeOnly: true
@@ -300,9 +320,58 @@ components:
       type: object
       writeOnly: true
       properties:
-        certified:
+        isCertified:
           type: boolean
           example: true
+    ProfileFindResponse:
+      type: object
+      writeOnly: true
+      properties:
+        accountId:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: "testtest"
+        profileId:
+          type: integer
+          example: 1
+        isCertified:
+          type: boolean
+          example: true
+        summonerAccountId:
+          type: integer
+          example: 1
+        profileIconId:
+          type: integer
+          example: 21
+        summonerId:
+          type: string
+          example: YLhKPSfcrbAGV4_oiKMt6ZLlAC7dITdXxBUtxkStn9qH5GU
+        summonerName:
+          type: string
+          example: Hide on bush
+        preferQueue:
+          type: string
+          example: RANKED_SOLO
+        level:
+          type: integer
+          example: 544
+        queue:
+          type: string
+          example: RANKED_FLEX
+        tier:
+          type: string
+          example: GOLD
+        tierLevel:
+          type: integer
+          example: 3
+        line:
+          type: string
+          example: MID
+        priority:
+          type: integer
+          example: 1
 
   responses:
     '400':

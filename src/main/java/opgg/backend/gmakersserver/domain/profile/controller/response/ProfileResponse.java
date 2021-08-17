@@ -20,24 +20,4 @@ public class ProfileResponse {
 		private final boolean isCertified;
 	}
 
-	@Getter
-	@AllArgsConstructor
-	public static class Find {
-		private final long accountId;
-		private final String username;
-		private final long profileId;
-		private final boolean isCertified;
-		private final String summonerAccountId;
-		private final long profileIconId;
-		private final String summonerId;
-		private final String summonerName;
-		private final Queue preferQueue;
-		private final int level;
-		private final Queue queue;
-		private final Tier tier;
-		private final int tierLevel;
-		private final Line line;
-		private final int priority;
-	}
-
 }

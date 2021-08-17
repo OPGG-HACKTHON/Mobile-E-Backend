@@ -38,7 +38,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "summonerName": "hideonbush",
+  "summonerName": "opggTeamE",
   "preferChampions": [
     {
       "priority": 1,
@@ -68,7 +68,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "summonerId": "YLhKPSvcrbAGV4_oiKMtLZLlAC7dITaXxBUtxkStn9qHqGU"
+  "summonerId": "8eDN8njLDjyiT9H8_SZFOi2Ft17wr3oDXsNnc8iDiz77lJzybOTih8Uy4w"
 }
 
 ### 프로필 인증확인
@@ -77,7 +77,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "summonerId": "YLhKPSvcrbAGV4_oiKMtLZLlAC7dITaXxBUtxkStn9qHqGU"
+  "summonerId": "8eDN8njLDjyiT9H8_SZFOi2Ft17wr3oDXsNnc8iDiz77lJzybOTih8Uy4w"
 }
 
 ### 프로필 조회
