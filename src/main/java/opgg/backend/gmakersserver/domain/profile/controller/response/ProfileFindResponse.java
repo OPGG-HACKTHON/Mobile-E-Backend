@@ -10,29 +10,29 @@ import opgg.backend.gmakersserver.domain.preferline.entity.Line;
 public class ProfileFindResponse {
 
     //Account
-    private Long accountId;
-    private String username;
+    private final Long accountId;
+    private final String username;
 
     //Profile
-    private Long profileId;
-    private boolean isCertified;
-    private String summonerAccountId;
+    private final Long profileId;
+    private final boolean isCertified;
+    private final String summonerAccountId;
 
     //SummonerInfo
-    private Integer profileIconId;
-    private String summonerId;
-    private String summonerName;
-    private Queue preferQueue;
+    private final Integer profileIconId;
+    private final String summonerId;
+    private final String summonerName;
+    private final Queue preferQueue;
 
     //LeaguePosition
-    private int level;
-    private Queue queue;
-    private Tier tier;
-    private int tierLevel;
+    private final int level;
+    private final Queue queue;
+    private final Tier tier;
+    private final int tierLevel;
 
     //PreferLine
-    private Line line;
-    private int preferLinePriority;
+    private final Line line;
+    private final int preferLinePriority;
 
     @QueryProjection
     public ProfileFindResponse(Long accountId, String username, Long profileId, boolean isCertified, String summonerAccountId, Integer profileIconId, String summonerId, String summonerName, Queue preferQueue, int level, Queue queue, Tier tier, int tierLevel, Line line, int preferLinePriority) {

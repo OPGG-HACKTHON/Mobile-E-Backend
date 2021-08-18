@@ -9,12 +9,15 @@ import opgg.backend.gmakersserver.domain.leagueposition.service.LeaguePositionSe
 import opgg.backend.gmakersserver.domain.preferchampion.service.PreferChampionService;
 import opgg.backend.gmakersserver.domain.preferline.service.PreferLineService;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
+import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileDetailResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileFindResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileResponse;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 import opgg.backend.gmakersserver.domain.profile.entity.SummonerInfo;
 import opgg.backend.gmakersserver.domain.profile.repository.ProfileRepository;
 import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
+import opgg.backend.gmakersserver.error.exception.preferchampion.PreferChampionBoundsException;
+import opgg.backend.gmakersserver.error.exception.preferchampion.PreferChampionPriorityDuplicateException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileBoundsException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileExistException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileNotExistException;
@@ -25,6 +28,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 @Service
@@ -36,6 +40,20 @@ public class ProfileService {
 	private final LeaguePositionService leaguePositionService;
 	private final PreferLineService preferLineService;
 	private final PreferChampionService preferChampionService;
+
+
+	private boolean isNotCreatePreferChampions(ProfileRequest.Create profileRequest) {
+		List<ProfileRequest.Create.PreferChampion> preferChampions = profileRequest.getPreferChampions();
+		if (preferChampions.size() > 3) {
+			return true;
+		}
+		int size = preferChampions.size();
+		long distinctSize = preferChampions.stream().distinct().count();
+		if (size != distinctSize) {
+			throw new PreferChampionPriorityDuplicateException();
+		}
+		return false;
+	}
 
 	private boolean isNotCreateProfile(long count) {
 		return count >= 3;
@@ -76,6 +94,10 @@ public class ProfileService {
 		Summoner summoner = Summoner.named(summonerName).get();
 		if (ObjectUtils.isEmpty(summoner.getProfileIcon())) {
 			throw new SummonerNotFoundException();
+		}
+
+		if (isNotCreatePreferChampions(profileRequest)) {
+			throw new PreferChampionBoundsException();
 		}
 
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
@@ -149,4 +171,17 @@ public class ProfileService {
 		return profileMainByAccount;
 	}
 
+	@Transactional(readOnly = true)
+	public List<ProfileDetailResponse> getProfile(Long profileId, Long id) {
+		// TODO : 처리
+		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
+
+		List<Profile> profiles = account.getProfile();
+		Profile findProfile = profiles.stream()
+				.filter(profile -> Objects.equals(profile.getProfileId(), profileId))
+				.findFirst()
+				.get();
+		List<Profile> profileDetailByAccount = profileRepository.findProfileDetailNativeByAccountIdAndProfileId(account.getAccountId(), findProfile.getProfileId());
+		return null;
+	}
 }

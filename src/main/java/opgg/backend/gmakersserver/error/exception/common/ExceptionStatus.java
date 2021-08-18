@@ -28,6 +28,10 @@ public enum ExceptionStatus{
 	// S3 , 4150
 	NOT_IMAGE_FILE_EXCEPTION(4150, "이미지 파일만 업로드 가능합니다.", BAD_REQUEST),
 
+	// PreferChampion, 4200
+	PREFER_CHAMPION_BOUNDS_EXCEPTION(4200, "선호 챔피언 개수 초과(3개)", BAD_REQUEST),
+	PREFER_CHAMPION_PRIORITY_DUPLICATE_EXCEPTION(4201, "선호 챔피언 우선순위를 다르게 해주세요.", BAD_REQUEST),
+
 	// Common
 	RUN_TIME_EXCEPTION(500, "런타임 에러", INTERNAL_SERVER_ERROR),
 	NOT_FOUND_EXCEPTION(404, "요청한 리소스가 존재하지 않습니다.", NOT_FOUND),

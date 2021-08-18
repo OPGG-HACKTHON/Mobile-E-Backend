@@ -49,7 +49,7 @@ public class LeaguePositionService {
 		}
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public Queue getPreferQueue(ProfileRequest.Create profileRequest, Profile profile) {
 		Queue queue = NONE;
 		List<LeaguePosition> leaguePositions = leaguePositionRepository.findByProfile(profile);

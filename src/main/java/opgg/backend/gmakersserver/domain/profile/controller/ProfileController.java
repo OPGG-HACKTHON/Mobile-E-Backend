@@ -2,8 +2,10 @@ package opgg.backend.gmakersserver.domain.profile.controller;
 
 import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
+import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileDetailResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileFindResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileResponse;
+import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 import opgg.backend.gmakersserver.domain.profile.service.ProfileService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +43,11 @@ public class ProfileController {
 	@GetMapping("/profiles")
 	public List<ProfileFindResponse> getProfiles(@AuthenticationPrincipal Long id) {
 		return profileService.getProfiles(id);
+	}
+
+	@GetMapping("/profiles/{id}")
+	public List<ProfileDetailResponse> getProfile(@PathVariable("id") Long profileId, @AuthenticationPrincipal Long id) {
+		return profileService.getProfile(profileId, id);
 	}
 
 }
