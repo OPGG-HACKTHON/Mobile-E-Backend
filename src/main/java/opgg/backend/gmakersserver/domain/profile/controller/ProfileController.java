@@ -46,7 +46,7 @@ public class ProfileController {
 	}
 
 	@GetMapping("/profiles/{id}")
-	public List<ProfileDetailResponse> getProfile(@PathVariable("id") Long profileId, @AuthenticationPrincipal Long id) {
+	public ProfileDetailResponse getProfile(@PathVariable("id") Long profileId, @AuthenticationPrincipal Long id) {
 		return profileService.getProfile(profileId, id);
 	}
 

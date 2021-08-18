@@ -4,8 +4,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "testtest",
-  "password": "testtest"
+  "username": "testtest1",
+  "password": "testtest1"
 }
 
 ### 로그인
@@ -14,8 +14,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "testtest",
-  "password": "testtest"
+  "username": "testtest1",
+  "password": "testtest1"
 }
 
 > {%
@@ -29,7 +29,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "key": "RGAPI-f01903e1-3e6c-47f1-8061-5f8011a09988"
+  "key": "RGAPI-7eb1240e-c870-4f4b-9b20-0d1d14dd192f"
 }
 
 ### 프로필 생성
@@ -38,15 +38,19 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "summonerName": "opggTeamE",
+  "summonerName": "Mastery7",
   "preferChampions": [
     {
       "priority": 1,
-      "championId": 76
+      "championId": 22
     },
     {
       "priority": 2,
-      "championId": 11
+      "championId": 15
+    },
+    {
+      "priority": 3,
+      "championId": 55
     }
   ],
   "preferLines": [
@@ -59,7 +63,7 @@ Content-Type: application/json
       "line": "AD"
     }
   ],
-  "preferQueue" : "NONE"
+  "preferQueue" : "RANKED_SOLO"
 }
 
 ### 프로필 인증
@@ -82,4 +86,8 @@ Content-Type: application/json
 
 ### 프로필 조회
 GET {{url}}/profiles
+Authorization: {{Authorization}}
+
+### 프로필 상세조회
+GET {{url}}/profiles/1
 Authorization: {{Authorization}}

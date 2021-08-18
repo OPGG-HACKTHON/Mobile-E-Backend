@@ -1,6 +1,16 @@
 package opgg.backend.gmakersserver.domain.profile.service;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
+
 import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
@@ -22,14 +32,6 @@ import opgg.backend.gmakersserver.error.exception.profile.ProfileBoundsException
 import opgg.backend.gmakersserver.error.exception.profile.ProfileExistException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileNotExistException;
 import opgg.backend.gmakersserver.error.exception.riotapi.SummonerNotFoundException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +42,6 @@ public class ProfileService {
 	private final LeaguePositionService leaguePositionService;
 	private final PreferLineService preferLineService;
 	private final PreferChampionService preferChampionService;
-
 
 	private boolean isNotCreatePreferChampions(ProfileRequest.Create profileRequest) {
 		List<ProfileRequest.Create.PreferChampion> preferChampions = profileRequest.getPreferChampions();
@@ -172,8 +173,7 @@ public class ProfileService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<ProfileDetailResponse> getProfile(Long profileId, Long id) {
-		// TODO : 처리
+	public ProfileDetailResponse getProfile(Long profileId, Long id) {
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
 
 		List<Profile> profiles = account.getProfile();
@@ -181,7 +181,8 @@ public class ProfileService {
 				.filter(profile -> Objects.equals(profile.getProfileId(), profileId))
 				.findFirst()
 				.get();
-		List<Profile> profileDetailByAccount = profileRepository.findProfileDetailNativeByAccountIdAndProfileId(account.getAccountId(), findProfile.getProfileId());
-		return null;
+		ProfileDetailResponse result = new ProfileDetailResponse();
+		return result.listToProfileDetailResponse(profileRepository.findProfileDetailByAccountAndProfile(
+				account, findProfile));
 	}
 }
