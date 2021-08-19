@@ -456,6 +456,9 @@ components:
         winRate:
           type: integer
           example: 90
+        discription:
+          type: string
+          example: "저는 미드라이너입니다. 로밍다니는것을 좋아하며 즐겜유저입니다. ~~~~~"
         preferChampions:
           type: array
           items:

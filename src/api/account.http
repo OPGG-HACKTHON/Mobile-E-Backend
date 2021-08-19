@@ -4,8 +4,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "test1111",
-  "password": "test1111"
+  "username": "test2222",
+  "password": "test2222"
 }
 
 ### 로그인
@@ -14,8 +14,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "test1111",
-  "password": "test1111"
+  "username": "test2222",
+  "password": "test2222"
 }
 
 > {%
@@ -38,7 +38,8 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "summonerName": "강찬밥",
+  "summonerName": "강친밥",
+  "description": "저는 미드라이너입니다. 로밍다니는것을 좋아하며 즐겜유저입니다.",
   "preferChampions": [
     {
       "priority": 32,
@@ -63,7 +64,7 @@ Content-Type: application/json
       "line": "TOP"
     }
   ],
-  "preferQueue" : "NONE"
+  "preferQueue" : "RANKED_SOLO"
 }
 
 ### 프로필 인증
@@ -89,5 +90,5 @@ GET {{url}}/profiles
 Authorization: {{Authorization}}
 
 ### 프로필 상세조회
-GET {{url}}/profiles/1
+GET {{url}}/profiles/5
 Authorization: {{Authorization}}

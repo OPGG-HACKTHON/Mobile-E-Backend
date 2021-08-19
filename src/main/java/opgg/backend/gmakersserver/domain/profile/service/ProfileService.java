@@ -147,6 +147,7 @@ public class ProfileService {
 				.authProfileIconId(null)
 				.summonerAccountId(summoner.getAccountId())
 				.summonerInfo(summonerInfo)
+				.description(profileRequest.getDescription())
 				.build();
 
 		profileRepository.save(profile);

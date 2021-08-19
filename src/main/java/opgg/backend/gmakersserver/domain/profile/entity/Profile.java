@@ -24,11 +24,13 @@ import static javax.persistence.FetchType.LAZY;
 public class Profile extends BaseEntity {
 
 	@Builder
-	private Profile(Account account, boolean isCertified, Integer authProfileIconId, String summonerAccountId, List<LeaguePosition> leaguePosition, List<PreferChampion> preferChampions, List<PreferLine> preferLines, SummonerInfo summonerInfo) {
+	public Profile(Account account, boolean isCertified, Integer authProfileIconId, String summonerAccountId, Queue preferQueue, String description, List<LeaguePosition> leaguePosition, List<PreferChampion> preferChampions, List<PreferLine> preferLines, SummonerInfo summonerInfo) {
 		this.account = account;
 		this.isCertified = isCertified;
 		this.authProfileIconId = authProfileIconId;
 		this.summonerAccountId = summonerAccountId;
+		this.preferQueue = preferQueue;
+		this.description = description;
 		this.leaguePosition = leaguePosition;
 		this.preferChampions = preferChampions;
 		this.preferLines = preferLines;
@@ -57,6 +59,9 @@ public class Profile extends BaseEntity {
 	@Column(name = "PREFER_QUEUE")
 	@Enumerated(EnumType.STRING)
 	private Queue preferQueue;
+
+	@Column(name = "DESCRIPTION")
+	private String description;
 
 	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
 	private List<LeaguePosition> leaguePosition = new ArrayList<>();

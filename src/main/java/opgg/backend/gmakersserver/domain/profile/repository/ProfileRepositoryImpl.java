@@ -103,6 +103,7 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 						QProfile.profile.summonerInfo.profileIconId,
 						QProfile.profile.summonerInfo.summonerId,
 						QProfile.profile.summonerInfo.summonerName,
+						QProfile.profile.description,
 						leaguePosition.level,
 						leaguePosition.queue,
 						leaguePosition.tier,

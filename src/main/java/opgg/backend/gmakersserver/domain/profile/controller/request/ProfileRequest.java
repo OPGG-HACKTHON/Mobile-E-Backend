@@ -31,6 +31,8 @@ public class ProfileRequest {
 		private final List<PreferLine> preferLines = new ArrayList<>();
 		@NotBlank
 		private String summonerName;
+		@NotBlank
+		private String description;
 
 		@NotNull
 		private Queue preferQueue;

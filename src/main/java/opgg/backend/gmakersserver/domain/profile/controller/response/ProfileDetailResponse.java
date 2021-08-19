@@ -44,6 +44,7 @@ public class ProfileDetailResponse {
 	private int loseGames;
 	private int winGames;
 	private int winRate;
+	private String description;
 	//PreferChampion
 	private List<PreferChampion> preferChampions = new ArrayList<>();
 	//PreferLine
@@ -53,7 +54,7 @@ public class ProfileDetailResponse {
 	@QueryProjection
 	public ProfileDetailResponse(Long accountId, String username, Long profileId, boolean isCertified,
 			String summonerAccountId, Queue preferQueue, Integer profileIconId, String summonerId, String summonerName,
-			int level, Queue queue, Tier tier, int tierLevel, int leaguePoint, int loseGames,
+			String description, int level, Queue queue, Tier tier, int tierLevel, int leaguePoint, int loseGames,
 			int winGames, int winRate, String championName, int championId, int championPoints, int championLevel,
 			int preferChampionPriority, Line line, int preferLinePriority) {
 		this.accountId = accountId;
@@ -64,6 +65,7 @@ public class ProfileDetailResponse {
 		this.profileIconId = profileIconId;
 		this.summonerId = summonerId;
 		this.summonerName = summonerName;
+		this.description = description;
 		this.preferQueue = preferQueue;
 		this.level = level;
 		this.queue = queue;
@@ -95,6 +97,7 @@ public class ProfileDetailResponse {
 					this.loseGames = profileDetailResponse.getLoseGames();
 					this.winGames = profileDetailResponse.getWinGames();
 					this.winRate = profileDetailResponse.getWinRate();
+					this.description = profileDetailResponse.description;
 				}
 				this.accountId = profileDetailResponse.getAccountId();
 				this.username = profileDetailResponse.getUsername();
