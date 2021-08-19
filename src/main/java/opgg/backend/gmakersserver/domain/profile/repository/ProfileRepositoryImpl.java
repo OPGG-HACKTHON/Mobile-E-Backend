@@ -1,6 +1,16 @@
 package opgg.backend.gmakersserver.domain.profile.repository;
 
+import static opgg.backend.gmakersserver.domain.account.entity.QAccount.*;
+import static opgg.backend.gmakersserver.domain.leagueposition.entity.QLeaguePosition.*;
+import static opgg.backend.gmakersserver.domain.preferchampion.entity.QPreferChampion.*;
+import static opgg.backend.gmakersserver.domain.preferline.entity.QPreferLine.*;
+import static opgg.backend.gmakersserver.domain.profile.entity.QProfile.*;
+
+import java.util.List;
+import java.util.Optional;
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.entity.QAccount;
@@ -10,15 +20,6 @@ import opgg.backend.gmakersserver.domain.profile.controller.response.QProfileDet
 import opgg.backend.gmakersserver.domain.profile.controller.response.QProfileFindResponse;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 import opgg.backend.gmakersserver.domain.profile.entity.QProfile;
-
-import java.util.List;
-import java.util.Optional;
-
-import static opgg.backend.gmakersserver.domain.account.entity.QAccount.account;
-import static opgg.backend.gmakersserver.domain.leagueposition.entity.QLeaguePosition.leaguePosition;
-import static opgg.backend.gmakersserver.domain.preferchampion.entity.QPreferChampion.preferChampion;
-import static opgg.backend.gmakersserver.domain.preferline.entity.QPreferLine.preferLine;
-import static opgg.backend.gmakersserver.domain.profile.entity.QProfile.profile;
 
 @RequiredArgsConstructor
 public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
@@ -123,9 +124,11 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 				.leftJoin(leaguePosition).on(QProfile.profile.profileId.eq(leaguePosition.profile.profileId))
 				.join(preferChampion).on(QProfile.profile.profileId.eq(preferChampion.profile.profileId))
 				.leftJoin(preferLine).on(QProfile.profile.profileId.eq(preferLine.profile.profileId))
-                .where(QAccount.account.activated.eq(true).and(QProfile.profile.preferQueue.eq(leaguePosition.queue)).and(QProfile.profile.profileId.eq(profile.getProfileId())))
-                .orderBy(QProfile.profile.summonerInfo.summonerName.asc(), preferChampion.championName.asc(),
-                        leaguePosition.queue.asc(), preferLine.priority.asc())
-                .fetch();
+				.where(QAccount.account.activated.eq(true)
+						.and(QProfile.profile.preferQueue.eq(leaguePosition.queue))
+						.and(QProfile.profile.profileId.eq(profile.getProfileId())))
+				.orderBy(QProfile.profile.summonerInfo.summonerName.asc(), preferChampion.championName.asc(),
+						leaguePosition.queue.asc(), preferLine.priority.asc())
+				.fetch();
 	}
 }
