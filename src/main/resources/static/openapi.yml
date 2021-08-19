@@ -147,6 +147,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProfileFindResponse'
 
+  /profiles/{id}:
+    get:
+      summary: 프로필 상세정보 조회
+      tags:
+        - Profile
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 사용자 계정(Account) id값
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileDetailFindResponse'
+
   /profiles/auth:
     patch:
       summary: 프로필 인증
@@ -366,6 +386,107 @@ components:
         tierLevel:
           type: integer
           example: 3
+        preferLines:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: integer
+          example:
+            - line: MID
+              preferLinePriority: 1
+            - line: TOP
+              preferLinePriority: 2
+        certified:
+          type: boolean
+          example: true
+
+    ProfileDetailFindResponse:
+      type: object
+      writeOnly: true
+      properties:
+        accountId:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: "testtest"
+        profileId:
+          type: integer
+          example: 1
+        summonerAccountId:
+          type: integer
+          example: 1
+        preferQueue:
+          type: string
+          example: RANKED_SOLO
+        profileIconId:
+          type: integer
+          example: 21
+        summonerId:
+          type: string
+          example: YLhKPSfcrbAGV4_oiKMt6ZLlAC7dITdXxBUtxkStn9qH5GU
+        summonerName:
+          type: string
+          example: Hide on bush
+        level:
+          type: integer
+          example: 544
+        queue:
+          type: string
+          example: RANKED_SOLO
+        tier:
+          type: string
+          example: CHALLEGER
+        tierLevel:
+          type: integer
+          example: 3
+        leaguePoint:
+          type: integer
+          example: 84
+        loseGames:
+          type: integer
+          example: 10
+        winGames:
+          type: integer
+          example: 100
+        winRate:
+          type: integer
+          example: 90
+        preferChampions:
+          type: array
+          items:
+            type: object
+            properties:
+              1:
+                type: string
+              2:
+                type: integer
+              3:
+                type: integer
+              4:
+                type: integer
+              5:
+                type: integer
+          example:
+            - championName: "르블랑"
+              championId: 22
+              championPoints: "97"
+              preferChampionPriority: 1
+              championLevel: 5
+            - championName: "아지르"
+              championId: 25
+              championPoints: "77"
+              preferChampionPriority: 2
+              championLevel: 5
+            - championName: "라이즈"
+              championId: 27
+              championPoints: "197"
+              preferChampionPriority: 3
+              championLevel: 6
         preferLines:
           type: array
           items:
