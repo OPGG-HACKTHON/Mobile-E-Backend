@@ -12,7 +12,6 @@ import com.merakianalytics.orianna.types.core.league.LeaguePositions;
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
 
 import lombok.RequiredArgsConstructor;
-import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.LeaguePosition;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Tier;
@@ -35,18 +34,32 @@ public class LeaguePositionService {
 	public void createLeaguePosition(Summoner summoner, Profile profile) {
 		LeaguePositions leaguePositions = summoner.getLeaguePositions();
 		if (!leaguePositions.isEmpty()) {
-			leaguePositions.forEach(leaguePosition -> leaguePositionRepository.save(LeaguePosition.builder()
-					.profile(profile)
-					.tier(Tier.valueOf(String.valueOf(leaguePosition.getTier())))
-					.tierLevel(TierLevel.valueOf(String.valueOf(leaguePosition.getDivision())).getLevel())
-					.level(summoner.getLevel())
-					.winGames(leaguePosition.getWins())
-					.loseGames(leaguePosition.getLosses())
-					.winRate(getWinRate(leaguePosition.getWins(), leaguePosition.getLosses()))
-					.leaguePoint(leaguePosition.getLeaguePoints())
-					.queue(Queue.valueOf(String.valueOf(leaguePosition.getQueue())))
-					.build()));
+			leaguePositions
+					.stream()
+					.map(leaguePosition -> LeaguePosition.builder()
+							.profile(profile)
+							.tier(Tier.valueOf(String.valueOf(leaguePosition.getTier())))
+							.tierLevel(TierLevel.valueOf(String.valueOf(leaguePosition.getDivision())).getLevel())
+							.level(summoner.getLevel())
+							.winGames(leaguePosition.getWins())
+							.loseGames(leaguePosition.getLosses())
+							.winRate(getWinRate(leaguePosition.getWins(), leaguePosition.getLosses()))
+							.leaguePoint(leaguePosition.getLeaguePoints())
+							.queue(valueOf(String.valueOf(leaguePosition.getQueue())))
+							.build())
+					.forEach(leaguePositionRepository::save);
 		}
+		leaguePositionRepository.save(LeaguePosition.builder()
+				.profile(profile)
+				.tier(null)
+				.tierLevel(0)
+				.level(0)
+				.winGames(0)
+				.loseGames(0)
+				.winRate(0)
+				.leaguePoint(0)
+				.queue(NONE)
+				.build());
 	}
 
 	@Transactional(readOnly = true)
