@@ -1,5 +1,6 @@
 package opgg.backend.gmakersserver.domain.profile.controller.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class ProfileFindResponse {
         private int preferLinePriority;
     }
 
+    @JsonIgnore
     private int index = 0;
 
     //Account

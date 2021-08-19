@@ -359,19 +359,30 @@ components:
           example: 544
         queue:
           type: string
-          example: RANKED_FLEX
+          example: RANKED_SOLO
         tier:
           type: string
-          example: GOLD
+          example: CHALLEGER
         tierLevel:
           type: integer
           example: 3
-        line:
-          type: string
-          example: MID
-        priority:
-          type: integer
-          example: 1
+        preferLines:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: integer
+          example:
+            - line: MID
+              preferLinePriority: 1
+            - line: TOP
+              preferLinePriority: 2
+        certified:
+          type: boolean
+          example: true
 
   responses:
     '400':
