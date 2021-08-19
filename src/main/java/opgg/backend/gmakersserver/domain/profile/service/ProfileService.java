@@ -145,8 +145,7 @@ public class ProfileService {
 				.orElseThrow(SummonerNotFoundException::new);
 		int iconId = -1;
 		if (isAuthProfile(profile)) {
-			int profileIconId = profile.getSummonerInfo().getProfileIconId();
-			iconId = getRandomIconId(profileIconId);
+			iconId = getRandomIconId(profile.getSummonerInfo().getProfileIconId());
 			profile.changeAuthProfileIconId(iconId);
 		}
 		return new ProfileResponse.Auth(iconId);
@@ -175,14 +174,10 @@ public class ProfileService {
 	@Transactional(readOnly = true)
 	public ProfileDetailResponse getProfile(Long profileId, Long id) {
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
-
-		List<Profile> profiles = account.getProfile();
-		Profile findProfile = profiles.stream()
-				.filter(profile -> Objects.equals(profile.getProfileId(), profileId))
-				.findFirst()
-				.get();
-		ProfileDetailResponse result = new ProfileDetailResponse();
-		return result.listToProfileDetailResponse(profileRepository.findProfileDetailByAccountAndProfile(
-				account, findProfile));
+		Profile profile = profileRepository.findById(profileId).orElseThrow(ProfileNotExistException::new);
+		List<ProfileDetailResponse> profileDetailResponses = profileRepository.findProfileDetailByAccountAndProfile(
+				account, profile);
+		// return new ProfileDetailResponse().listToProfileDetailResponse(profileDetailResponses);
+		return new ProfileDetailResponse(profileDetailResponses);
 	}
 }
