@@ -177,7 +177,6 @@ public class ProfileService {
 		Profile profile = profileRepository.findById(profileId).orElseThrow(ProfileNotExistException::new);
 		List<ProfileDetailResponse> profileDetailResponses = profileRepository.findProfileDetailByAccountAndProfile(
 				account, profile);
-		// return new ProfileDetailResponse().listToProfileDetailResponse(profileDetailResponses);
 		return new ProfileDetailResponse(profileDetailResponses);
 	}
 }
