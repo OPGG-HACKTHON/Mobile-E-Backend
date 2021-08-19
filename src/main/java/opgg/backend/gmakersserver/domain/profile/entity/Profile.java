@@ -45,7 +45,7 @@ public class Profile extends BaseEntity {
 	@JoinColumn(name = "ACCOUNT_ID", updatable = false)
 	private Account account;
 
-	@Column(name = "CERITIFIED")
+	@Column(name = "CERTIFIED")
 	private boolean isCertified;
 
 	@Column(name = "AUTH_PROFILE_ICON_ID")

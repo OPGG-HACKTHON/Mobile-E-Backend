@@ -1,14 +1,17 @@
 package opgg.backend.gmakersserver.domain.profile.service;
 
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
 
 import lombok.RequiredArgsConstructor;
+import opgg.backend.gmakersserver.application.util.DeduplicationUtils;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
@@ -16,13 +19,20 @@ import opgg.backend.gmakersserver.domain.leagueposition.service.LeaguePositionSe
 import opgg.backend.gmakersserver.domain.preferchampion.service.PreferChampionService;
 import opgg.backend.gmakersserver.domain.preferline.service.PreferLineService;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
+import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileDetailResponse;
+import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileFindResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileResponse;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 import opgg.backend.gmakersserver.domain.profile.entity.SummonerInfo;
 import opgg.backend.gmakersserver.domain.profile.repository.ProfileRepository;
 import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
+import opgg.backend.gmakersserver.error.exception.preferchampion.PreferChampionBoundsException;
+import opgg.backend.gmakersserver.error.exception.preferchampion.PreferChampionPriorityDuplicateException;
+import opgg.backend.gmakersserver.error.exception.preferline.PreferLineBoundsException;
+import opgg.backend.gmakersserver.error.exception.preferline.PreferLinePriorityDuplicateException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileBoundsException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileExistException;
+import opgg.backend.gmakersserver.error.exception.profile.ProfileNotExistException;
 import opgg.backend.gmakersserver.error.exception.riotapi.SummonerNotFoundException;
 
 @Service
@@ -34,6 +44,34 @@ public class ProfileService {
 	private final LeaguePositionService leaguePositionService;
 	private final PreferLineService preferLineService;
 	private final PreferChampionService preferChampionService;
+
+	private boolean isNotCreatePreferLines(ProfileRequest.Create profileRequest) {
+		List<ProfileRequest.Create.PreferLine> preferLines = profileRequest.getPreferLines();
+		if (preferLines.size() > 2) {
+			return true;
+		}
+		int size = preferLines.size();
+		int distinctSize = DeduplicationUtils.deduplication(preferLines, ProfileRequest.Create.PreferLine::getPriority)
+				.size();
+		if (size != distinctSize) {
+			throw new PreferLinePriorityDuplicateException();
+		}
+		return false;
+	}
+
+	private boolean isNotCreatePreferChampions(ProfileRequest.Create profileRequest) {
+		List<ProfileRequest.Create.PreferChampion> preferChampions = profileRequest.getPreferChampions();
+		if (preferChampions.size() > 3) {
+			return true;
+		}
+		int size = preferChampions.size();
+		int distinctSize = DeduplicationUtils.deduplication(preferChampions,
+				ProfileRequest.Create.PreferChampion::getPriority).size();
+		if (size != distinctSize) {
+			throw new PreferChampionPriorityDuplicateException();
+		}
+		return false;
+	}
 
 	private boolean isNotCreateProfile(long count) {
 		return count >= 3;
@@ -76,6 +114,14 @@ public class ProfileService {
 			throw new SummonerNotFoundException();
 		}
 
+		if (isNotCreatePreferChampions(profileRequest)) {
+			throw new PreferChampionBoundsException();
+		}
+
+		if (isNotCreatePreferLines(profileRequest)) {
+			throw new PreferLineBoundsException();
+		}
+
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
 
 		long profileCount = profileRepository.countByAccount(account);
@@ -91,7 +137,7 @@ public class ProfileService {
 
 		SummonerInfo summonerInfo = SummonerInfo.builder()
 				.summonerId(summoner.getId())
-				.summonerName(summonerName)
+				.summonerName(summoner.getName())
 				.profileIconId(summoner.getProfileIcon().getId())
 				.build();
 
@@ -120,8 +166,7 @@ public class ProfileService {
 				.orElseThrow(SummonerNotFoundException::new);
 		int iconId = -1;
 		if (isAuthProfile(profile)) {
-			int profileIconId = profile.getSummonerInfo().getProfileIconId();
-			iconId = getRandomIconId(profileIconId);
+			iconId = getRandomIconId(profile.getSummonerInfo().getProfileIconId());
 			profile.changeAuthProfileIconId(iconId);
 		}
 		return new ProfileResponse.Auth(iconId);
@@ -133,6 +178,27 @@ public class ProfileService {
 		Profile profile = profileRepository.findBySummonerIdAndAccountId(summonerId, id)
 				.orElseThrow(SummonerNotFoundException::new);
 		return new ProfileResponse.AuthConfirm(isAuthConfirm(profile));
+	}
+
+	@Transactional(readOnly = true)
+	public List<ProfileFindResponse> getProfiles(Long id) {
+		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
+		List<ProfileFindResponse> profileMainByAccount = profileRepository.findProfileMainByAccount(account);
+
+		if (CollectionUtils.isEmpty(profileMainByAccount)) {
+			throw new ProfileNotExistException();
+		}
+
+		return new ProfileFindResponse().convert(profileMainByAccount);
+	}
+
+	@Transactional(readOnly = true)
+	public ProfileDetailResponse getProfile(Long profileId, Long id) {
+		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
+		Profile profile = profileRepository.findById(profileId).orElseThrow(ProfileNotExistException::new);
+		List<ProfileDetailResponse> profileDetailResponses = profileRepository.findProfileDetailByAccountAndProfile(
+				account, profile);
+		return new ProfileDetailResponse(profileDetailResponses);
 	}
 
 }

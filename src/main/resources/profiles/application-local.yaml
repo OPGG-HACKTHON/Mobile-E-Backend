@@ -9,13 +9,13 @@ spring:
   # JPA Configuration
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     database: mysql
     show-sql: true
     generate-ddl: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL55Dialect
+        dialect: org.hibernate.dialect.MySQL57Dialect
         naming:
           physical-strategy: org.hibernate.boot.model.naming.MySQL5InnoDBDialect
 
@@ -67,4 +67,4 @@ springdoc:
 
 riot:
   api:
-    key: RGAPI-0832d13b-e595-48c8-860b-36ae04786de8
+    key: RGAPI-6fa18edc-672f-431d-a6d9-00b4c17e47f3
