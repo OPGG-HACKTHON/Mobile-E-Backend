@@ -4,8 +4,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "testtest1",
-  "password": "testtest1"
+  "username": "test1111",
+  "password": "test1111"
 }
 
 ### 로그인
@@ -14,8 +14,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "testtest1",
-  "password": "testtest1"
+  "username": "test1111",
+  "password": "test1111"
 }
 
 > {%
@@ -29,7 +29,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "key": "RGAPI-7eb1240e-c870-4f4b-9b20-0d1d14dd192f"
+  "key": "RGAPI-6fa18edc-672f-431d-a6d9-00b4c17e47f3"
 }
 
 ### 프로필 생성
@@ -38,32 +38,32 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "summonerName": "Mastery7",
+  "summonerName": "강찬밥",
   "preferChampions": [
     {
-      "priority": 1,
-      "championId": 22
+      "priority": 32,
+      "championId": 1
     },
     {
       "priority": 2,
-      "championId": 15
+      "championId": 2
     },
     {
       "priority": 3,
-      "championId": 55
+      "championId": 3
     }
   ],
   "preferLines": [
     {
       "priority": 1,
-      "line": "TOP"
+      "line": "SUP"
     },
     {
       "priority": 2,
-      "line": "AD"
+      "line": "TOP"
     }
   ],
-  "preferQueue" : "RANKED_SOLO"
+  "preferQueue" : "NONE"
 }
 
 ### 프로필 인증

@@ -189,7 +189,7 @@ public class ProfileService {
 			throw new ProfileNotExistException();
 		}
 
-		return profileMainByAccount;
+		return new ProfileFindResponse().convert(profileMainByAccount);
 	}
 
 	@Transactional(readOnly = true)

@@ -1,27 +1,24 @@
 package opgg.backend.gmakersserver.domain.profile.repository;
 
-import static opgg.backend.gmakersserver.domain.account.entity.QAccount.*;
-import static opgg.backend.gmakersserver.domain.leagueposition.entity.QLeaguePosition.*;
-import static opgg.backend.gmakersserver.domain.preferchampion.entity.QPreferChampion.*;
-import static opgg.backend.gmakersserver.domain.preferline.entity.QPreferLine.*;
-import static opgg.backend.gmakersserver.domain.profile.entity.QProfile.*;
-
-import java.util.List;
-import java.util.Optional;
-
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.entity.QAccount;
-import opgg.backend.gmakersserver.domain.leagueposition.entity.QLeaguePosition;
-import opgg.backend.gmakersserver.domain.preferchampion.entity.QPreferChampion;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileDetailResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileFindResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.QProfileDetailResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.QProfileFindResponse;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 import opgg.backend.gmakersserver.domain.profile.entity.QProfile;
+
+import java.util.List;
+import java.util.Optional;
+
+import static opgg.backend.gmakersserver.domain.account.entity.QAccount.account;
+import static opgg.backend.gmakersserver.domain.leagueposition.entity.QLeaguePosition.leaguePosition;
+import static opgg.backend.gmakersserver.domain.preferchampion.entity.QPreferChampion.preferChampion;
+import static opgg.backend.gmakersserver.domain.preferline.entity.QPreferLine.preferLine;
+import static opgg.backend.gmakersserver.domain.profile.entity.QProfile.profile;
 
 @RequiredArgsConstructor
 public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
@@ -84,10 +81,13 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 				.leftJoin(leaguePosition).on(profile.profileId.eq(leaguePosition.profile.profileId))
 				.join(preferChampion).on(profile.profileId.eq(preferChampion.profile.profileId))
 				.leftJoin(preferLine).on(profile.profileId.eq(preferLine.profile.profileId))
-				.where(QAccount.account.activated.eq(true))
+				.where(
+						QAccount.account.activated.eq(true),
+						QAccount.account.accountId.eq(account.getAccountId()),
+						profile.preferQueue.eq(leaguePosition.queue)
+				)
 				.orderBy(profile.summonerInfo.summonerName.asc(), leaguePosition.queue.asc(), preferLine.priority.asc())
 				.fetch();
-
 	}
 
 	@Override
