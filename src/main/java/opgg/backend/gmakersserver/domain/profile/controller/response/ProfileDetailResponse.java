@@ -54,7 +54,7 @@ public class ProfileDetailResponse {
 	public ProfileDetailResponse(Long accountId, String username, Long profileId, boolean isCertified,
 			String summonerAccountId, Queue preferQueue, Integer profileIconId, String summonerId, String summonerName,
 			int level, Queue queue, Tier tier, int tierLevel, int leaguePoint, int loseGames,
-			int winGames, int winRate, String championName, int championId, int championPoints,
+			int winGames, int winRate, String championName, int championId, int championPoints, int championLevel,
 			int preferChampionPriority, Line line, int preferLinePriority) {
 		this.accountId = accountId;
 		this.username = username;
@@ -77,6 +77,7 @@ public class ProfileDetailResponse {
 				.championName(championName)
 				.championId(championId)
 				.championPoints(championPoints)
+				.championLevel(championLevel)
 				.preferChampionPriority(preferChampionPriority)
 				.build());
 		this.preferLines.add(new PreferLine(line, preferLinePriority));
@@ -110,6 +111,7 @@ public class ProfileDetailResponse {
 						.championName(preferChampion.getChampionName())
 						.championId(preferChampion.getChampionId())
 						.championPoints(preferChampion.getChampionPoints())
+						.championLevel(preferChampion.getChampionLevel())
 						.preferChampionPriority(preferChampion.getPreferChampionPriority())
 						.build());
 				PreferLine preferLine = profileDetailResponse.getPreferLines().get(0);
@@ -134,12 +136,16 @@ public class ProfileDetailResponse {
 		private int championId;
 		private int championPoints;
 		private int preferChampionPriority;
+		private int championLevel;
+
 		@Builder
-		public PreferChampion(String championName, int championId, int championPoints, int preferChampionPriority) {
+		public PreferChampion(String championName, int championId, int championPoints, int preferChampionPriority,
+				int championLevel) {
 			this.championName = championName;
 			this.championId = championId;
 			this.championPoints = championPoints;
 			this.preferChampionPriority = preferChampionPriority;
+			this.championLevel = championLevel;
 		}
 
 		@Override
@@ -150,13 +156,15 @@ public class ProfileDetailResponse {
 				return false;
 			PreferChampion that = (PreferChampion)o;
 			return getChampionId() == that.getChampionId() && getChampionPoints() == that.getChampionPoints()
-					&& getPreferChampionPriority() == that.getPreferChampionPriority() && Objects.equals(
-					getChampionName(), that.getChampionName());
+					&& getPreferChampionPriority() == that.getPreferChampionPriority()
+					&& getChampionLevel() == that.getChampionLevel() && Objects.equals(getChampionName(),
+					that.getChampionName());
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(getChampionName(), getChampionId(), getChampionPoints(), getPreferChampionPriority());
+			return Objects.hash(getChampionName(), getChampionId(), getChampionPoints(), getPreferChampionPriority(),
+					getChampionLevel());
 		}
 	}
 

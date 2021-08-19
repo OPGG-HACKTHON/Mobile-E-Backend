@@ -2,10 +2,12 @@ package opgg.backend.gmakersserver.domain.profile.controller.request;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,8 +24,10 @@ public class ProfileRequest {
 	public static class Create {
 
 		@NotEmpty
+		@Size(min = 1, max = 3)
 		private final List<PreferChampion> preferChampions = new ArrayList<>();
 		@NotEmpty
+		@Size(min = 2, max = 2)
 		private final List<PreferLine> preferLines = new ArrayList<>();
 		@NotBlank
 		private String summonerName;
@@ -65,6 +69,20 @@ public class ProfileRequest {
 			@NotBlank
 			private Line line;
 
+			@Override
+			public boolean equals(Object o) {
+				if (this == o)
+					return true;
+				if (o == null || getClass() != o.getClass())
+					return false;
+				PreferLine that = (PreferLine)o;
+				return getPriority() == that.getPriority() && getLine() == that.getLine();
+			}
+
+			@Override
+			public int hashCode() {
+				return Objects.hash(getPriority(), getLine());
+			}
 		}
 
 	}

@@ -113,6 +113,7 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 						preferChampion.championName,
 						preferChampion.championId,
 						preferChampion.championPoints,
+						preferChampion.championLevel,
 						preferChampion.priority,
 						preferLine.line,
 						preferLine.priority
@@ -122,7 +123,7 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 				.leftJoin(leaguePosition).on(QProfile.profile.profileId.eq(leaguePosition.profile.profileId))
 				.join(preferChampion).on(QProfile.profile.profileId.eq(preferChampion.profile.profileId))
 				.leftJoin(preferLine).on(QProfile.profile.profileId.eq(preferLine.profile.profileId))
-                .where(QAccount.account.activated.eq(true).and(QProfile.profile.profileId.eq(profile.getProfileId())))
+                .where(QAccount.account.activated.eq(true).and(QProfile.profile.preferQueue.eq(leaguePosition.queue)).and(QProfile.profile.profileId.eq(profile.getProfileId())))
                 .orderBy(QProfile.profile.summonerInfo.summonerName.asc(), preferChampion.championName.asc(),
                         leaguePosition.queue.asc(), preferLine.priority.asc())
                 .fetch();

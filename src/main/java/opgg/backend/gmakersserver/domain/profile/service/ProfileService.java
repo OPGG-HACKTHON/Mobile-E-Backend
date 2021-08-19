@@ -1,7 +1,6 @@
 package opgg.backend.gmakersserver.domain.profile.service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 import org.springframework.stereotype.Service;
@@ -12,6 +11,7 @@ import org.springframework.util.ObjectUtils;
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
 
 import lombok.RequiredArgsConstructor;
+import opgg.backend.gmakersserver.application.util.DeduplicationUtils;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
@@ -28,6 +28,8 @@ import opgg.backend.gmakersserver.domain.profile.repository.ProfileRepository;
 import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
 import opgg.backend.gmakersserver.error.exception.preferchampion.PreferChampionBoundsException;
 import opgg.backend.gmakersserver.error.exception.preferchampion.PreferChampionPriorityDuplicateException;
+import opgg.backend.gmakersserver.error.exception.preferline.PreferLineBoundsException;
+import opgg.backend.gmakersserver.error.exception.preferline.PreferLinePriorityDuplicateException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileBoundsException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileExistException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileNotExistException;
@@ -43,13 +45,28 @@ public class ProfileService {
 	private final PreferLineService preferLineService;
 	private final PreferChampionService preferChampionService;
 
+	private boolean isNotCreatePreferLines(ProfileRequest.Create profileRequest) {
+		List<ProfileRequest.Create.PreferLine> preferLines = profileRequest.getPreferLines();
+		if (preferLines.size() > 2) {
+			return true;
+		}
+		int size = preferLines.size();
+		int distinctSize = DeduplicationUtils.deduplication(preferLines, ProfileRequest.Create.PreferLine::getPriority)
+				.size();
+		if (size != distinctSize) {
+			throw new PreferLinePriorityDuplicateException();
+		}
+		return false;
+	}
+
 	private boolean isNotCreatePreferChampions(ProfileRequest.Create profileRequest) {
 		List<ProfileRequest.Create.PreferChampion> preferChampions = profileRequest.getPreferChampions();
 		if (preferChampions.size() > 3) {
 			return true;
 		}
 		int size = preferChampions.size();
-		long distinctSize = preferChampions.stream().distinct().count();
+		int distinctSize = DeduplicationUtils.deduplication(preferChampions,
+				ProfileRequest.Create.PreferChampion::getPriority).size();
 		if (size != distinctSize) {
 			throw new PreferChampionPriorityDuplicateException();
 		}
@@ -99,6 +116,10 @@ public class ProfileService {
 
 		if (isNotCreatePreferChampions(profileRequest)) {
 			throw new PreferChampionBoundsException();
+		}
+
+		if (isNotCreatePreferLines(profileRequest)) {
+			throw new PreferLineBoundsException();
 		}
 
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
@@ -179,4 +200,5 @@ public class ProfileService {
 				account, profile);
 		return new ProfileDetailResponse(profileDetailResponses);
 	}
+
 }
