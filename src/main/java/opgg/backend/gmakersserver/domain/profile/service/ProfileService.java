@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import com.merakianalytics.orianna.Orianna;
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
 
 import lombok.RequiredArgsConstructor;

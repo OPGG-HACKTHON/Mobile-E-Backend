@@ -58,8 +58,9 @@ public class ProfileController {
 		return profileService.getProfiles(summonerName, id);
 	}
 
-	@GetMapping("/profiles/{id}")
-	public ProfileDetailResponse getProfile(@PathVariable("id") Long profileId, @AuthenticationPrincipal Long id) {
+	@GetMapping("/profiles/{profileId}")
+	public ProfileDetailResponse getProfile(@PathVariable("profileId") Long profileId,
+			@AuthenticationPrincipal Long id) {
 		return profileService.getProfile(profileId, id);
 	}
 
