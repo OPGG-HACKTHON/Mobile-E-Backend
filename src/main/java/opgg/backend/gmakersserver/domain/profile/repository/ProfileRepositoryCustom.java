@@ -8,6 +8,8 @@ import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+
 public interface ProfileRepositoryCustom {
 
     Profile findByAccountAndSummonerName(Long accountId, String summonerName);
@@ -19,5 +21,7 @@ public interface ProfileRepositoryCustom {
     List<ProfileFindResponse> findProfileMainByAccount(Account account);
 
     List<ProfileDetailResponse> findProfileDetailByAccountAndProfile(Account account, Profile profile);
+
+    List<ProfileFindResponse> findProfileBySummonerName(String summonerName);
 
 }

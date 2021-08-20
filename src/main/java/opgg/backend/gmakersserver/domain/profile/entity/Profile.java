@@ -18,7 +18,10 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@Table(name = "PROFILE")
+@Table(
+		name = "PROFILE",
+		indexes = @Index(name = "idx_profile", columnList = "summoner_name")
+)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Profile extends BaseEntity {
