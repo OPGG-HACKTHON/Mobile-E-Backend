@@ -9,6 +9,8 @@ import static opgg.backend.gmakersserver.domain.profile.entity.QProfile.*;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -131,4 +133,39 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 						leaguePosition.queue.asc(), preferLine.priority.asc())
 				.fetch();
 	}
+
+	@Override
+	public List<ProfileFindResponse> findProfileBySummonerName(String summonerName) {
+		return queryFactory
+				.select(new QProfileFindResponse(
+						QAccount.account.accountId,
+						QAccount.account.username,
+						profile.profileId,
+						profile.isCertified,
+						profile.summonerAccountId,
+						profile.summonerInfo.profileIconId,
+						profile.summonerInfo.summonerId,
+						profile.summonerInfo.summonerName,
+						profile.preferQueue,
+						leaguePosition.level,
+						leaguePosition.queue,
+						leaguePosition.tier,
+						leaguePosition.tierLevel,
+						preferLine.line,
+						preferLine.priority
+				)).distinct()
+				.from(QAccount.account)
+				.join(profile).on(QAccount.account.accountId.eq(profile.account.accountId))
+				.leftJoin(leaguePosition).on(profile.profileId.eq(leaguePosition.profile.profileId))
+				.join(preferChampion).on(profile.profileId.eq(preferChampion.profile.profileId))
+				.leftJoin(preferLine).on(profile.profileId.eq(preferLine.profile.profileId))
+				.where(
+						QAccount.account.activated.eq(true),
+						profile.summonerInfo.summonerName.eq(summonerName),
+						profile.preferQueue.eq(leaguePosition.queue)
+				)
+				.orderBy(profile.summonerInfo.summonerName.asc(), leaguePosition.queue.asc(), preferLine.priority.asc())
+				.fetch();
+	}
+
 }

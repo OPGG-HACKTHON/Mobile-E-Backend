@@ -3,14 +3,17 @@ package opgg.backend.gmakersserver.domain.profile.service;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import com.merakianalytics.orianna.Orianna;
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import opgg.backend.gmakersserver.application.util.DeduplicationUtils;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
@@ -35,7 +38,9 @@ import opgg.backend.gmakersserver.error.exception.profile.ProfileExistException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileNotExistException;
 import opgg.backend.gmakersserver.error.exception.riotapi.SummonerNotFoundException;
 
+@Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProfileService {
 
@@ -44,6 +49,25 @@ public class ProfileService {
 	private final LeaguePositionService leaguePositionService;
 	private final PreferLineService preferLineService;
 	private final PreferChampionService preferChampionService;
+
+	private List<ProfileFindResponse> getProfileFindResponses(String summonerName, Account account) {
+		List<ProfileFindResponse> profileMainByAccount;
+		if (!StringUtils.isBlank(summonerName)) {
+			profileMainByAccount = profileRepository.findProfileBySummonerName(summonerName);
+			if (CollectionUtils.isEmpty(profileMainByAccount)) {
+				Summoner summoner = Summoner.named(summonerName).get();
+				summoner.load();
+				if (ObjectUtils.isEmpty(summoner)) {
+					throw new SummonerNotFoundException();
+				}
+				String findSummonerName = summoner.getCoreData().getName();
+				profileMainByAccount = profileRepository.findProfileBySummonerName(findSummonerName);
+			}
+		} else {
+			profileMainByAccount = profileRepository.findProfileMainByAccount(account);
+		}
+		return profileMainByAccount;
+	}
 
 	private boolean isNotCreatePreferLines(ProfileRequest.Create profileRequest) {
 		List<ProfileRequest.Create.PreferLine> preferLines = profileRequest.getPreferLines();
@@ -180,11 +204,9 @@ public class ProfileService {
 		return new ProfileResponse.AuthConfirm(isAuthConfirm(profile));
 	}
 
-	@Transactional(readOnly = true)
-	public List<ProfileFindResponse> getProfiles(Long id) {
+	public List<ProfileFindResponse> getProfiles(String summonerName, Long id) {
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
-		List<ProfileFindResponse> profileMainByAccount = profileRepository.findProfileMainByAccount(account);
-
+		List<ProfileFindResponse> profileMainByAccount = getProfileFindResponses(summonerName, account);
 		if (CollectionUtils.isEmpty(profileMainByAccount)) {
 			throw new ProfileNotExistException();
 		}
@@ -192,7 +214,6 @@ public class ProfileService {
 		return new ProfileFindResponse().convert(profileMainByAccount);
 	}
 
-	@Transactional(readOnly = true)
 	public ProfileDetailResponse getProfile(Long profileId, Long id) {
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
 		Profile profile = profileRepository.findById(profileId).orElseThrow(ProfileNotExistException::new);
