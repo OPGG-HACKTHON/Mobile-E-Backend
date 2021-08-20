@@ -29,7 +29,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "key": "RGAPI-6fa18edc-672f-431d-a6d9-00b4c17e47f3"
+  "key": "RGAPI-a1c4d29e-7088-4456-a7e5-027a13acfbce"
 }
 
 ### 프로필 생성
@@ -87,6 +87,10 @@ Content-Type: application/json
 
 ### 프로필 조회
 GET {{url}}/profiles
+Authorization: {{Authorization}}
+
+### 프로필 조회 - 검색
+GET {{url}}/profiles?summonerName=hideonbush
 Authorization: {{Authorization}}
 
 ### 프로필 상세조회
