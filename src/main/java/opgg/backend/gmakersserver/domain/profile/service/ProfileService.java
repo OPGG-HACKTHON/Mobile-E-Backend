@@ -3,13 +3,13 @@ package opgg.backend.gmakersserver.domain.profile.service;
 import java.util.List;
 import java.util.Random;
 
+import opgg.backend.gmakersserver.domain.preferKeyword.service.PreferKeywordService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import com.merakianalytics.orianna.Orianna;
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
 
 import lombok.RequiredArgsConstructor;
@@ -49,6 +49,7 @@ public class ProfileService {
 	private final LeaguePositionService leaguePositionService;
 	private final PreferLineService preferLineService;
 	private final PreferChampionService preferChampionService;
+	private final PreferKeywordService preferKeywordService;
 
 	private List<ProfileFindResponse> getProfileFindResponses(String summonerName, Account account) {
 		List<ProfileFindResponse> profileMainByAccount;
@@ -179,6 +180,7 @@ public class ProfileService {
 		preferChampionService.createPreferChampion(profileRequest, profile);
 		preferLineService.createPreferLine(profileRequest, profile);
 		leaguePositionService.createLeaguePosition(summoner, profile);
+		preferKeywordService.createPreferKeyword(profileRequest, profile);
 
 		Queue queue = leaguePositionService.getPreferQueue(profileRequest, profile);
 		profile.changePreferQueue(queue);
