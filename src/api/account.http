@@ -29,7 +29,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "key": "RGAPI-a1c4d29e-7088-4456-a7e5-027a13acfbce"
+  "key": "RGAPI-23a38ffe-e507-46d9-97e0-dbf7f01ab6da"
 }
 
 ### 프로필 생성
@@ -95,4 +95,8 @@ Authorization: {{Authorization}}
 
 ### 프로필 상세조회
 GET {{url}}/profiles/5
+Authorization: {{Authorization}}
+
+### 프로필 삭제
+DELETE {{url}}/profiles/1
 Authorization: {{Authorization}}

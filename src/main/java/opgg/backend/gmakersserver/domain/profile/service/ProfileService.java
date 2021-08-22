@@ -222,4 +222,10 @@ public class ProfileService {
 		return new ProfileDetailResponse(profileDetailResponses);
 	}
 
+	@Transactional
+	public void deleteProfile(Long profileId) {
+		Profile profile = profileRepository.findById(profileId).orElseThrow(ProfileNotExistException::new);
+		profileRepository.delete(profile);
+	}
+
 }
