@@ -29,7 +29,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "key": "RGAPI-a1c4d29e-7088-4456-a7e5-027a13acfbce"
+  "key": "RGAPI-239d3849-b00b-44f6-97af-d3e55020711f"
 }
 
 ### 프로필 생성
@@ -38,7 +38,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "summonerName": "강친밥",
+  "summonerName": "강찬밥",
   "description": "저는 미드라이너입니다. 로밍다니는것을 좋아하며 즐겜유저입니다.",
   "preferChampions": [
     {
@@ -90,9 +90,44 @@ GET {{url}}/profiles
 Authorization: {{Authorization}}
 
 ### 프로필 조회 - 검색
-GET {{url}}/profiles?summonerName=hideonbush
+GET {{url}}/profiles?summonerName=강찬밥
 Authorization: {{Authorization}}
 
 ### 프로필 상세조회
 GET {{url}}/profiles/5
 Authorization: {{Authorization}}
+
+### 프로필 수정
+PATCH {{url}}/profiles/5
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "summonerName": "강찬밥",
+  "description": "저는 미드라이너입니다. 로밍다니는것을 좋아하며 즐겜유저입니다. 수정1",
+  "preferChampions": [
+    {
+      "priority": 3,
+      "championId": 11
+    },
+    {
+      "priority": 1,
+      "championId": 22
+    },
+    {
+      "priority": 2,
+      "championId": 33
+    }
+  ],
+  "preferLines": [
+    {
+      "priority": 2,
+      "line": "AD"
+    },
+    {
+      "priority": 1,
+      "line": "TOP"
+    }
+  ],
+  "preferQueue" : "RANKED_SOLO"
+}

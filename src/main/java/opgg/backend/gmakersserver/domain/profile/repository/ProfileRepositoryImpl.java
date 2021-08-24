@@ -169,4 +169,14 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 				.fetch();
 	}
 
+	@Override
+	public Optional<Profile> findByAccountAndProfileId(Account account, Long profileId) {
+		return Optional.ofNullable(queryFactory.selectFrom(QProfile.profile)
+				.where(
+						QAccount.account.accountId.eq(account.getAccountId()),
+						QProfile.profile.profileId.eq(profileId)
+				)
+				.fetchOne());
+	}
+
 }

@@ -1,5 +1,7 @@
 package opgg.backend.gmakersserver.domain.preferchampion.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,25 +16,40 @@ import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileReque
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PreferChampionService {
 
 	private final PreferChampionRepository preferChampionRepository;
 
 	@Transactional
-	public void createPreferChampion(ProfileRequest.Create profileRequest, Profile profile) {
-		Summoner summoner = Summoner.named(profileRequest.getSummonerName()).get();
-		profileRequest.getPreferChampions().forEach(requestPreferChampion -> {
-			int championId = requestPreferChampion.getChampionId();
+	public void createPreferChampion(List<ProfileRequest.Create.PreferChampion> preferChampions, String summonerName,
+			Profile profile) {
+		createPreferChampions(preferChampions, summonerName, profile);
+	}
+
+	@Transactional
+	public void updatePreferChampion(List<ProfileRequest.Create.PreferChampion> updatePreferChampions, String summonerName,
+			Profile profile) {
+		preferChampionRepository.deletePreferChampionByProfile(profile);
+		createPreferChampions(updatePreferChampions, summonerName, profile);
+	}
+
+	@Transactional
+	public void createPreferChampions(List<ProfileRequest.Create.PreferChampion> updatePreferChampions,
+			String summonerName,
+			Profile profile) {
+		Summoner summoner = Summoner.named(summonerName).get();
+		updatePreferChampions.forEach(updatePreferChampion -> {
 			ChampionMastery mastery = ChampionMastery.forSummoner(summoner).withChampion(
-					Champion.withId(championId).get()).get();
+					Champion.withId(updatePreferChampion.getChampionId()).get()).get();
 			preferChampionRepository.save(PreferChampion.builder()
 					.profile(profile)
 					.championId(mastery.getChampion().getId())
 					.championName(mastery.getChampion().getName())
 					.championLevel(mastery.getLevel())
 					.championPoints(mastery.getPoints())
-					.priority(requestPreferChampion.getPriority())
+					.priority(updatePreferChampion.getPriority())
 					.build());
 		});
 	}

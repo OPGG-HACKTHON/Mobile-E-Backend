@@ -98,4 +98,26 @@ public class ProfileRequest {
 
 	}
 
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class Update {
+
+		@Size(min = 1, max = 3)
+		private final List<Create.PreferChampion> preferChampions = new ArrayList<>();
+
+		@Size(min = 1, max = 2)
+		private final List<Create.PreferLine> preferLines = new ArrayList<>();
+
+		@NotBlank
+		private String summonerName;
+
+		private String description;
+
+		private Queue preferQueue;
+
+		// TODO : 키워드
+
+	}
+
 }
