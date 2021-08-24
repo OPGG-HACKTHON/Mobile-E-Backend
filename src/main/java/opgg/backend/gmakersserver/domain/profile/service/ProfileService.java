@@ -229,4 +229,46 @@ public class ProfileService {
 		profileRepository.delete(profile);
 	}
 
+	@Transactional
+	public void updateProfile(Long profileId, ProfileRequest.Update update,  Long id) {
+		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
+		Profile profile = profileRepository.findByAccountAndProfileId(account, profileId).orElseThrow(
+				ProfileNotMatchException::new);
+
+		Queue updatePreferQueue = update.getPreferQueue();
+		if (!ObjectUtils.isEmpty(updatePreferQueue)) {
+			profile.changePreferQueue(updatePreferQueue);
+		}
+
+		List<ProfileRequest.Create.PreferChampion> updatePreferChampions = update.getPreferChampions();
+		List<ProfileRequest.Create.PreferLine> updatePreferLines = update.getPreferLines();
+
+		if (isNotCreatePreferChampions(updatePreferChampions)) {
+			throw new PreferChampionBoundsException();
+		}
+		if (!CollectionUtils.isEmpty(updatePreferChampions)) {
+			preferChampionService.updatePreferChampion(update.getPreferChampions(),
+					update.getSummonerName(), profile);
+		}
+
+		if (isNotCreatePreferLines(updatePreferLines)) {
+			throw new PreferLineBoundsException();
+		}
+
+		if (!CollectionUtils.isEmpty(updatePreferLines)) {
+			preferLineService.updatePreferLine(updatePreferLines, profile);
+		}
+
+		String description = update.getDescription();
+		if (!StringUtils.isBlank(description)) {
+			profile.changeDescription(description);
+		}
+
+		Queue preferQueue = update.getPreferQueue();
+		if (!ObjectUtils.isEmpty(preferQueue)) {
+			profile.changePreferQueue(preferQueue);
+		}
+
+	}
+
 }

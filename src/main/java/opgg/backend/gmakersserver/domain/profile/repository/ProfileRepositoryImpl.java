@@ -10,9 +10,6 @@ import static opgg.backend.gmakersserver.domain.profile.entity.QProfile.*;
 import java.util.List;
 import java.util.Optional;
 
-import opgg.backend.gmakersserver.domain.preferKeyword.entity.QPreferKeyword;
-import org.springframework.data.domain.Page;
-
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
