@@ -3,6 +3,7 @@ package opgg.backend.gmakersserver.domain.profile.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
+import opgg.backend.gmakersserver.domain.preferKeyword.entity.PreferKeyword;
 import opgg.backend.gmakersserver.domain.preferline.entity.PreferLine;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
@@ -65,6 +66,9 @@ public class Profile extends BaseEntity {
 
 	@Column(name = "DESCRIPTION")
 	private String description;
+
+	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
+	private List<PreferKeyword> preferKeywords;
 
 	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
 	private List<LeaguePosition> leaguePosition = new ArrayList<>();

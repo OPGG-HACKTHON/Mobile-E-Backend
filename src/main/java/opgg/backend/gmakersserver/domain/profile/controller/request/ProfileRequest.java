@@ -1,20 +1,20 @@
 package opgg.backend.gmakersserver.domain.profile.controller.request;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
+import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;
 import opgg.backend.gmakersserver.domain.preferline.entity.Line;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class ProfileRequest {
 
@@ -26,11 +26,18 @@ public class ProfileRequest {
 		@NotEmpty
 		@Size(min = 1, max = 3)
 		private final List<PreferChampion> preferChampions = new ArrayList<>();
+
 		@NotEmpty
 		@Size(min = 2, max = 2)
 		private final List<PreferLine> preferLines = new ArrayList<>();
+
+		@NotEmpty
+		@Size(max = 3)
+		private List<String> preferKeyword = new ArrayList<>();
+
 		@NotBlank
 		private String summonerName;
+
 		@NotBlank
 		private String description;
 

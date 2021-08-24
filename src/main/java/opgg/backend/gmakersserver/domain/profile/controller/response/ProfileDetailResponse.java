@@ -1,16 +1,6 @@
 package opgg.backend.gmakersserver.domain.profile.controller.response;
 
-import static opgg.backend.gmakersserver.domain.leagueposition.entity.Queue.*;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import com.querydsl.core.annotations.QueryProjection;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +8,11 @@ import lombok.NoArgsConstructor;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Tier;
 import opgg.backend.gmakersserver.domain.preferline.entity.Line;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static opgg.backend.gmakersserver.domain.leagueposition.entity.Queue.NONE;
 
 @Getter
 @NoArgsConstructor
@@ -49,6 +44,7 @@ public class ProfileDetailResponse {
 	private List<PreferChampion> preferChampions = new ArrayList<>();
 	//PreferLine
 	private List<PreferLine> preferLines = new ArrayList<>();
+	private List<PreferKeyword> preferKeyword = new ArrayList<>();
 
 	@Builder
 	@QueryProjection
@@ -56,7 +52,7 @@ public class ProfileDetailResponse {
 			String summonerAccountId, Queue preferQueue, Integer profileIconId, String summonerId, String summonerName,
 			String description, int level, Queue queue, Tier tier, int tierLevel, int leaguePoint, int loseGames,
 			int winGames, int winRate, String championName, int championId, int championPoints, int championLevel,
-			int preferChampionPriority, Line line, int preferLinePriority) {
+			int preferChampionPriority, Line line, int preferLinePriority, String keyword) {
 		this.accountId = accountId;
 		this.username = username;
 		this.profileId = profileId;
@@ -83,6 +79,7 @@ public class ProfileDetailResponse {
 				.preferChampionPriority(preferChampionPriority)
 				.build());
 		this.preferLines.add(new PreferLine(line, preferLinePriority));
+		this.preferKeyword.add(new PreferKeyword(keyword));
 	}
 
 	public ProfileDetailResponse(List<ProfileDetailResponse> profileDetailResponses) {
@@ -109,6 +106,7 @@ public class ProfileDetailResponse {
 				this.summonerName = profileDetailResponse.getSummonerName();
 				this.preferQueue = profileDetailResponse.getPreferQueue();
 				this.level = profileDetailResponse.getLevel();
+
 				PreferChampion preferChampion = profileDetailResponse.getPreferChampions().get(0);
 				this.preferChampions.add(PreferChampion.builder()
 						.championName(preferChampion.getChampionName())
@@ -117,10 +115,15 @@ public class ProfileDetailResponse {
 						.championLevel(preferChampion.getChampionLevel())
 						.preferChampionPriority(preferChampion.getPreferChampionPriority())
 						.build());
+
 				PreferLine preferLine = profileDetailResponse.getPreferLines().get(0);
 				this.preferLines.add(new PreferLine(preferLine.getLine(), preferLine.getPreferLinePriority()));
+
+				PreferKeyword preferKeyword = profileDetailResponse.getPreferKeyword().get(0);
+				this.preferKeyword.add(new PreferKeyword(preferKeyword.getKeyword()));
 			}
 		}
+
 		this.preferChampions = new ArrayList<>(new HashSet<>(preferChampions))
 				.stream()
 				.sorted(Comparator.comparingInt(o -> o.preferChampionPriority))
@@ -128,6 +131,9 @@ public class ProfileDetailResponse {
 		this.preferLines = new ArrayList<>(new HashSet<>(preferLines))
 				.stream()
 				.sorted(Comparator.comparingInt(o -> o.preferLinePriority))
+				.collect(Collectors.toList());
+		this.preferKeyword = new ArrayList<>(new HashSet<>(preferKeyword))
+				.stream()
 				.collect(Collectors.toList());
 	}
 
@@ -192,6 +198,27 @@ public class ProfileDetailResponse {
 		@Override
 		public int hashCode() {
 			return Objects.hash(getLine(), getPreferLinePriority());
+		}
+	}
+
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class PreferKeyword{
+
+		private String keyword;
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (!(o instanceof PreferKeyword)) return false;
+			PreferKeyword that = (PreferKeyword) o;
+			return Objects.equals(getKeyword(), that.getKeyword());
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(getKeyword());
 		}
 	}
 

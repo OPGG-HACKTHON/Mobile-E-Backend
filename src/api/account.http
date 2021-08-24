@@ -4,8 +4,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "test2222",
-  "password": "test2222"
+  "username": "test1111",
+  "password": "test1111"
 }
 
 ### 로그인
@@ -14,8 +14,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "test2222",
-  "password": "test2222"
+  "username": "test1111",
+  "password": "test1111"
 }
 
 > {%
@@ -29,7 +29,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "key": "RGAPI-a1c4d29e-7088-4456-a7e5-027a13acfbce"
+  "key": "RGAPI-badaa137-63ca-4045-8a9e-25e8a6eec97d"
 }
 
 ### 프로필 생성
@@ -38,8 +38,11 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "summonerName": "강친밥",
-  "description": "저는 미드라이너입니다. 로밍다니는것을 좋아하며 즐겜유저입니다.",
+  "summonerName": "Hide on bush",
+  "description": "저는 망나니입니다. 칼챔을 좋아하며 스플릿 위주입니다.",
+  "preferKeyword": [
+    "망나니", "스플릿"
+  ],
   "preferChampions": [
     {
       "priority": 32,
@@ -90,9 +93,9 @@ GET {{url}}/profiles
 Authorization: {{Authorization}}
 
 ### 프로필 조회 - 검색
-GET {{url}}/profiles?summonerName=hideonbush
+GET {{url}}/profiles?summonerName=강친밥
 Authorization: {{Authorization}}
 
 ### 프로필 상세조회
-GET {{url}}/profiles/5
+GET {{url}}/profiles/1
 Authorization: {{Authorization}}
