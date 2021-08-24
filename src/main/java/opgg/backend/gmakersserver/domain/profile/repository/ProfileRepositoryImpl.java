@@ -10,9 +10,6 @@ import static opgg.backend.gmakersserver.domain.profile.entity.QProfile.*;
 import java.util.List;
 import java.util.Optional;
 
-import opgg.backend.gmakersserver.domain.preferKeyword.entity.QPreferKeyword;
-import org.springframework.data.domain.Page;
-
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -171,6 +168,16 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 				)
 				.orderBy(profile.summonerInfo.summonerName.asc(), leaguePosition.queue.asc(), preferLine.priority.asc())
 				.fetch();
+	}
+
+	@Override
+	public Optional<Profile> findByAccountAndProfileId(Account account, Long profileId) {
+		return Optional.ofNullable(queryFactory.selectFrom(QProfile.profile)
+				.where(
+						QAccount.account.accountId.eq(account.getAccountId()),
+						QProfile.profile.profileId.eq(profileId)
+				)
+				.fetchOne());
 	}
 
 }

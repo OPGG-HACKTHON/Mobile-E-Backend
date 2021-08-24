@@ -1,5 +1,7 @@
 package opgg.backend.gmakersserver.domain.preferline.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,17 +12,29 @@ import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileReque
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PreferLineService {
 
 	private final PreferLineRepository preferLineRepository;
 
 	@Transactional
-	public void createPreferLine(ProfileRequest.Create profileRequest, Profile profile) {
-		profileRequest.getPreferLines().forEach(requestPreferLine -> preferLineRepository.save(PreferLine.builder()
+	public void createPreferLine(List<ProfileRequest.Create.PreferLine> preferLines, Profile profile) {
+		createPreferLines(preferLines, profile);
+	}
+
+	@Transactional
+	public void updatePreferLine(List<ProfileRequest.Create.PreferLine> preferLines, Profile profile) {
+		preferLineRepository.deletePreferLineByProfile(profile);
+		createPreferLines(preferLines, profile);
+	}
+
+	@Transactional
+	public void createPreferLines(List<ProfileRequest.Create.PreferLine> preferLines, Profile profile) {
+		preferLines.forEach(preferLine -> preferLineRepository.save(PreferLine.builder()
 				.profile(profile)
-				.line(requestPreferLine.getLine())
-				.priority(requestPreferLine.getPriority())
+				.line(preferLine.getLine())
+				.priority(preferLine.getPriority())
 				.build()));
 	}
 

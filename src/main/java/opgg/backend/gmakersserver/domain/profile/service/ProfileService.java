@@ -13,7 +13,6 @@ import org.springframework.util.ObjectUtils;
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import opgg.backend.gmakersserver.application.util.DeduplicationUtils;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
@@ -36,6 +35,7 @@ import opgg.backend.gmakersserver.error.exception.preferline.PreferLinePriorityD
 import opgg.backend.gmakersserver.error.exception.profile.ProfileBoundsException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileExistException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileNotExistException;
+import opgg.backend.gmakersserver.error.exception.profile.ProfileNotMatchException;
 import opgg.backend.gmakersserver.error.exception.riotapi.SummonerNotFoundException;
 
 @Service
@@ -69,8 +69,7 @@ public class ProfileService {
 		return profileMainByAccount;
 	}
 
-	private boolean isNotCreatePreferLines(ProfileRequest.Create profileRequest) {
-		List<ProfileRequest.Create.PreferLine> preferLines = profileRequest.getPreferLines();
+	private boolean isNotCreatePreferLines(List<ProfileRequest.Create.PreferLine> preferLines) {
 		if (preferLines.size() > 2) {
 			return true;
 		}
@@ -83,8 +82,7 @@ public class ProfileService {
 		return false;
 	}
 
-	private boolean isNotCreatePreferChampions(ProfileRequest.Create profileRequest) {
-		List<ProfileRequest.Create.PreferChampion> preferChampions = profileRequest.getPreferChampions();
+	private boolean isNotCreatePreferChampions(List<ProfileRequest.Create.PreferChampion> preferChampions) {
 		if (preferChampions.size() > 3) {
 			return true;
 		}
@@ -138,11 +136,11 @@ public class ProfileService {
 			throw new SummonerNotFoundException();
 		}
 
-		if (isNotCreatePreferChampions(profileRequest)) {
+		if (isNotCreatePreferChampions(profileRequest.getPreferChampions())) {
 			throw new PreferChampionBoundsException();
 		}
 
-		if (isNotCreatePreferLines(profileRequest)) {
+		if (isNotCreatePreferLines(profileRequest.getPreferLines())) {
 			throw new PreferLineBoundsException();
 		}
 
@@ -176,8 +174,9 @@ public class ProfileService {
 
 		profileRepository.save(profile);
 
-		preferChampionService.createPreferChampion(profileRequest, profile);
-		preferLineService.createPreferLine(profileRequest, profile);
+		preferChampionService.createPreferChampion(profileRequest.getPreferChampions(),
+				profileRequest.getSummonerName(), profile);
+		preferLineService.createPreferLine(profileRequest.getPreferLines(), profile);
 		leaguePositionService.createLeaguePosition(summoner, profile);
 		preferKeywordService.createPreferKeyword(profileRequest, profile);
 
@@ -228,6 +227,48 @@ public class ProfileService {
 	public void deleteProfile(Long profileId) {
 		Profile profile = profileRepository.findById(profileId).orElseThrow(ProfileNotExistException::new);
 		profileRepository.delete(profile);
+	}
+
+	@Transactional
+	public void updateProfile(Long profileId, ProfileRequest.Update update,  Long id) {
+		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
+		Profile profile = profileRepository.findByAccountAndProfileId(account, profileId).orElseThrow(
+				ProfileNotMatchException::new);
+
+		Queue updatePreferQueue = update.getPreferQueue();
+		if (!ObjectUtils.isEmpty(updatePreferQueue)) {
+			profile.changePreferQueue(updatePreferQueue);
+		}
+
+		List<ProfileRequest.Create.PreferChampion> updatePreferChampions = update.getPreferChampions();
+		List<ProfileRequest.Create.PreferLine> updatePreferLines = update.getPreferLines();
+
+		if (isNotCreatePreferChampions(updatePreferChampions)) {
+			throw new PreferChampionBoundsException();
+		}
+		if (!CollectionUtils.isEmpty(updatePreferChampions)) {
+			preferChampionService.updatePreferChampion(update.getPreferChampions(),
+					update.getSummonerName(), profile);
+		}
+
+		if (isNotCreatePreferLines(updatePreferLines)) {
+			throw new PreferLineBoundsException();
+		}
+
+		if (!CollectionUtils.isEmpty(updatePreferLines)) {
+			preferLineService.updatePreferLine(updatePreferLines, profile);
+		}
+
+		String description = update.getDescription();
+		if (!StringUtils.isBlank(description)) {
+			profile.changeDescription(description);
+		}
+
+		Queue preferQueue = update.getPreferQueue();
+		if (!ObjectUtils.isEmpty(preferQueue)) {
+			profile.changePreferQueue(preferQueue);
+		}
+
 	}
 
 }

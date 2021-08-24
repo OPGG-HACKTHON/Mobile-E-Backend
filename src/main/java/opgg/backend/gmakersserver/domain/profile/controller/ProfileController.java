@@ -57,9 +57,15 @@ public class ProfileController {
 	}
 
 	@DeleteMapping("/profiles/{profileId}")
-	public String deleteProfile(@PathVariable("profileId") Long profileId) {
+	@ResponseStatus(NO_CONTENT)
+	public void deleteProfile(@PathVariable("profileId") Long profileId) {
 		profileService.deleteProfile(profileId);
-		return "Delete Profile";
+	}
+
+	@PatchMapping("/profiles/{profileId}")
+	@ResponseStatus(NO_CONTENT)
+	public void updateProfile(@PathVariable("profileId") Long profileId, @RequestBody ProfileRequest.Update update,  @AuthenticationPrincipal Long id) {
+		profileService.updateProfile(profileId, update, id);
 	}
 
 }
