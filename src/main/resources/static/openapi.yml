@@ -147,14 +147,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProfileFindResponse'
 
-  /profiles/{id}:
+  /profiles/{profileId}:
     get:
       summary: 프로필 상세정보 조회
       tags:
         - Profile
       parameters:
         - in: path
-          name: id
+          name: profileId
           schema:
             type: integer
           required: true
@@ -166,6 +166,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProfileDetailFindResponse'
+    delete:
+      summary: 프로필 삭제
+      tags:
+        - Profile
+      parameters:
+        - in: path
+          name: profileId
+          schema:
+            type: integer
+          required: true
+          description: 사용자 계정(Account) id값
+      responses:
+        '200':
+          description: 삭제 성공
+          content:
+            application/json:
+              schema:
+                type: string
+                writeOnly: true
+                example: Delete Profile
+
 
   /profiles/auth:
     patch:
@@ -220,6 +241,7 @@ paths:
           $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
+
 
 components:
   schemas:
@@ -294,6 +316,13 @@ components:
         summonerName:
           type: string
           example: Hide on bush
+        description:
+          type: string
+          example: 저는 망나니 입니다. 칼챔을 좋아하며 스플릿 위주입니다
+        preferKeyword:
+          type: array
+          items:
+            example: 망나니, 스플릿
         preferChampions:
           type: array
           items:
@@ -321,7 +350,10 @@ components:
             - priority: 1
               line: TOP
             - priority: 2
-              line: AD
+              line: MID
+        preferQueue:
+          type: string
+          example: RANKED_SOLO
     ProfileAuthRequest:
       type: object
       writeOnly: true
@@ -344,66 +376,45 @@ components:
           type: boolean
           example: true
     ProfileFindResponse:
-      type: object
-      writeOnly: true
-      properties:
-        accountId:
-          type: integer
-          example: 1
-        username:
-          type: string
-          example: "testtest"
-        profileId:
-          type: integer
-          example: 1
-        isCertified:
-          type: boolean
-          example: true
-        summonerAccountId:
-          type: integer
-          example: 1
-        profileIconId:
-          type: integer
-          example: 21
-        summonerId:
-          type: string
-          example: YLhKPSfcrbAGV4_oiKMt6ZLlAC7dITdXxBUtxkStn9qH5GU
-        summonerName:
-          type: string
-          example: Hide on bush
-        preferQueue:
-          type: string
-          example: RANKED_SOLO
-        level:
-          type: integer
-          example: 544
-        queue:
-          type: string
-          example: RANKED_SOLO
-        tier:
-          type: string
-          example: CHALLEGER
-        tierLevel:
-          type: integer
-          example: 3
-        preferLines:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: integer
-              name:
-                type: integer
-          example:
-            - line: MID
-              preferLinePriority: 1
-            - line: TOP
-              preferLinePriority: 2
-        certified:
-          type: boolean
-          example: true
-
+      example:
+        -  accountId: 1
+           username: "opgg"
+           profileId: 1
+           isCertified: true
+           summonerAccountId: goaYy7-6PSARK_IedxJj5x25fekzfx5FafhHSfdfcIimF
+           profileIconId: 6
+           summonerId: "YLhKPSfcrbAGV4_oiKMt6ZLlAC7dITdXxBUtxkStn9qH5GU"
+           summonerName: Hide on bush
+           preferQueue: RANKED_SOLO
+           level: 544
+           queue: RANKED_SOLO
+           tier: CHALLEGER
+           tierLevel: 3
+           preferLines:
+             - line: TOP
+               preferLinePriority: 1
+             - line: NID
+               preferLinePriority: 2
+           certified: true
+        -  accountId: 1
+           username: "opgg"
+           profileId: 2
+           isCertified: true
+           summonerAccountId: gfds-vcjkkl22eIedxJj5x25fekzfx5FdsvjuizuisA
+           profileIconId: 6
+           summonerId: "YLcxosvsdGV4_oiKMt6ads2AC7dITdXxfdfStn9f2azU"
+           summonerName: 괴물쥐
+           preferQueue: RANKED_SOLO
+           level: 651
+           queue: RANKED_SOLO
+           tier: DIAMOND
+           tierLevel: 2
+           preferLines:
+             - line: AD
+               preferLinePriority: 1
+             - line: SUP
+               preferLinePriority: 2
+           certified: true
     ProfileDetailFindResponse:
       type: object
       writeOnly: true
@@ -413,19 +424,19 @@ components:
           example: 1
         username:
           type: string
-          example: "testtest"
+          example: "opgg"
         profileId:
           type: integer
           example: 1
         summonerAccountId:
           type: integer
-          example: 1
+          example: goaYy7-6PSARK_IedxJj5x25fekzfx5FafhHSfdfcIimF
         preferQueue:
           type: string
           example: RANKED_SOLO
         profileIconId:
           type: integer
-          example: 21
+          example: 6
         summonerId:
           type: string
           example: YLhKPSfcrbAGV4_oiKMt6ZLlAC7dITdXxBUtxkStn9qH5GU
@@ -443,7 +454,7 @@ components:
           example: CHALLEGER
         tierLevel:
           type: integer
-          example: 3
+          example: 1
         leaguePoint:
           type: integer
           example: 84
@@ -458,22 +469,11 @@ components:
           example: 90
         discription:
           type: string
-          example: "저는 미드라이너입니다. 로밍다니는것을 좋아하며 즐겜유저입니다. ~~~~~"
+          example: "저는 탑유저입니다. 로밍다니는것을 좋아하며 즐겜유저입니다. ~~~~~"
         preferChampions:
           type: array
           items:
             type: object
-            properties:
-              1:
-                type: string
-              2:
-                type: integer
-              3:
-                type: integer
-              4:
-                type: integer
-              5:
-                type: integer
           example:
             - championName: "르블랑"
               championId: 22
@@ -494,19 +494,21 @@ components:
           type: array
           items:
             type: object
-            properties:
-              id:
-                type: integer
-              name:
-                type: integer
           example:
-            - line: MID
-              preferLinePriority: 1
             - line: TOP
+              preferLinePriority: 1
+            - line: MID
               preferLinePriority: 2
+        preferKeyword:
+          type: array
+          items:
+            type: object
+          example:
+            - keyword: 망나니
+            - keyword: 스플릿
         certified:
-          type: boolean
           example: true
+
 
   responses:
     '400':

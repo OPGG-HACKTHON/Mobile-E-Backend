@@ -93,9 +93,13 @@ GET {{url}}/profiles
 Authorization: {{Authorization}}
 
 ### 프로필 조회 - 검색
-GET {{url}}/profiles?summonerName=강친밥
+GET {{url}}/profiles?summonerName=hideonbush
 Authorization: {{Authorization}}
 
 ### 프로필 상세조회
 GET {{url}}/profiles/1
+Authorization: {{Authorization}}
+
+### 프로필 삭제
+DELETE {{url}}/profiles/1
 Authorization: {{Authorization}}
