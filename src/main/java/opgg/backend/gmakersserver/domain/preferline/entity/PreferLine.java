@@ -31,8 +31,8 @@ public class PreferLine {
 
     @Builder
     public PreferLine(Profile profile, Line line, int priority) {
-        this.profile = profile;
-        this.line = line;
+        this.profile  = profile;
+        this.line     = line;
         this.priority = priority;
     }
 

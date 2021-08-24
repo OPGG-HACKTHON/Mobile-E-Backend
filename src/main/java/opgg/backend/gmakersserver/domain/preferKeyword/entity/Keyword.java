@@ -13,26 +13,22 @@ public enum Keyword {
 
     //JUG
     GANKING("갱킹"),
-    ORIENTEDOBJECT("오브젝트지향"),
+    ORIENTED_OBJECT("오브젝트지향"),
 
     //MID
     ROAMING("로밍"),
     ASSASSIN("암살자"),
 
     //AD
-    GROWTHTYPE("성장형"),
+    GROWTH_TYPE("성장형"),
 
     //SUP
-    UTILITYTYPE("유틸형"),
+    UTILITY_TYPE("유틸형"),
 
     //공통
-    BATTLENATION("전투민족"),
-    ORIENTEDTOWARDSFIGHTING("한타지향");
+    BATTLE_NATION("전투민족"),
+    ORIENTED_TOWARDS_FIGHTING("한타지향");
 
-    private String krKeyword;
-
-    Keyword(String krKeyword){
-        this.krKeyword = krKeyword;
-    }
+    private final String krKeyword;
 
 }

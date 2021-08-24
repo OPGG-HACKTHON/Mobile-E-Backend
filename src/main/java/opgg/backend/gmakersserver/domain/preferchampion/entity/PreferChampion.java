@@ -29,12 +29,12 @@ public class PreferChampion {
 
     @Builder
     public PreferChampion(Profile profile, int championId, int championLevel, int championPoints, int priority, String championName) {
-        this.profile = profile;
-        this.championId = championId;
-        this.championLevel = championLevel;
+        this.profile        = profile;
+        this.championId     = championId;
+        this.championLevel  = championLevel;
         this.championPoints = championPoints;
-        this.priority = priority;
-        this.championName = championName;
+        this.priority       = priority;
+        this.championName   = championName;
     }
 
     @Id

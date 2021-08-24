@@ -47,16 +47,16 @@ public class Profile extends BaseEntity {
 
 	@Builder
 	public Profile(Account account, boolean isCertified, Integer authProfileIconId, String summonerAccountId, Queue preferQueue, String description, List<LeaguePosition> leaguePosition, List<PreferChampion> preferChampions, List<PreferLine> preferLines, SummonerInfo summonerInfo) {
-		this.account = account;
-		this.isCertified = isCertified;
-		this.authProfileIconId = authProfileIconId;
-		this.summonerAccountId = summonerAccountId;
-		this.preferQueue = preferQueue;
-		this.description = description;
-		this.leaguePosition = leaguePosition;
-		this.preferChampions = preferChampions;
-		this.preferLines = preferLines;
-		this.summonerInfo = summonerInfo;
+		this.account 			= account;
+		this.isCertified		= isCertified;
+		this.authProfileIconId	= authProfileIconId;
+		this.summonerAccountId 	= summonerAccountId;
+		this.preferQueue 		= preferQueue;
+		this.description 		= description;
+		this.leaguePosition		= leaguePosition;
+		this.preferChampions 	= preferChampions;
+		this.preferLines 		= preferLines;
+		this.summonerInfo 		= summonerInfo;
 	}
 
 	@Id

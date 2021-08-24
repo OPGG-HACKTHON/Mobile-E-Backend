@@ -20,10 +20,10 @@ public class Account extends BaseEntity {
 
 	@Builder
 	public Account(String username, String password, boolean activated, Role role) {
-		this.username = username;
-		this.password = password;
-		this.activated = activated;
-		this.role = role;
+		this.username 	= username;
+		this.password 	= password;
+		this.activated 	= activated;
+		this.role 		= role;
 	}
 
 	@JsonIgnore
