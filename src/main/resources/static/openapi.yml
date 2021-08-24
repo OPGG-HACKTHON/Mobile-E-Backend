@@ -145,6 +145,26 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/ProfileFindResponses'
+
+  /profiles/{summonerName}:
+    get:
+      summary: 프로필 검색
+      parameters:
+        - in: path
+          name: summonerName
+          schema:
+            type: string
+          required: true
+          description: 롤 소환사 닉네임
+      tags:
+        - Profile
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
                 $ref: '#/components/schemas/ProfileFindResponse'
 
   /profiles/{profileId}:
@@ -376,6 +396,27 @@ components:
           type: boolean
           example: true
     ProfileFindResponse:
+      example:
+        -  accountId: 1
+           username: "opgg"
+           profileId: 1
+           isCertified: true
+           summonerAccountId: goaYy7-6PSARK_IedxJj5x25fekzfx5FafhHSfdfcIimF
+           profileIconId: 6
+           summonerId: "YLhKPSfcrbAGV4_oiKMt6ZLlAC7dITdXxBUtxkStn9qH5GU"
+           summonerName: Hide on bush
+           preferQueue: RANKED_SOLO
+           level: 544
+           queue: RANKED_SOLO
+           tier: CHALLEGER
+           tierLevel: 3
+           preferLines:
+             - line: TOP
+               preferLinePriority: 1
+             - line: NID
+               preferLinePriority: 2
+           certified: true
+    ProfileFindResponses:
       example:
         -  accountId: 1
            username: "opgg"
