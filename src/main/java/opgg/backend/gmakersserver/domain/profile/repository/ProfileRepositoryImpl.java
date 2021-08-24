@@ -2,6 +2,7 @@ package opgg.backend.gmakersserver.domain.profile.repository;
 
 import static opgg.backend.gmakersserver.domain.account.entity.QAccount.*;
 import static opgg.backend.gmakersserver.domain.leagueposition.entity.QLeaguePosition.*;
+import static opgg.backend.gmakersserver.domain.preferKeyword.entity.QPreferKeyword.*;
 import static opgg.backend.gmakersserver.domain.preferchampion.entity.QPreferChampion.*;
 import static opgg.backend.gmakersserver.domain.preferline.entity.QPreferLine.*;
 import static opgg.backend.gmakersserver.domain.profile.entity.QProfile.*;
@@ -9,6 +10,7 @@ import static opgg.backend.gmakersserver.domain.profile.entity.QProfile.*;
 import java.util.List;
 import java.util.Optional;
 
+import opgg.backend.gmakersserver.domain.preferKeyword.entity.QPreferKeyword;
 import org.springframework.data.domain.Page;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -120,13 +122,15 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 						preferChampion.championLevel,
 						preferChampion.priority,
 						preferLine.line,
-						preferLine.priority
+						preferLine.priority,
+						preferKeyword.keyword
 				)).distinct()
 				.from(QAccount.account)
 				.join(QProfile.profile).on(QAccount.account.accountId.eq(QProfile.profile.account.accountId))
 				.leftJoin(leaguePosition).on(QProfile.profile.profileId.eq(leaguePosition.profile.profileId))
 				.join(preferChampion).on(QProfile.profile.profileId.eq(preferChampion.profile.profileId))
 				.leftJoin(preferLine).on(QProfile.profile.profileId.eq(preferLine.profile.profileId))
+				.join(preferKeyword).on(QProfile.profile.profileId.eq(preferKeyword.profile.profileId))
 				.where(QAccount.account.activated.eq(true)
 						.and(QProfile.profile.preferQueue.eq(leaguePosition.queue))
 						.and(QProfile.profile.profileId.eq(profile.getProfileId())))

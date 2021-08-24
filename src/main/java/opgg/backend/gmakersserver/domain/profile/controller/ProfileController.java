@@ -7,15 +7,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
@@ -58,15 +50,16 @@ public class ProfileController {
 		return profileService.getProfiles(summonerName, id);
 	}
 
-	@GetMapping("/profiles/{id}")
-	public ProfileDetailResponse getProfile(@PathVariable("id") Long profileId, @AuthenticationPrincipal Long id) {
+	@GetMapping("/profiles/{profileId}")
+	public ProfileDetailResponse getProfile(@PathVariable("profileId") Long profileId,
+			@AuthenticationPrincipal Long id) {
 		return profileService.getProfile(profileId, id);
 	}
 
-	@PatchMapping("/profiles/{profileId}")
-	@ResponseStatus(NO_CONTENT)
-	public void updateProfile(@PathVariable("profileId") Long profileId, @RequestBody ProfileRequest.Update update,  @AuthenticationPrincipal Long id) {
-		profileService.updateProfile(profileId, update, id);
+	@DeleteMapping("/profiles/{profileId}")
+	public String deleteProfile(@PathVariable("profileId") Long profileId) {
+		profileService.deleteProfile(profileId);
+		return "Delete Profile";
 	}
 
 }

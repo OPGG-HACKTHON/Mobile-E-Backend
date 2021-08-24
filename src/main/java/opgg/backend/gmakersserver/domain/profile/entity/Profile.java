@@ -1,7 +1,15 @@
 package opgg.backend.gmakersserver.domain.profile.entity;
 
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
+import opgg.backend.gmakersserver.domain.preferKeyword.entity.PreferKeyword;
+import opgg.backend.gmakersserver.domain.preferline.entity.PreferLine;
+import opgg.backend.gmakersserver.domain.account.entity.Account;
+import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
+import opgg.backend.gmakersserver.domain.preferchampion.entity.PreferChampion;
+import opgg.backend.gmakersserver.domain.leagueposition.entity.LeaguePosition;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +91,9 @@ public class Profile extends BaseEntity {
 
 	@Column(name = "DESCRIPTION")
 	private String description;
+
+	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
+	private List<PreferKeyword> preferKeywords;
 
 	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
 	private List<LeaguePosition> leaguePosition = new ArrayList<>();
