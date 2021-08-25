@@ -4,8 +4,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "test1111",
-  "password": "test1111"
+  "username": "test3333",
+  "password": "test3333"
 }
 
 ### 로그인
@@ -14,8 +14,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "test1111",
-  "password": "test1111"
+  "username": "test3333",
+  "password": "test3333"
 }
 
 > {%
@@ -39,22 +39,22 @@ Content-Type: application/json
 
 {
   "summonerName": "Hide on bush",
-  "description": "저는 망나니입니다. 칼챔을 좋아하며 스플릿 위주입니다.",
-  "preferKeyword": [
-    "망나니", "스플릿"
+  "description": "저는 테스터입니다. 칼챔을 좋아하며 스플릿 위주입니다.",
+  "preferKeywords": [
+    "HEADSMAN", "SPLIT"
   ],
   "preferChampions": [
     {
-      "priority": 32,
-      "championId": 1
+      "priority": 1,
+      "championId": 5
     },
     {
       "priority": 2,
-      "championId": 2
+      "championId": 6
     },
     {
       "priority": 3,
-      "championId": 3
+      "championId": 7
     }
   ],
   "preferLines": [
@@ -93,15 +93,15 @@ GET {{url}}/profiles
 Authorization: {{Authorization}}
 
 ### 프로필 조회 - 검색
-GET {{url}}/profiles?summonerName=강찬밥
+GET {{url}}/profiles?summonerName=hideonbush
 Authorization: {{Authorization}}
 
 ### 프로필 상세조회
-GET {{url}}/profiles/6
+GET {{url}}/profiles/8
 Authorization: {{Authorization}}
 
 ### 프로필 수정
-PATCH {{url}}/profiles/6
+PATCH {{url}}/profiles/8
 Authorization: {{Authorization}}
 Content-Type: application/json
 
@@ -140,5 +140,5 @@ Content-Type: application/json
 
 
 ### 프로필 삭제
-DELETE {{url}}/profiles/1
+DELETE {{url}}/profiles/7
 Authorization: {{Authorization}}

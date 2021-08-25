@@ -74,12 +74,10 @@ public class ProfileFindResponse {
 
     public List<ProfileFindResponse> convert(List<ProfileFindResponse> profileFindResponseList) {
         List<ProfileFindResponse> response = new ArrayList<>();
-
         while (profileFindResponseList.size() > index) {
             ProfileFindResponse profileFindResponse = profileFindResponseList.get(index++);
             ProfileFindResponse profileFindResponseNext = profileFindResponseList.get(index++);
             profileFindResponse.getPreferLines().add(profileFindResponseNext.getPreferLines().get(0));
-
             response.add(profileFindResponse);
         }
 

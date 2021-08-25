@@ -164,6 +164,7 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 				.leftJoin(preferLine).on(profile.profileId.eq(preferLine.profile.profileId))
 				.where(
 						QAccount.account.activated.eq(true),
+						profile.isCertified.eq(true),
 						profile.summonerInfo.summonerName.eq(summonerName),
 						profile.preferQueue.eq(leaguePosition.queue)
 				)

@@ -1,10 +1,10 @@
 package opgg.backend.gmakersserver.domain.profile.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
-import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;
-import opgg.backend.gmakersserver.domain.preferKeyword.service.PreferKeywordService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +19,8 @@ import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
 import opgg.backend.gmakersserver.domain.leagueposition.service.LeaguePositionService;
+import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;
+import opgg.backend.gmakersserver.domain.preferKeyword.service.PreferKeywordService;
 import opgg.backend.gmakersserver.domain.preferchampion.service.PreferChampionService;
 import opgg.backend.gmakersserver.domain.preferline.service.PreferLineService;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
@@ -69,7 +71,9 @@ public class ProfileService {
 		} else {
 			profileMainByAccount = profileRepository.findProfileMainByAccount(account);
 		}
-		return profileMainByAccount;
+		return profileMainByAccount.stream()
+				.sorted(Comparator.comparingLong(ProfileFindResponse::getProfileId))
+				.collect(Collectors.toList());
 	}
 
 	private boolean isNotCreatePreferKeywords(List<Keyword> updatePreferKeywords) {
@@ -223,10 +227,6 @@ public class ProfileService {
 	public List<ProfileFindResponse> getProfiles(String summonerName, Long id) {
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
 		List<ProfileFindResponse> profileMainByAccount = getProfileFindResponses(summonerName, account);
-		if (CollectionUtils.isEmpty(profileMainByAccount)) {
-			throw new ProfileNotExistException();
-		}
-
 		return new ProfileFindResponse().convert(profileMainByAccount);
 	}
 
@@ -247,7 +247,7 @@ public class ProfileService {
 	}
 
 	@Transactional
-	public void updateProfile(Long profileId, ProfileRequest.Update update,  Long id) {
+	public void updateProfile(Long profileId, ProfileRequest.Update update, Long id) {
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
 		Profile profile = profileRepository.findByAccountAndProfileId(account, profileId).orElseThrow(
 				ProfileNotMatchException::new);
