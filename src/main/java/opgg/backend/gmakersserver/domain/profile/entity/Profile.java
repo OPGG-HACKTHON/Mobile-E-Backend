@@ -86,7 +86,7 @@ public class Profile extends BaseEntity {
 	private String description;
 
 	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
-	private List<PreferKeyword> preferKeywords;
+	private List<PreferKeyword> preferKeywords = new ArrayList<>();
 
 	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
 	private List<LeaguePosition> leaguePosition = new ArrayList<>();

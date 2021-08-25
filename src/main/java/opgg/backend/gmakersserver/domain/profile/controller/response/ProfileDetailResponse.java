@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Tier;
+import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;
 import opgg.backend.gmakersserver.domain.preferline.entity.Line;
 
 import java.util.*;
@@ -44,7 +45,7 @@ public class ProfileDetailResponse {
 	private List<PreferChampion> preferChampions = new ArrayList<>();
 	//PreferLine
 	private List<PreferLine> preferLines = new ArrayList<>();
-	private List<PreferKeyword> preferKeyword = new ArrayList<>();
+	private List<String> preferKeywords = new ArrayList<>();
 
 	@Builder
 	@QueryProjection
@@ -52,7 +53,7 @@ public class ProfileDetailResponse {
 			String summonerAccountId, Queue preferQueue, Integer profileIconId, String summonerId, String summonerName,
 			String description, int level, Queue queue, Tier tier, int tierLevel, int leaguePoint, int loseGames,
 			int winGames, int winRate, String championName, int championId, int championPoints, int championLevel,
-			int preferChampionPriority, Line line, int preferLinePriority, String keyword) {
+			int preferChampionPriority, Line line, int preferLinePriority, Keyword keyword) {
 		this.accountId = accountId;
 		this.username = username;
 		this.profileId = profileId;
@@ -79,7 +80,7 @@ public class ProfileDetailResponse {
 				.preferChampionPriority(preferChampionPriority)
 				.build());
 		this.preferLines.add(new PreferLine(line, preferLinePriority));
-		this.preferKeyword.add(new PreferKeyword(keyword));
+		this.preferKeywords.add(keyword.getKrKeyword());
 	}
 
 	public ProfileDetailResponse(List<ProfileDetailResponse> profileDetailResponses) {
@@ -119,8 +120,8 @@ public class ProfileDetailResponse {
 				PreferLine preferLine = profileDetailResponse.getPreferLines().get(0);
 				this.preferLines.add(new PreferLine(preferLine.getLine(), preferLine.getPreferLinePriority()));
 
-				PreferKeyword preferKeyword = profileDetailResponse.getPreferKeyword().get(0);
-				this.preferKeyword.add(new PreferKeyword(preferKeyword.getKeyword()));
+				String preferKeyword = profileDetailResponse.getPreferKeywords().get(0);
+				this.preferKeywords.add(preferKeyword);
 			}
 		}
 
@@ -132,9 +133,7 @@ public class ProfileDetailResponse {
 				.stream()
 				.sorted(Comparator.comparingInt(o -> o.preferLinePriority))
 				.collect(Collectors.toList());
-		this.preferKeyword = new ArrayList<>(new HashSet<>(preferKeyword))
-				.stream()
-				.collect(Collectors.toList());
+		this.preferKeywords = new ArrayList<>(new ArrayList<>(new HashSet<>(preferKeywords)));
 	}
 
 	@Getter
@@ -206,20 +205,23 @@ public class ProfileDetailResponse {
 	@AllArgsConstructor
 	public static class PreferKeyword{
 
-		private String keyword;
+		private Keyword keyword;
 
 		@Override
 		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (!(o instanceof PreferKeyword)) return false;
-			PreferKeyword that = (PreferKeyword) o;
-			return Objects.equals(getKeyword(), that.getKeyword());
+			if (this == o)
+				return true;
+			if (o == null || getClass() != o.getClass())
+				return false;
+			PreferKeyword that = (PreferKeyword)o;
+			return getKeyword() == that.getKeyword();
 		}
 
 		@Override
 		public int hashCode() {
 			return Objects.hash(getKeyword());
 		}
+
 	}
 
 }

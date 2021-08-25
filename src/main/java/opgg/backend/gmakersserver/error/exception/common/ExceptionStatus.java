@@ -37,6 +37,10 @@ public enum ExceptionStatus{
 	PREFER_LINE_BOUNDS_EXCEPTION(4250, "선호 라인 개수 초과(2개)", BAD_REQUEST),
 	PREFER_LINE_PRIORITY_DUPLICATE_EXCEPTION(4251, "선호 라인 우선순위를 다르게 해주세요.", BAD_REQUEST),
 
+	// PreferKeyword, 4300
+	PREFER_KEYWORD_BOUNDS_EXCEPTION(4300, "키워드 개수 초과(3개)", BAD_REQUEST),
+	PREFER_KEYWORD_DUPLICATE_EXCEPTION(4301, "키워드가 중복되지 않도록 입력해주세요.", BAD_REQUEST),
+
 	// Common
 	RUN_TIME_EXCEPTION(500, "런타임 에러", INTERNAL_SERVER_ERROR),
 	NOT_FOUND_EXCEPTION(404, "요청한 리소스가 존재하지 않습니다.", NOT_FOUND),

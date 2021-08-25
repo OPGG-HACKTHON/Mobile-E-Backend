@@ -15,6 +15,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.entity.QAccount;
+import opgg.backend.gmakersserver.domain.preferKeyword.entity.QPreferKeyword;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileDetailResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileFindResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.QProfileDetailResponse;

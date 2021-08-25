@@ -58,8 +58,8 @@ public class ProfileController {
 
 	@DeleteMapping("/profiles/{profileId}")
 	@ResponseStatus(NO_CONTENT)
-	public void deleteProfile(@PathVariable("profileId") Long profileId) {
-		profileService.deleteProfile(profileId);
+	public void deleteProfile(@PathVariable("profileId") Long profileId, @AuthenticationPrincipal Long id) {
+		profileService.deleteProfile(profileId, id);
 	}
 
 	@PatchMapping("/profiles/{profileId}")

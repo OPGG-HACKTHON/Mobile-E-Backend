@@ -3,6 +3,7 @@ package opgg.backend.gmakersserver.domain.profile.service;
 import java.util.List;
 import java.util.Random;
 
+import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;
 import opgg.backend.gmakersserver.domain.preferKeyword.service.PreferKeywordService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,8 @@ import opgg.backend.gmakersserver.domain.profile.repository.ProfileRepository;
 import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
 import opgg.backend.gmakersserver.error.exception.preferchampion.PreferChampionBoundsException;
 import opgg.backend.gmakersserver.error.exception.preferchampion.PreferChampionPriorityDuplicateException;
+import opgg.backend.gmakersserver.error.exception.preferkeyword.PreferKeywordBoundsException;
+import opgg.backend.gmakersserver.error.exception.preferkeyword.PreferKeywordDuplicateException;
 import opgg.backend.gmakersserver.error.exception.preferline.PreferLineBoundsException;
 import opgg.backend.gmakersserver.error.exception.preferline.PreferLinePriorityDuplicateException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileBoundsException;
@@ -69,11 +72,23 @@ public class ProfileService {
 		return profileMainByAccount;
 	}
 
-	private boolean isNotCreatePreferLines(List<ProfileRequest.Create.PreferLine> preferLines) {
-		if (preferLines.size() > 2) {
+	private boolean isNotCreatePreferKeywords(List<Keyword> updatePreferKeywords) {
+		int size = updatePreferKeywords.size();
+		if (size > 3) {
 			return true;
 		}
+		int distinctSize = DeduplicationUtils.deduplication(updatePreferKeywords, Keyword::getKrKeyword).size();
+		if (size != distinctSize) {
+			throw new PreferKeywordDuplicateException();
+		}
+		return false;
+	}
+
+	private boolean isNotCreatePreferLines(List<ProfileRequest.Create.PreferLine> preferLines) {
 		int size = preferLines.size();
+		if (size > 2) {
+			return true;
+		}
 		int distinctSize = DeduplicationUtils.deduplication(preferLines, ProfileRequest.Create.PreferLine::getPriority)
 				.size();
 		if (size != distinctSize) {
@@ -83,10 +98,10 @@ public class ProfileService {
 	}
 
 	private boolean isNotCreatePreferChampions(List<ProfileRequest.Create.PreferChampion> preferChampions) {
-		if (preferChampions.size() > 3) {
+		int size = preferChampions.size();
+		if (size > 3) {
 			return true;
 		}
-		int size = preferChampions.size();
 		int distinctSize = DeduplicationUtils.deduplication(preferChampions,
 				ProfileRequest.Create.PreferChampion::getPriority).size();
 		if (size != distinctSize) {
@@ -178,7 +193,7 @@ public class ProfileService {
 				profileRequest.getSummonerName(), profile);
 		preferLineService.createPreferLine(profileRequest.getPreferLines(), profile);
 		leaguePositionService.createLeaguePosition(summoner, profile);
-		preferKeywordService.createPreferKeyword(profileRequest, profile);
+		preferKeywordService.createPreferKeyword(profileRequest.getPreferKeywords(), profile);
 
 		Queue queue = leaguePositionService.getPreferQueue(profileRequest, profile);
 		profile.changePreferQueue(queue);
@@ -224,8 +239,10 @@ public class ProfileService {
 	}
 
 	@Transactional
-	public void deleteProfile(Long profileId) {
-		Profile profile = profileRepository.findById(profileId).orElseThrow(ProfileNotExistException::new);
+	public void deleteProfile(Long profileId, Long id) {
+		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
+		Profile profile = profileRepository.findByAccountAndProfileId(account, profileId).orElseThrow(
+				ProfileNotMatchException::new);
 		profileRepository.delete(profile);
 	}
 
@@ -235,28 +252,33 @@ public class ProfileService {
 		Profile profile = profileRepository.findByAccountAndProfileId(account, profileId).orElseThrow(
 				ProfileNotMatchException::new);
 
-		Queue updatePreferQueue = update.getPreferQueue();
-		if (!ObjectUtils.isEmpty(updatePreferQueue)) {
-			profile.changePreferQueue(updatePreferQueue);
-		}
-
 		List<ProfileRequest.Create.PreferChampion> updatePreferChampions = update.getPreferChampions();
 		List<ProfileRequest.Create.PreferLine> updatePreferLines = update.getPreferLines();
+		List<Keyword> updatePreferKeywords = update.getPreferKeywords();
 
 		if (isNotCreatePreferChampions(updatePreferChampions)) {
 			throw new PreferChampionBoundsException();
-		}
-		if (!CollectionUtils.isEmpty(updatePreferChampions)) {
-			preferChampionService.updatePreferChampion(update.getPreferChampions(),
-					update.getSummonerName(), profile);
 		}
 
 		if (isNotCreatePreferLines(updatePreferLines)) {
 			throw new PreferLineBoundsException();
 		}
 
+		if ((isNotCreatePreferKeywords(updatePreferKeywords))) {
+			throw new PreferKeywordBoundsException();
+		}
+
+		if (!CollectionUtils.isEmpty(updatePreferChampions)) {
+			preferChampionService.updatePreferChampion(update.getPreferChampions(),
+					update.getSummonerName(), profile);
+		}
+
 		if (!CollectionUtils.isEmpty(updatePreferLines)) {
 			preferLineService.updatePreferLine(updatePreferLines, profile);
+		}
+
+		if (!CollectionUtils.isEmpty(updatePreferKeywords)) {
+			preferKeywordService.updatePreferKeyword(updatePreferKeywords, profile);
 		}
 
 		String description = update.getDescription();

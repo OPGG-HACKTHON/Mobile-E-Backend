@@ -33,7 +33,7 @@ public class ProfileRequest {
 
 		@NotEmpty
 		@Size(max = 3)
-		private List<String> preferKeyword = new ArrayList<>();
+		private List<Keyword> preferKeywords = new ArrayList<>();
 
 		@NotBlank
 		private String summonerName;
@@ -123,7 +123,8 @@ public class ProfileRequest {
 
 		private Queue preferQueue;
 
-		// TODO : 키워드
+		@Size(max = 3)
+		private List<Keyword> preferKeywords = new ArrayList<>();
 
 	}
 

@@ -16,7 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 public class PreferKeyword {
 
     @Builder
-    public PreferKeyword(String keyword, Profile profile) {
+    public PreferKeyword(Keyword keyword, Profile profile) {
         this.keyword = keyword;
         this.profile = profile;
     }
@@ -28,7 +28,8 @@ public class PreferKeyword {
     private Long preferKeywordId;
 
     @Column(name = "KEYWORD")
-    private String keyword;
+    @Enumerated(EnumType.STRING)
+    private Keyword keyword;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "PROFILE_ID")

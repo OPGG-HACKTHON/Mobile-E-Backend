@@ -29,7 +29,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "key": "RGAPI-badaa137-63ca-4045-8a9e-25e8a6eec97d"
+  "key": "RGAPI-239d3849-b00b-44f6-97af-d3e55020711f"
 }
 
 ### 프로필 생성
@@ -97,21 +97,20 @@ GET {{url}}/profiles?summonerName=강찬밥
 Authorization: {{Authorization}}
 
 ### 프로필 상세조회
-GET {{url}}/profiles/1
-Authorization: {{Authorization}}
-
-### 프로필 삭제
-DELETE {{url}}/profiles/1
+GET {{url}}/profiles/6
 Authorization: {{Authorization}}
 
 ### 프로필 수정
-PATCH {{url}}/profiles/5
+PATCH {{url}}/profiles/6
 Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
   "summonerName": "강찬밥",
-  "description": "저는 미드라이너입니다. 로밍다니는것을 좋아하며 즐겜유저입니다. 수정1",
+  "description": "저는 미드라이너입니다. 로밍다니는것을 좋아하며 즐겜유저입니다.",
+  "preferKeywords": [
+    "GANKING", "ORIENTED_OBJECT"
+  ],
   "preferChampions": [
     {
       "priority": 3,
@@ -138,3 +137,8 @@ Content-Type: application/json
   ],
   "preferQueue" : "RANKED_SOLO"
 }
+
+
+### 프로필 삭제
+DELETE {{url}}/profiles/1
+Authorization: {{Authorization}}
