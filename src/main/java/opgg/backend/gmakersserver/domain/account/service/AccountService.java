@@ -13,11 +13,13 @@ import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
 import opgg.backend.gmakersserver.error.exception.account.AccountDuplicateIdException;
 import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
 import opgg.backend.gmakersserver.error.exception.account.AccountPasswordNotMatchException;
+import opgg.backend.gmakersserver.infra.jwt.JjwtService;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService {
 
+    private final JjwtService jjwtService;
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -35,13 +37,13 @@ public class AccountService {
     }
 
     @Transactional(readOnly = true)
-    public Account login(SignInRequest signInRequest){
+    public String getJwtToken(SignInRequest signInRequest){
         Account account = accountRepository.findByUsername(signInRequest.getUsername())
                 .orElseThrow(AccountNotFoundException::new);
         if (!passwordEncoder.matches(signInRequest.getPassword(), account.getPassword())) {
             throw new AccountPasswordNotMatchException();
         }
-        return account;
+        return jjwtService.createToken(account);
     }
 
 }
