@@ -174,6 +174,7 @@ public class ProfileDetailResponse {
 			return Objects.hash(getChampionName(), getChampionId(), getChampionPoints(), getPreferChampionPriority(),
 					getChampionLevel());
 		}
+
 	}
 
 	@Getter
@@ -198,6 +199,7 @@ public class ProfileDetailResponse {
 		public int hashCode() {
 			return Objects.hash(getLine(), getPreferLinePriority());
 		}
+
 	}
 
 	@Getter

@@ -1,6 +1,5 @@
 package opgg.backend.gmakersserver.domain.account.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.account.controller.request.SignInRequest;
 import opgg.backend.gmakersserver.domain.account.controller.request.SignUpRequest;
@@ -17,7 +16,6 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@Tag(name = "account", description = "the Account API")
 public class AccountController {
 
 	private final AccountService accountService;

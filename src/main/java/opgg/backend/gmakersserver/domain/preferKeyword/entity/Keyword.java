@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Keyword {
+
     //TOP
     HEADSMAN("망나니"),
     SPLIT("스플릿"),

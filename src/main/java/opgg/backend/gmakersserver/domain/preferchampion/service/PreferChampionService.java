@@ -29,16 +29,15 @@ public class PreferChampionService {
 	}
 
 	@Transactional
-	public void updatePreferChampion(List<ProfileRequest.Create.PreferChampion> updatePreferChampions, String summonerName,
-			Profile profile) {
+	public void updatePreferChampion(List<ProfileRequest.Create.PreferChampion> updatePreferChampions,
+			String summonerName, Profile profile) {
 		preferChampionRepository.deletePreferChampionByProfile(profile);
 		createPreferChampions(updatePreferChampions, summonerName, profile);
 	}
 
 	@Transactional
 	public void createPreferChampions(List<ProfileRequest.Create.PreferChampion> updatePreferChampions,
-			String summonerName,
-			Profile profile) {
+			String summonerName, Profile profile) {
 		Summoner summoner = Summoner.named(summonerName).get();
 		updatePreferChampions.forEach(updatePreferChampion -> {
 			ChampionMastery mastery = ChampionMastery.forSummoner(summoner).withChampion(

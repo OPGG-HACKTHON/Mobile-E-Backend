@@ -22,4 +22,5 @@ public class ChampionInfoController {
     public Map<Integer, String> getChampionInfo() {
         return championInfoService.getChampionInfo();
     }
+
 }
