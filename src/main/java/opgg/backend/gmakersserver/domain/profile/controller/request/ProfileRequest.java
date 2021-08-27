@@ -110,10 +110,10 @@ public class ProfileRequest {
 	@AllArgsConstructor
 	public static class Update {
 
-		@Size(min = 1, max = 3)
+		@Size(max = 3)
 		private final List<Create.PreferChampion> preferChampions = new ArrayList<>();
 
-		@Size(min = 1, max = 2)
+		@Size(max = 2)
 		private final List<Create.PreferLine> preferLines = new ArrayList<>();
 
 		@NotBlank
