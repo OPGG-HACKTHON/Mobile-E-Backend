@@ -50,10 +50,19 @@ public class ExceptionResponse {
 				.map(Field::getName)
 				.collect(Collectors.joining(", "));
 		String getTargetType = ex.getTargetType().toString();
-		List<ExceptionDetailResponse> errors = ExceptionDetailResponse.of(
-				ex.getPath().size() == 0 ? "지원 Enum = " + field : ex.getPath().get(0).getFieldName(),
-				ex.getValue().toString(),
-				getTargetType.contains("$") ? getTargetType.substring('$' + 1) : getTargetType);
+		List<ExceptionDetailResponse> errors = null;
+		if (ex.getPath().size() != 0) {
+			errors = ExceptionDetailResponse.of(
+					"지원 Enum = " + field,
+					ex.getValue().toString(),
+					"지원하지 않는 Enum 입니다.");
+		}
+		if (ex.getPath().size() == 0) {
+			errors = ExceptionDetailResponse.of(
+					ex.getPath().size() == 0 ? "지원 Enum = " + field : ex.getPath().get(0).getFieldName(),
+					ex.getValue().toString(),
+					getTargetType.contains("$") ? getTargetType.substring('$' + 1) : getTargetType);
+		}
 		return new ExceptionResponse(ExceptionStatus.INVALID_FORMAT_EXCEPTION, errors);
 	}
 

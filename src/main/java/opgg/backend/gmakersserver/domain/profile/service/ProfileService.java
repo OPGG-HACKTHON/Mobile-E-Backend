@@ -151,6 +151,7 @@ public class ProfileService {
 	public void createProfile(ProfileRequest.Create profileRequest, Long id) {
 		String summonerName = profileRequest.getSummonerName();
 		Summoner summoner = Summoner.named(summonerName).get();
+		summoner.load();
 		if (ObjectUtils.isEmpty(summoner.getProfileIcon())) {
 			throw new SummonerNotFoundException();
 		}
@@ -170,7 +171,8 @@ public class ProfileService {
 			throw new ProfileBoundsException();
 		}
 
-		Profile findProfile = profileRepository.findByAccountAndSummonerName(account.getAccountId(), summonerName);
+		Profile findProfile = profileRepository.findByAccountAndSummonerName(account.getAccountId(),
+				summoner.getName());
 
 		if (!ObjectUtils.isEmpty(findProfile)) {
 			throw new ProfileExistException();
@@ -206,6 +208,18 @@ public class ProfileService {
 	@Transactional
 	public ProfileResponse.Auth authProfile(ProfileRequest.Auth auth, Long id) {
 		String summonerId = auth.getSummonerId();
+		Summoner summoner = Summoner.withId(summonerId).get();
+		summoner.load();
+		List<ProfileFindResponse> profileBySummonerNames = profileRepository.findProfileBySummonerName(
+				summoner.getName());
+		if (!CollectionUtils.isEmpty(profileBySummonerNames)) {
+			profileBySummonerNames.stream()
+					.filter(ProfileFindResponse::isCertified)
+					.findFirst()
+					.ifPresent(profileFindResponse -> {
+						throw new ProfileExistException();
+					});
+		}
 		Profile profile = profileRepository.findBySummonerIdAndAccountId(summonerId, id)
 				.orElseThrow(SummonerNotFoundException::new);
 		int iconId = -1;
