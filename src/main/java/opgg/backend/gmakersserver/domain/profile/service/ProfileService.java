@@ -42,6 +42,7 @@ import opgg.backend.gmakersserver.error.exception.profile.ProfileExistException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileNotExistException;
 import opgg.backend.gmakersserver.error.exception.profile.ProfileNotMatchException;
 import opgg.backend.gmakersserver.error.exception.riotapi.SummonerNotFoundException;
+import opgg.backend.gmakersserver.error.exception.summoner.SummonerAlreadyCertifiedException;
 
 @Service
 @Transactional(readOnly = true)
@@ -217,7 +218,7 @@ public class ProfileService {
 					.filter(ProfileFindResponse::isCertified)
 					.findFirst()
 					.ifPresent(profileFindResponse -> {
-						throw new ProfileExistException();
+						throw new SummonerAlreadyCertifiedException();
 					});
 		}
 		Profile profile = profileRepository.findBySummonerIdAndAccountId(summonerId, id)
