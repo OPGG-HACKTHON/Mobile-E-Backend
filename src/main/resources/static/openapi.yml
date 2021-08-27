@@ -123,88 +123,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProfileFindResponses'
 
-  /summoner/{summonerName}:
-    get:
-      summary: 프로필 검색1 (모든 프로필, 즉 인증을 하기위한 검색)
-      parameters:
-        - in: path
-          name: summonerName
-          schema:
-            type: string
-          required: true
-          description: 롤 소환사 닉네임
-      tags:
-        - Profile
-      responses:
-        '200':
-          description: 조회 성공
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SummonerFindResponse'
-
-
-  /profiles/{summonerName}:
-    get:
-      summary: 프로필 검색2 (인증된 프로필, 즉 인증된 타 유저의 프로필을 보기 위한 검색)
-      parameters:
-        - in: path
-          name: summonerName
-          schema:
-            type: string
-          required: true
-          description: 롤 소환사 닉네임
-      tags:
-        - Profile
-      responses:
-        '200':
-          description: 조회 성공
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProfileFindResponse'
-
-  /profiles/{profileId}:
-    get:
-      summary: 프로필 상세정보 조회
-      tags:
-        - Profile
-      parameters:
-        - in: path
-          name: profileId
-          schema:
-            type: integer
-          required: true
-          description: 사용자 계정(Account) id값
-      responses:
-        '200':
-          description: 조회 성공
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProfileDetailFindResponse'
-    delete:
-      summary: 프로필 삭제
-      tags:
-        - Profile
-      parameters:
-        - in: path
-          name: profileId
-          schema:
-            type: integer
-          required: true
-          description: 사용자 계정(Account) id값
-      responses:
-        '200':
-          description: 삭제 성공
-          content:
-            application/json:
-              schema:
-                type: string
-                writeOnly: true
-                example: Delete Profile
-
-
   /profiles/auth:
     patch:
       summary: 프로필 인증
@@ -259,6 +177,109 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
+  /summoner/{summonerName}:
+    get:
+      summary: 프로필 검색1 (모든 프로필, 즉 인증을 하기위한 검색)
+      parameters:
+        - in: path
+          name: summonerName
+          schema:
+            type: string
+          required: true
+          description: 롤 소환사 닉네임
+      tags:
+        - Profile
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SummonerFindResponse'
+
+
+  /profiles/{summonerName}:
+    get:
+      summary: 프로필 검색2 (인증된 프로필, 즉 인증된 타 유저의 프로필을 보기 위한 검색)
+      parameters:
+        - in: path
+          name: summonerName
+          schema:
+            type: string
+          required: true
+          description: 롤 소환사 닉네임
+      tags:
+        - Profile
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileFindResponse'
+
+
+  /profiles/{profileId}:
+    get:
+      summary: 프로필 상세정보 조회
+      tags:
+        - Profile
+      parameters:
+        - in: path
+          name: profileId
+          schema:
+            type: integer
+          required: true
+          description: 사용자 계정(Account) id값
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileDetailFindResponse'
+
+    patch:
+      summary: 프로필 수정
+      tags:
+        - Profile
+      parameters:
+        - in: path
+          name: profileId
+          schema:
+            type: integer
+          required: true
+          description: 사용자 계정(Account) id값
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/ProfileCreateRequest'
+      responses:
+        '200':
+          description: 수정 성공
+
+    delete:
+      summary: 프로필 삭제
+      tags:
+        - Profile
+      parameters:
+        - in: path
+          name: profileId
+          schema:
+            type: integer
+          required: true
+          description: 사용자 계정(Account) id값
+      responses:
+        '200':
+          description: 삭제 성공
+          content:
+            application/json:
+              schema:
+                type: string
+                writeOnly: true
+                example: Delete Profile
 
 components:
   schemas:
@@ -301,6 +322,7 @@ components:
           minLength: 8
           pattern: ^[A-Za-z0-9]{8,20}$
           example: opggmobile!
+
     SignInRequest:
       type: object
       writeOnly: true
@@ -317,6 +339,7 @@ components:
           minLength: 8
           pattern: ^[A-Za-z0-9]{8,20}$
           example: opggmobile!
+
     SignInResponse:
       type: object
       writeOnly: true
@@ -582,6 +605,26 @@ components:
             - keyword: 스플릿
         certified:
           example: true
+    Queue:
+      type: string
+      enum: [RANKED_SOLO, RANKED_FLEX, NONE]
+    Tier:
+      type: string
+      enum: [NONE, IRON, BRONZE, SILVER, GOLD, PLATINUM, DIAMOND, MASTER, GRANDMASTER, CHALLENGER]
+    Line:
+      type: string
+      enum: [TOP, JUNGLE, MID, AD, SUP]
+    TierLevel:
+      type: string
+      enum: [IV(4), III(3), II(2), I(1), NONE(0)]
+    Keyword:
+      type: string
+      enum: [HEADSMAN("망나니"), SPLIT("스플릿"), TANKER("탱커"),
+             GANKING("갱킹"), ORIENTED_OBJECT("오브젝트지향"),
+             ROAMING("로밍"), ASSASSIN("암살자"),
+             GROWTH_TYPE("성장형"),
+             UTILITY_TYPE("유틸형"),
+             BATTLE_NATION("전투민족"), ORIENTED_TOWARDS_FIGHTING("한타지향");]
 
 
   responses:
