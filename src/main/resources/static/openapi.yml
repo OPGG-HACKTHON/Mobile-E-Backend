@@ -56,14 +56,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExceptionResponse'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
 
   /accounts/sign-in:
     post:
@@ -89,14 +81,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExceptionResponse'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
 
   ### Profile ###
   /profiles:
@@ -126,17 +110,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ExceptionResponse'
-        '401':
-          $ref: '#/components/responses/401'
-        '403':
-          $ref: '#/components/responses/403'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
 
     get:
-      summary: 프로필 메인 정보 조회
+      summary: 프로필 메인 정보 조회 (첫 메인화면의 내 카드 목록 프로필 데이터들)
       tags:
         - Profile
       responses:
@@ -147,9 +123,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProfileFindResponses'
 
+  /summoner/{summonerName}:
+    get:
+      summary: 프로필 검색1 (모든 프로필, 즉 인증을 하기위한 검색)
+      parameters:
+        - in: path
+          name: summonerName
+          schema:
+            type: string
+          required: true
+          description: 롤 소환사 닉네임
+      tags:
+        - Profile
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SummonerFindResponse'
+
+
   /profiles/{summonerName}:
     get:
-      summary: 프로필 검색
+      summary: 프로필 검색2 (인증된 프로필, 즉 인증된 타 유저의 프로필을 보기 위한 검색)
       parameters:
         - in: path
           name: summonerName
@@ -328,6 +325,36 @@ components:
           type: string
           example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJvnGdnIiwic3ViIjoiMSIsImV4cCI6MTYyODQzMTMwNCwiaWF0IjoxNjI4NDI5NTA0LCJhdXRoIjoiUk9MRV9VU0VSIn0.qRWiKpHKBF13M7Tw485NaDPveVF2iRh9vZ39YRJvItW16ikg7pHmmP3QwEzc732TPntruhgWzny-VrOBBk8LWA
 
+    ### Summoner ###
+    SummonerFindResponse:
+      type: object
+      writeOnly: true
+      properties:
+        level:
+          type: integer
+          example: 492
+        profileIconId:
+          type: integer
+          example: 6
+        summonerId:
+          type: string
+          example: c4ef16ITFOMN9FGfdphixlp8-vSDIOUgsadQqXz2zO9KMO9XqzzHs9_EQ2
+        summonerName:
+          type: string
+          example: Hide on bush
+        leaguePoint:
+          type: string
+          example: 600
+        tier:
+          type: string
+          example: GRANDMASTER
+        tierLevel:
+          type: string
+          example: I
+        queue:
+          type: string
+          example: RANKED_SOLO
+
     ### Profile ###
     ProfileCreateRequest:
       type: object
@@ -374,6 +401,7 @@ components:
         preferQueue:
           type: string
           example: RANKED_SOLO
+
     ProfileAuthRequest:
       type: object
       writeOnly: true
@@ -381,6 +409,7 @@ components:
         summonerId:
           type: string
           example: c4ef16ITFOMN9FGfdphixlp8-vSDIOUgsadQqXz2zO9KMO9XqzzHs9_EQ2
+
     ProfileAuthResponse:
       type: object
       writeOnly: true
@@ -388,6 +417,7 @@ components:
         iconId:
           type: string
           example: 5
+
     ProfileAuthConfirmResponse:
       type: object
       writeOnly: true
@@ -395,6 +425,7 @@ components:
         isCertified:
           type: boolean
           example: true
+
     ProfileFindResponse:
       example:
         -  accountId: 1
@@ -416,6 +447,7 @@ components:
              - line: NID
                preferLinePriority: 2
            certified: true
+
     ProfileFindResponses:
       example:
         -  accountId: 1
@@ -456,6 +488,7 @@ components:
              - line: SUP
                preferLinePriority: 2
            certified: true
+
     ProfileDetailFindResponse:
       type: object
       writeOnly: true
