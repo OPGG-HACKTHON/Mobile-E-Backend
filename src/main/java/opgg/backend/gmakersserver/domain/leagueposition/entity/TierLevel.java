@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum TierLevel {
 
-    IV(4), III(3), II(2), I(1);
+    IV(4), III(3), II(2), I(1), NONE(0);
 
     public final int level;
 

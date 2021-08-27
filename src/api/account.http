@@ -4,8 +4,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "test3333",
-  "password": "test3333"
+  "username": "test1111",
+  "password": "test1111"
 }
 
 ### 로그인
@@ -14,8 +14,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "test3333",
-  "password": "test3333"
+  "username": "test1111",
+  "password": "test1111"
 }
 
 > {%
@@ -29,7 +29,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "key": "RGAPI-239d3849-b00b-44f6-97af-d3e55020711f"
+  "key": "RGAPI-1b3fbeda-cb83-46a8-b407-21b82668d8c4"
 }
 
 ### 프로필 생성
@@ -38,7 +38,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "summonerName": "Hide on bush",
+  "summonerName": "강친밥",
   "description": "저는 테스터입니다. 칼챔을 좋아하며 스플릿 위주입니다.",
   "preferKeywords": [
     "HEADSMAN", "SPLIT"
@@ -67,7 +67,7 @@ Content-Type: application/json
       "line": "TOP"
     }
   ],
-  "preferQueue" : "RANKED_SOLO"
+  "preferQueue" : "NONE"
 }
 
 ### 프로필 인증
@@ -96,6 +96,10 @@ Authorization: {{Authorization}}
 GET {{url}}/profiles?summonerName=hideonbush
 Authorization: {{Authorization}}
 
+### 프로필 인증을 위한 조회 - 검색
+GET {{url}}/summoner?summonerName=hideonbush
+Authorization: {{Authorization}}
+
 ### 프로필 상세조회
 GET {{url}}/profiles/8
 Authorization: {{Authorization}}
@@ -106,7 +110,7 @@ Authorization: {{Authorization}}
 Content-Type: application/json
 
 {
-  "summonerName": "강찬밥",
+  "summonerName": "강친밥",
   "description": "저는 미드라이너입니다. 로밍다니는것을 좋아하며 즐겜유저입니다.",
   "preferKeywords": [
     "GANKING", "ORIENTED_OBJECT"

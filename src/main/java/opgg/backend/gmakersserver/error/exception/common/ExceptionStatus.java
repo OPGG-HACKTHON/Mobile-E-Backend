@@ -41,6 +41,9 @@ public enum ExceptionStatus{
 	PREFER_KEYWORD_BOUNDS_EXCEPTION(4300, "키워드 개수 초과(3개)", BAD_REQUEST),
 	PREFER_KEYWORD_DUPLICATE_EXCEPTION(4301, "키워드가 중복되지 않도록 입력해주세요.", BAD_REQUEST),
 
+	// Summoner, 4350
+	SUMMONER_ALREADY_CERTIFIED_EXCEPTION(4350, "이미 인증된 소환사입니다.", BAD_REQUEST),
+
 	// Common
 	RUN_TIME_EXCEPTION(500, "런타임 에러", INTERNAL_SERVER_ERROR),
 	NOT_FOUND_EXCEPTION(404, "요청한 리소스가 존재하지 않습니다.", NOT_FOUND),
