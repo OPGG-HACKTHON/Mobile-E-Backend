@@ -16,10 +16,8 @@ public class SummonerController {
 
     @GetMapping("/summoner")
     @ResponseStatus(HttpStatus.OK)
-    public SummonerResponse getSummoner(
-            @RequestParam(value = "summonerName", required = false) String summonerName,
-            @AuthenticationPrincipal Long id) {
-
-        return summonerService.getSummoner(summonerName, id);
+    public SummonerResponse getSummoner(@RequestParam(value = "summonerName", required = false) String summonerName) {
+        return summonerService.getSummoner(summonerName);
     }
+
 }
