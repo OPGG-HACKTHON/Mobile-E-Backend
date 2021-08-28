@@ -2,6 +2,7 @@ package opgg.backend.gmakersserver.domain.account.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import opgg.backend.gmakersserver.domain.account.controller.request.SignUpRequest;
 import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter
@@ -48,5 +51,9 @@ public class Account extends BaseEntity {
 
 	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = ALL)
 	private List<Profile> profile = new ArrayList<>();
+
+	public boolean isPasswordMatch(PasswordEncoder passwordEncoder, String requestPassword) {
+		return passwordEncoder.matches(requestPassword, password);
+	}
 
 }

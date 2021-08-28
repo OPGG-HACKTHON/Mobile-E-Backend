@@ -1,19 +1,22 @@
 package opgg.backend.gmakersserver.domain.account.controller.request;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import opgg.backend.gmakersserver.domain.account.entity.Account;
+import opgg.backend.gmakersserver.domain.account.entity.Role;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignUpRequest {
@@ -29,5 +32,13 @@ public class SignUpRequest {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    public Account toEntity(PasswordEncoder passwordEncoder) {
+        return Account.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .role(Role.ROLE_USER)
+                .activated(true)
+                .build();
+    }
 
 }

@@ -39,18 +39,4 @@ public class AccountRepositoryImpl implements AccountRepositoryCustom{
                                         .fetchOne());
     }
 
-    @Override
-    public Optional<Account> findBySummonerNameAndAccountId(String summonerName, Long accountId) {
-        return Optional.ofNullable(queryFactory
-                                        .selectFrom(account)
-                                        .leftJoin(account.profile, profile).fetchJoin()
-                                        .where(
-                                                account.accountId.eq(accountId),
-                                                account.profile.contains(
-                                                                    selectFrom(profile)
-                                                                    .where(profile.summonerInfo.summonerName.eq(summonerName))
-                                                )
-                                        ).fetchOne());
-    }
-
 }
