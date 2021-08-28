@@ -14,7 +14,6 @@ import static opgg.backend.gmakersserver.domain.leagueposition.entity.TierLevel.
 
 @Getter
 @NoArgsConstructor
-@Getter
 public class SummonerResponse {
 
     @Builder
