@@ -16,6 +16,7 @@ import opgg.backend.gmakersserver.error.exception.account.AccountPasswordNotMatc
 import opgg.backend.gmakersserver.infra.jwt.JjwtService;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AccountService {
 
@@ -28,19 +29,13 @@ public class AccountService {
         accountRepository.findByUsername(signUpRequest.getUsername()).ifPresent(account -> {
             throw new AccountDuplicateIdException(account.getUsername());
         });
-        accountRepository.save(Account.builder()
-                                        .username(signUpRequest.getUsername())
-                                        .password(passwordEncoder.encode(signUpRequest.getPassword()))
-                                        .role(Role.ROLE_USER)
-                                        .activated(true)
-                                        .build());
+        accountRepository.save(signUpRequest.toEntity(passwordEncoder));
     }
 
-    @Transactional(readOnly = true)
     public String getJwtToken(SignInRequest signInRequest){
         Account account = accountRepository.findByUsername(signInRequest.getUsername())
                 .orElseThrow(AccountNotFoundException::new);
-        if (!passwordEncoder.matches(signInRequest.getPassword(), account.getPassword())) {
+        if (!account.isPasswordMatch(passwordEncoder, signInRequest.getPassword())) {
             throw new AccountPasswordNotMatchException();
         }
         return jjwtService.createToken(account);

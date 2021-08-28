@@ -29,10 +29,10 @@ public class AccountController {
 
 	@PostMapping("/accounts/sign-in")
 	public ResponseEntity<TokenResponse> authorize(@Valid @RequestBody SignInRequest signInRequest) {
-		String jwt = accountService.getJwtToken(signInRequest);
+		String jwtToken = accountService.getJwtToken(signInRequest);
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-		return new ResponseEntity<>(new TokenResponse(jwt), httpHeaders, HttpStatus.OK);
+		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwtToken);
+		return new ResponseEntity<>(new TokenResponse(jwtToken), httpHeaders, HttpStatus.OK);
 	}
 
 }
