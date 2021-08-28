@@ -11,6 +11,7 @@ import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 import static opgg.backend.gmakersserver.domain.leagueposition.entity.Queue.*;
+import static opgg.backend.gmakersserver.domain.leagueposition.entity.Tier.*;
 
 @Entity
 @Getter
@@ -89,7 +90,7 @@ public class LeaguePosition {
     public static LeaguePosition from(Profile profile) {
         return LeaguePosition.builder()
                 .profile(profile)
-                .tier(null)
+                .tier(UNRANKED)
                 .tierLevel(0)
                 .level(0)
                 .winGames(0)
