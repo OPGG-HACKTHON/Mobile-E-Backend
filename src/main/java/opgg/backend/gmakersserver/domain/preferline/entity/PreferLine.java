@@ -1,32 +1,21 @@
 package opgg.backend.gmakersserver.domain.preferline.entity;
 
-import static javax.persistence.FetchType.*;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
+
+import javax.persistence.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
 @Table(name = "PREFER_LINE")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor()
 public class PreferLine {
 
     @Builder
@@ -52,5 +41,19 @@ public class PreferLine {
 
     @Column(name = "PRIORITY")
     private int priority;
+
+    public static List<PreferLine> of(List<ProfileRequest.Create.PreferLine> requestPreferLines, Profile profile) {
+        return requestPreferLines.stream()
+                .map(preferLine -> PreferLine.of(profile, preferLine))
+                .collect(Collectors.toList());
+    }
+
+    private static PreferLine of(Profile profile, ProfileRequest.Create.PreferLine preferLine) {
+        return PreferLine.builder()
+                .profile(profile)
+                .line(preferLine.getLine())
+                .priority(preferLine.getPriority())
+                .build();
+    }
 
 }
