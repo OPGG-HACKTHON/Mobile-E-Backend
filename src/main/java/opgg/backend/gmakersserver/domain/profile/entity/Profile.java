@@ -22,6 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.merakianalytics.orianna.types.core.summoner.Summoner;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,7 @@ import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
 import opgg.backend.gmakersserver.domain.preferKeyword.entity.PreferKeyword;
 import opgg.backend.gmakersserver.domain.preferchampion.entity.PreferChampion;
 import opgg.backend.gmakersserver.domain.preferline.entity.PreferLine;
+import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
 
 @Entity
 @Getter

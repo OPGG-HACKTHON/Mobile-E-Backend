@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
 
+import com.merakianalytics.orianna.types.core.summoner.Summoner;
+
 @Getter
 @Embeddable
 @NoArgsConstructor
