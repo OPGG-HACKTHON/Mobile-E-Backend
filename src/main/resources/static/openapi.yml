@@ -316,12 +316,14 @@ components:
           minLength: 4
           pattern: ^[A-Za-z0-9]{4,20}$
           example: opgg
+          nullable: false
         password:
           type: string
           maxLength: 20
           minLength: 8
           pattern: ^[A-Za-z0-9]{8,20}$
           example: opggmobile!
+          nullable: false
 
     SignInRequest:
       type: object
@@ -333,12 +335,14 @@ components:
           minLength: 4
           pattern: ^[A-Za-z0-9]{4,20}$
           example: opgg
+          nullable: false
         password:
           type: string
           maxLength: 20
           minLength: 8
           pattern: ^[A-Za-z0-9]{8,20}$
           example: opggmobile!
+          nullable: false
 
     SignInResponse:
       type: object
@@ -386,44 +390,57 @@ components:
         summonerName:
           type: string
           example: Hide on bush
+          nullable: false
         description:
           type: string
           example: 저는 망나니 입니다. 칼챔을 좋아하며 스플릿 위주입니다
+          nullable: false
         preferKeyword:
           type: array
           items:
             example: 망나니, 스플릿
+          nullable: true
         preferChampions:
           type: array
           items:
             type: object
             properties:
-              id:
+              priority:
                 type: integer
-              name:
+              championId:
                 type: integer
           example:
             - priority: 1
-              cahmpionId: 10
+              championId: 10
+              nullable: false
             - priority: 2
-              cahmpionId: 13
+              championId: 13
+              nullable: true
+            - priority: 3
+              championId: 14
+              nullable: true
+          nullable: false
         preferLines:
           type: array
           items:
             type: object
             properties:
-              id:
+              priority:
                 type: integer
-              name:
+              line:
                 type: string
           example:
             - priority: 1
               line: TOP
+              nullable: false
             - priority: 2
               line: MID
+              nullable: false
+          nullable: false
         preferQueue:
           type: string
           example: RANKED_SOLO
+          nullable: false
 
     ProfileAuthRequest:
       type: object
@@ -432,6 +449,7 @@ components:
         summonerId:
           type: string
           example: c4ef16ITFOMN9FGfdphixlp8-vSDIOUgsadQqXz2zO9KMO9XqzzHs9_EQ2
+          nullable: false
 
     ProfileAuthResponse:
       type: object
