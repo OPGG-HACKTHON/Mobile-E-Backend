@@ -87,12 +87,12 @@ public class LeaguePosition {
                 .build();
     }
 
-    public static LeaguePosition from(Profile profile) {
+    public static LeaguePosition from(Profile profile, Summoner summoner) {
         return LeaguePosition.builder()
                 .profile(profile)
                 .tier(UNRANKED)
                 .tierLevel(0)
-                .level(0)
+                .level(summoner.getLevel())
                 .winGames(0)
                 .loseGames(0)
                 .winRate(0)

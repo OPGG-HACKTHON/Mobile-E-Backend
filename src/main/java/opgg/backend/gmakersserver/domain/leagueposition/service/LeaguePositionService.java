@@ -27,14 +27,14 @@ public class LeaguePositionService {
 				.stream()
 				.map(leagueEntry -> of(leagueEntry, profile, summoner))
 				.forEach(leaguePositionRepository::save);
-		leaguePositionRepository.save(from(profile));
+		leaguePositionRepository.save(from(profile, summoner));
 	}
 
 	@Transactional(readOnly = true)
-	public Queue getPreferQueue(ProfileRequest.Create profileRequest, Profile profile) {
+	public Queue getPreferQueue(Queue preferQueue, Profile profile) {
 		return leaguePositionRepository.findByProfile(profile)
 				.stream()
-				.filter(leaguePosition -> leaguePosition.isQueueMatch(profileRequest.getPreferQueue()))
+				.filter(leaguePosition -> leaguePosition.isQueueMatch(preferQueue))
 				.map(LeaguePosition::getQueue)
 				.findFirst()
 				.orElse(NONE);

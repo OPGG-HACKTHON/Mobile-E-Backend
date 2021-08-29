@@ -5,6 +5,7 @@ import static javax.persistence.FetchType.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -100,6 +101,17 @@ public class Profile extends BaseEntity {
 	@Embedded
 	private SummonerInfo summonerInfo;
 
+	public static Profile of(Account account, Summoner summoner, ProfileRequest.Create profileRequest) {
+		return Profile.builder()
+				.account(account)
+				.isCertified(false)
+				.authProfileIconId(null)
+				.summonerAccountId(summoner.getAccountId())
+				.summonerInfo(SummonerInfo.of(summoner))
+				.description(profileRequest.getDescription())
+				.build();
+	}
+
 	public void changeAuthProfileIconId(Integer summonerProfileIconId) {
 		this.authProfileIconId = summonerProfileIconId;
 	}
@@ -119,5 +131,33 @@ public class Profile extends BaseEntity {
 	public void changeDescription(String description) {
 		this.description = description;
 	}
+
+	public int getRandomIconId() {
+		int profileIconId = summonerInfo.getProfileIconId();
+		Random random = new Random();
+		random.setSeed(System.currentTimeMillis());
+		int iconId = profileIconId;
+		while (iconId == profileIconId) {
+			iconId = random.nextInt(28);
+		}
+		return iconId;
+	}
+
+	public boolean getAuthConfirm() {
+		return isCertified || isReliable();
+	}
+
+	private boolean isReliable() {
+		Summoner summoner = Summoner.withId(getSummonerInfo().getSummonerId()).get();
+		int summonerProfileIconId = summoner.getProfileIcon().getId();
+		if (isAuthorizable(summonerProfileIconId)) {
+			changeIsCertified(true);
+			changeAuthProfileIconId(-1);
+			return true;
+		}
+		return false;
+	}
+
+
 
 }

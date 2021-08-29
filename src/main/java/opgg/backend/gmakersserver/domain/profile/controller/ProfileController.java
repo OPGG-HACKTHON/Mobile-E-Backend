@@ -64,7 +64,8 @@ public class ProfileController {
 
 	@PatchMapping("/profiles/{profileId}")
 	@ResponseStatus(NO_CONTENT)
-	public void updateProfile(@PathVariable("profileId") Long profileId, @RequestBody ProfileRequest.Update update,  @AuthenticationPrincipal Long id) {
+	public void updateProfile(@PathVariable("profileId") Long profileId, @RequestBody ProfileRequest.Update update,
+			@AuthenticationPrincipal Long id) {
 		profileService.updateProfile(profileId, update, id);
 	}
 

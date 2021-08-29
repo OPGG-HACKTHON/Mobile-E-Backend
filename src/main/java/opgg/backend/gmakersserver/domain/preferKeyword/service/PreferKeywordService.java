@@ -5,8 +5,8 @@ import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;
 import opgg.backend.gmakersserver.domain.preferKeyword.repository.PreferKeywordRepository;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 import static opgg.backend.gmakersserver.domain.preferKeyword.entity.PreferKeyword.of;

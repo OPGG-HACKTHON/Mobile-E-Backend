@@ -12,12 +12,22 @@ public class ProfileResponse {
 	@AllArgsConstructor
 	public static class Auth {
 		private final int iconId;
+
+		public static Auth from (int profileId) {
+			return new Auth(profileId);
+		}
+
 	}
 
 	@Getter
 	@AllArgsConstructor
 	public static class AuthConfirm {
 		private final boolean isCertified;
+
+		public static AuthConfirm from (boolean isAuthConfirm) {
+			return new AuthConfirm(isAuthConfirm);
+		}
+
 	}
 
 }

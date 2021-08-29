@@ -10,7 +10,7 @@ import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
 public interface ProfileRepositoryCustom {
 
-    Profile findByAccountAndSummonerName(Long accountId, String summonerName);
+    Optional<Profile> findByAccountAndSummonerName(Long accountId, String summonerName);
 
     Optional<Profile> findBySummonerIdAndAccountId(String summonerId, Long accountId);
 

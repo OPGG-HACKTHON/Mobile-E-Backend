@@ -14,6 +14,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static opgg.backend.gmakersserver.domain.leagueposition.entity.Queue.NONE;
+import static opgg.backend.gmakersserver.domain.leagueposition.entity.Tier.*;
+import static opgg.backend.gmakersserver.domain.profile.controller.response.ProfileDetailResponse.PreferChampion.*;
+import static opgg.backend.gmakersserver.domain.profile.controller.response.ProfileDetailResponse.PreferLine.*;
+
+import org.springframework.util.ObjectUtils;
 
 @Getter
 @NoArgsConstructor
@@ -95,7 +100,6 @@ public class ProfileDetailResponse {
 					this.loseGames = profileDetailResponse.getLoseGames();
 					this.winGames = profileDetailResponse.getWinGames();
 					this.winRate = profileDetailResponse.getWinRate();
-					this.description = profileDetailResponse.description;
 				}
 				this.accountId = profileDetailResponse.getAccountId();
 				this.username = profileDetailResponse.getUsername();
@@ -107,22 +111,23 @@ public class ProfileDetailResponse {
 				this.summonerName = profileDetailResponse.getSummonerName();
 				this.preferQueue = profileDetailResponse.getPreferQueue();
 				this.level = profileDetailResponse.getLevel();
+				this.description = profileDetailResponse.getDescription();
 
 				PreferChampion preferChampion = profileDetailResponse.getPreferChampions().get(0);
-				this.preferChampions.add(PreferChampion.builder()
-						.championName(preferChampion.getChampionName())
-						.championId(preferChampion.getChampionId())
-						.championPoints(preferChampion.getChampionPoints())
-						.championLevel(preferChampion.getChampionLevel())
-						.preferChampionPriority(preferChampion.getPreferChampionPriority())
-						.build());
-
+				this.preferChampions.add(from(preferChampion));
 				PreferLine preferLine = profileDetailResponse.getPreferLines().get(0);
-				this.preferLines.add(new PreferLine(preferLine.getLine(), preferLine.getPreferLinePriority()));
-
+				this.preferLines.add(from(preferLine));
 				String preferKeyword = profileDetailResponse.getPreferKeywords().get(0);
 				this.preferKeywords.add(preferKeyword);
 			}
+		}
+
+		if (ObjectUtils.isEmpty(queue)) {
+			queue = NONE;
+		}
+
+		if (ObjectUtils.isEmpty(tier)) {
+			tier = UNRANKED;
 		}
 
 		this.preferChampions = new ArrayList<>(new HashSet<>(preferChampions))
@@ -145,6 +150,16 @@ public class ProfileDetailResponse {
 		private int championPoints;
 		private int preferChampionPriority;
 		private int championLevel;
+
+		public static PreferChampion from(PreferChampion preferChampion) {
+			return PreferChampion.builder()
+					.championName(preferChampion.getChampionName())
+					.championId(preferChampion.getChampionId())
+					.championPoints(preferChampion.getChampionPoints())
+					.championLevel(preferChampion.getChampionLevel())
+					.preferChampionPriority(preferChampion.getPreferChampionPriority())
+					.build();
+		}
 
 		@Builder
 		public PreferChampion(String championName, int championId, int championPoints, int preferChampionPriority,
@@ -184,6 +199,10 @@ public class ProfileDetailResponse {
 
 		private Line line;
 		private int preferLinePriority;
+
+		public static PreferLine from(PreferLine preferLine) {
+			return new PreferLine(preferLine.getLine(), preferLine.getPreferLinePriority());
+		}
 
 		@Override
 		public boolean equals(Object o) {
