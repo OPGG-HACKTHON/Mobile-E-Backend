@@ -6,13 +6,17 @@ import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
 @Table(name = "PREFER_KEYWORD")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class PreferKeyword {
 
     @Builder
@@ -34,5 +38,18 @@ public class PreferKeyword {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "PROFILE_ID")
     private Profile profile;
+
+    public static List<PreferKeyword> of(List<Keyword> keywords, Profile profile) {
+        return keywords.stream()
+                .map(keyword -> PreferKeyword.of(profile, keyword))
+                .collect(Collectors.toList());
+    }
+
+    private static PreferKeyword of(Profile profile, Keyword keyword) {
+        return PreferKeyword.builder()
+                .keyword(keyword)
+                .profile(profile)
+                .build();
+    }
 
 }

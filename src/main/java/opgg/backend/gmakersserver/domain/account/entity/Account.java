@@ -1,15 +1,32 @@
 package opgg.backend.gmakersserver.domain.account.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
-import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
-import opgg.backend.gmakersserver.domain.profile.entity.Profile;
+import static javax.persistence.CascadeType.*;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.CascadeType.ALL;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
+import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
 @Entity
 @Getter
@@ -48,5 +65,9 @@ public class Account extends BaseEntity {
 
 	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = ALL)
 	private List<Profile> profile = new ArrayList<>();
+
+	public boolean isPasswordMatch(PasswordEncoder passwordEncoder, String requestPassword) {
+		return passwordEncoder.matches(requestPassword, password);
+	}
 
 }

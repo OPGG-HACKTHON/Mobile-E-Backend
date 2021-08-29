@@ -29,14 +29,14 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public Profile findByAccountAndSummonerName(Long accountId, String summonerName) {
-		return queryFactory
+	public Optional<Profile> findByAccountAndSummonerName(Long accountId, String summonerName) {
+		return Optional.ofNullable(queryFactory
 				.selectFrom(profile)
 				.where(
 						profile.account.accountId.eq(accountId),
 						profile.summonerInfo.summonerName.eq(summonerName)
 				)
-				.fetchOne();
+				.fetchOne());
 	}
 
 	@Override

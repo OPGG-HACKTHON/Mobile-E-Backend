@@ -8,7 +8,7 @@ import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LeaguePositionRepository extends JpaRepository<LeaguePosition, Long>, LeaguePositionRepositoryCustom {
+public interface LeaguePositionRepository extends JpaRepository<LeaguePosition, Long> {
 
 	List<LeaguePosition> findByProfile(Profile profile);
 

@@ -5,6 +5,7 @@ import static javax.persistence.FetchType.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -21,6 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.merakianalytics.orianna.types.core.summoner.Summoner;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,6 +36,7 @@ import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
 import opgg.backend.gmakersserver.domain.preferKeyword.entity.PreferKeyword;
 import opgg.backend.gmakersserver.domain.preferchampion.entity.PreferChampion;
 import opgg.backend.gmakersserver.domain.preferline.entity.PreferLine;
+import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
 
 @Entity
 @Getter
@@ -100,6 +103,17 @@ public class Profile extends BaseEntity {
 	@Embedded
 	private SummonerInfo summonerInfo;
 
+	public static Profile of(Account account, Summoner summoner, ProfileRequest.Create profileRequest) {
+		return Profile.builder()
+				.account(account)
+				.isCertified(false)
+				.authProfileIconId(null)
+				.summonerAccountId(summoner.getAccountId())
+				.summonerInfo(SummonerInfo.of(summoner))
+				.description(profileRequest.getDescription())
+				.build();
+	}
+
 	public void changeAuthProfileIconId(Integer summonerProfileIconId) {
 		this.authProfileIconId = summonerProfileIconId;
 	}
@@ -118,6 +132,32 @@ public class Profile extends BaseEntity {
 
 	public void changeDescription(String description) {
 		this.description = description;
+	}
+
+	public int getRandomIconId() {
+		int profileIconId = summonerInfo.getProfileIconId();
+		Random random = new Random();
+		random.setSeed(System.currentTimeMillis());
+		int iconId = profileIconId;
+		while (iconId == profileIconId) {
+			iconId = random.nextInt(28);
+		}
+		return iconId;
+	}
+
+	public boolean getAuthConfirm() {
+		return isCertified || isReliable();
+	}
+
+	private boolean isReliable() {
+		Summoner summoner = Summoner.withId(getSummonerInfo().getSummonerId()).get();
+		int summonerProfileIconId = summoner.getProfileIcon().getId();
+		if (isAuthorizable(summonerProfileIconId)) {
+			changeIsCertified(true);
+			changeAuthProfileIconId(-1);
+			return true;
+		}
+		return false;
 	}
 
 }

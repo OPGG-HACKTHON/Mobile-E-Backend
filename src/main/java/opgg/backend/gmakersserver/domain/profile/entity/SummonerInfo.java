@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
 
+import com.merakianalytics.orianna.types.core.summoner.Summoner;
+
 @Getter
 @Embeddable
 @NoArgsConstructor
@@ -29,5 +31,13 @@ public class SummonerInfo {
 
 	@Column(name = "PROFILE_ICON_ID")
 	private Integer profileIconId;
+
+	public static SummonerInfo of(Summoner summoner) {
+		return SummonerInfo.builder()
+				.summonerId(summoner.getId())
+				.summonerName(summoner.getName())
+				.profileIconId(summoner.getProfileIcon().getId())
+				.build();
+	}
 
 }

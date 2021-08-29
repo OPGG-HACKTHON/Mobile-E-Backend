@@ -1,8 +1,9 @@
 package opgg.backend.gmakersserver.domain.profile.service;
 
+import static opgg.backend.gmakersserver.domain.profile.controller.response.ProfileResponse.Auth.from;
+
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,17 +19,12 @@ import opgg.backend.gmakersserver.application.util.DeduplicationUtils;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
-import opgg.backend.gmakersserver.domain.leagueposition.service.LeaguePositionService;
 import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;
-import opgg.backend.gmakersserver.domain.preferKeyword.service.PreferKeywordService;
-import opgg.backend.gmakersserver.domain.preferchampion.service.PreferChampionService;
-import opgg.backend.gmakersserver.domain.preferline.service.PreferLineService;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileDetailResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileFindResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileResponse;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
-import opgg.backend.gmakersserver.domain.profile.entity.SummonerInfo;
 import opgg.backend.gmakersserver.domain.profile.repository.ProfileRepository;
 import opgg.backend.gmakersserver.error.exception.account.AccountNotFoundException;
 import opgg.backend.gmakersserver.error.exception.preferchampion.PreferChampionBoundsException;
@@ -51,28 +47,60 @@ public class ProfileService {
 
 	private final ProfileRepository profileRepository;
 	private final AccountRepository accountRepository;
-	private final LeaguePositionService leaguePositionService;
-	private final PreferLineService preferLineService;
-	private final PreferChampionService preferChampionService;
-	private final PreferKeywordService preferKeywordService;
+	private final ProfileDomainService profileDomainService;
+
+
+	private void validUpdateProfile(List<ProfileRequest.Create.PreferChampion> updatePreferChampions,
+			List<ProfileRequest.Create.PreferLine> updatePreferLines, List<Keyword> updatePreferKeywords) {
+		if (isNotCreatePreferChampions(updatePreferChampions)) {
+			throw new PreferChampionBoundsException();
+		}
+
+		if (isNotCreatePreferLines(updatePreferLines)) {
+			throw new PreferLineBoundsException();
+		}
+
+		if ((isNotCreatePreferKeywords(updatePreferKeywords))) {
+			throw new PreferKeywordBoundsException();
+		}
+	}
+
+	private void validAccount(Account account) {
+		long profileCount = profileRepository.countByAccount(account);
+		if (isNotCreateProfile(profileCount)) {
+			throw new ProfileBoundsException();
+		}
+	}
+
+	private void validCreateProfile(ProfileRequest.Create profileRequest, Summoner summoner) {
+		if (ObjectUtils.isEmpty(summoner.getProfileIcon())) {
+			throw new SummonerNotFoundException();
+		}
+		if (isNotCreatePreferChampions(profileRequest.getPreferChampions())) {
+			throw new PreferChampionBoundsException();
+		}
+		if (isNotCreatePreferLines(profileRequest.getPreferLines())) {
+			throw new PreferLineBoundsException();
+		}
+	}
 
 	private List<ProfileFindResponse> getProfileFindResponses(String summonerName, Account account) {
-		List<ProfileFindResponse> profileMainByAccount;
+		List<ProfileFindResponse> profileFindResponses;
 		if (!StringUtils.isBlank(summonerName)) {
-			profileMainByAccount = profileRepository.findProfileBySummonerName(summonerName);
-			if (CollectionUtils.isEmpty(profileMainByAccount)) {
+			profileFindResponses = profileRepository.findProfileBySummonerName(summonerName);
+			if (CollectionUtils.isEmpty(profileFindResponses)) {
 				Summoner summoner = Summoner.named(summonerName).get();
 				summoner.load();
 				if (ObjectUtils.isEmpty(summoner)) {
 					throw new SummonerNotFoundException();
 				}
 				String findSummonerName = summoner.getCoreData().getName();
-				profileMainByAccount = profileRepository.findProfileBySummonerName(findSummonerName);
+				profileFindResponses = profileRepository.findProfileBySummonerName(findSummonerName);
 			}
 		} else {
-			profileMainByAccount = profileRepository.findProfileMainByAccount(account);
+			profileFindResponses = profileRepository.findProfileMainByAccount(account);
 		}
-		return profileMainByAccount.stream()
+		return profileFindResponses.stream()
 				.sorted(Comparator.comparingLong(ProfileFindResponse::getProfileId))
 				.collect(Collectors.toList());
 	}
@@ -119,15 +147,6 @@ public class ProfileService {
 		return count >= 3;
 	}
 
-	private int getRandomIconId(int profileIconId) {
-		Random random = new Random();
-		random.setSeed(System.currentTimeMillis());
-		int iconId = profileIconId;
-		while (iconId == profileIconId) {
-			iconId = random.nextInt(28);
-		}
-		return iconId;
-	}
 
 	private boolean isReliable(Profile profile) {
 		Summoner summoner = Summoner.withId(profile.getSummonerInfo().getSummonerId()).get();
@@ -144,66 +163,22 @@ public class ProfileService {
 		return !profile.isCertified() && !isReliable(profile);
 	}
 
-	private boolean isAuthConfirm(Profile profile) {
-		return profile.isCertified() || isReliable(profile);
-	}
-
 	@Transactional
 	public void createProfile(ProfileRequest.Create profileRequest, Long id) {
-		String summonerName = profileRequest.getSummonerName();
-		Summoner summoner = Summoner.named(summonerName).get();
+		Summoner summoner = Summoner.named(profileRequest.getSummonerName()).get();
 		summoner.load();
-		if (ObjectUtils.isEmpty(summoner.getProfileIcon())) {
-			throw new SummonerNotFoundException();
-		}
-
-		if (isNotCreatePreferChampions(profileRequest.getPreferChampions())) {
-			throw new PreferChampionBoundsException();
-		}
-
-		if (isNotCreatePreferLines(profileRequest.getPreferLines())) {
-			throw new PreferLineBoundsException();
-		}
-
+		validCreateProfile(profileRequest, summoner);
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
+		validAccount(account);
+		profileRepository.findByAccountAndSummonerName(account.getAccountId(), summoner.getName())
+				.ifPresent(profile -> {
+					throw new ProfileExistException();
+				});
 
-		long profileCount = profileRepository.countByAccount(account);
-		if (isNotCreateProfile(profileCount)) {
-			throw new ProfileBoundsException();
-		}
-
-		Profile findProfile = profileRepository.findByAccountAndSummonerName(account.getAccountId(),
-				summoner.getName());
-
-		if (!ObjectUtils.isEmpty(findProfile)) {
-			throw new ProfileExistException();
-		}
-
-		SummonerInfo summonerInfo = SummonerInfo.builder()
-				.summonerId(summoner.getId())
-				.summonerName(summoner.getName())
-				.profileIconId(summoner.getProfileIcon().getId())
-				.build();
-
-		Profile profile = Profile.builder()
-				.account(account)
-				.isCertified(false)
-				.authProfileIconId(null)
-				.summonerAccountId(summoner.getAccountId())
-				.summonerInfo(summonerInfo)
-				.description(profileRequest.getDescription())
-				.build();
-
+		Profile profile = Profile.of(account, summoner, profileRequest);
 		profileRepository.save(profile);
-
-		preferChampionService.createPreferChampion(profileRequest.getPreferChampions(),
-				profileRequest.getSummonerName(), profile);
-		preferLineService.createPreferLine(profileRequest.getPreferLines(), profile);
-		leaguePositionService.createLeaguePosition(summoner, profile);
-		preferKeywordService.createPreferKeyword(profileRequest.getPreferKeywords(), profile);
-
-		Queue queue = leaguePositionService.getPreferQueue(profileRequest, profile);
-		profile.changePreferQueue(queue);
+		profileDomainService.createProfileDomain(profileRequest, summoner, profile);
+		profile.changePreferQueue(profileDomainService.getPreferQueue(profileRequest.getPreferQueue(), profile));
 	}
 
 	@Transactional
@@ -211,32 +186,28 @@ public class ProfileService {
 		String summonerId = auth.getSummonerId();
 		Summoner summoner = Summoner.withId(summonerId).get();
 		summoner.load();
-		List<ProfileFindResponse> profileBySummonerNames = profileRepository.findProfileBySummonerName(
-				summoner.getName());
-		if (!CollectionUtils.isEmpty(profileBySummonerNames)) {
-			profileBySummonerNames.stream()
-					.filter(ProfileFindResponse::isCertified)
-					.findFirst()
-					.ifPresent(profileFindResponse -> {
-						throw new SummonerAlreadyCertifiedException();
-					});
-		}
+
+		profileRepository.findProfileBySummonerName(summoner.getName()).stream()
+				.filter(ProfileFindResponse::isCertified)
+				.findFirst()
+				.ifPresent(profileFindResponse -> {
+					throw new SummonerAlreadyCertifiedException();
+				});
+
 		Profile profile = profileRepository.findBySummonerIdAndAccountId(summonerId, id)
 				.orElseThrow(SummonerNotFoundException::new);
 		int iconId = -1;
 		if (isAuthProfile(profile)) {
-			iconId = getRandomIconId(profile.getSummonerInfo().getProfileIconId());
+			iconId = profile.getRandomIconId();
 			profile.changeAuthProfileIconId(iconId);
 		}
-		return new ProfileResponse.Auth(iconId);
+		return from(iconId);
 	}
 
 	@Transactional
 	public ProfileResponse.AuthConfirm authConfirm(ProfileRequest.Auth auth, Long id) {
-		String summonerId = auth.getSummonerId();
-		Profile profile = profileRepository.findBySummonerIdAndAccountId(summonerId, id)
-				.orElseThrow(SummonerNotFoundException::new);
-		return new ProfileResponse.AuthConfirm(isAuthConfirm(profile));
+		return ProfileResponse.AuthConfirm.from(profileRepository.findBySummonerIdAndAccountId(auth.getSummonerId(), id)
+				.orElseThrow(SummonerNotFoundException::new).getAuthConfirm());
 	}
 
 	public List<ProfileFindResponse> getProfiles(String summonerName, Long id) {
@@ -271,30 +242,9 @@ public class ProfileService {
 		List<ProfileRequest.Create.PreferLine> updatePreferLines = update.getPreferLines();
 		List<Keyword> updatePreferKeywords = update.getPreferKeywords();
 
-		if (isNotCreatePreferChampions(updatePreferChampions)) {
-			throw new PreferChampionBoundsException();
-		}
-
-		if (isNotCreatePreferLines(updatePreferLines)) {
-			throw new PreferLineBoundsException();
-		}
-
-		if ((isNotCreatePreferKeywords(updatePreferKeywords))) {
-			throw new PreferKeywordBoundsException();
-		}
-
-		if (!CollectionUtils.isEmpty(updatePreferChampions)) {
-			preferChampionService.updatePreferChampion(update.getPreferChampions(),
-					update.getSummonerName(), profile);
-		}
-
-		if (!CollectionUtils.isEmpty(updatePreferLines)) {
-			preferLineService.updatePreferLine(updatePreferLines, profile);
-		}
-
-		if (!CollectionUtils.isEmpty(updatePreferKeywords)) {
-			preferKeywordService.updatePreferKeyword(updatePreferKeywords, profile);
-		}
+		validUpdateProfile(updatePreferChampions, updatePreferLines, updatePreferKeywords);
+		profileDomainService.profileDomainUpdate(update, profile, updatePreferChampions,
+				updatePreferLines, updatePreferKeywords);
 
 		String description = update.getDescription();
 		if (!StringUtils.isBlank(description)) {
@@ -303,7 +253,7 @@ public class ProfileService {
 
 		Queue preferQueue = update.getPreferQueue();
 		if (!ObjectUtils.isEmpty(preferQueue)) {
-			profile.changePreferQueue(preferQueue);
+			profile.changePreferQueue(profileDomainService.getPreferQueue(preferQueue, profile));
 		}
 
 	}
