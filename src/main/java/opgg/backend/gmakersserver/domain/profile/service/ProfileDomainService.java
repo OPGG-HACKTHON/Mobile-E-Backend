@@ -1,7 +1,5 @@
 package opgg.backend.gmakersserver.domain.profile.service;
 
-import static opgg.backend.gmakersserver.domain.leagueposition.entity.Queue.*;
-
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -11,7 +9,6 @@ import org.springframework.util.CollectionUtils;
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
 
 import lombok.RequiredArgsConstructor;
-import opgg.backend.gmakersserver.domain.leagueposition.entity.LeaguePosition;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
 import opgg.backend.gmakersserver.domain.leagueposition.service.LeaguePositionService;
 import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;

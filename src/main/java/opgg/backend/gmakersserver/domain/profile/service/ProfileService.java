@@ -175,7 +175,7 @@ public class ProfileService {
 					throw new ProfileExistException();
 				});
 
-		Profile profile = Profile.of(account, summoner, profileRequest); // ?
+		Profile profile = Profile.of(account, summoner, profileRequest);
 		profileRepository.save(profile);
 		profileDomainService.createProfileDomain(profileRequest, summoner, profile);
 		profile.changePreferQueue(profileDomainService.getPreferQueue(profileRequest.getPreferQueue(), profile));
