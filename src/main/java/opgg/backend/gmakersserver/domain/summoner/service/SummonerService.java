@@ -21,14 +21,6 @@ public class SummonerService {
 
     private final ProfileRepository profileRepository;
 
-    public boolean isNotExistRankData(LeaguePositions leaguePositions) {
-        if (leaguePositions.size() == 0) {
-            return true;
-        }
-
-        return false;
-    }
-
     @Transactional(readOnly = true)
     public SummonerResponse getSummoner(String summonerName) {
         Summoner summoner = Orianna.summonerNamed(summonerName).get();
