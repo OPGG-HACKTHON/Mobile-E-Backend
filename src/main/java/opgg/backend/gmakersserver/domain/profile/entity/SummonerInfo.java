@@ -32,4 +32,12 @@ public class SummonerInfo {
 	@Column(name = "PROFILE_ICON_ID")
 	private Integer profileIconId;
 
+	public static SummonerInfo of(Summoner summoner) {
+		return SummonerInfo.builder()
+				.summonerId(summoner.getId())
+				.summonerName(summoner.getName())
+				.profileIconId(summoner.getProfileIcon().getId())
+				.build();
+	}
+
 }
