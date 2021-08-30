@@ -1,5 +1,7 @@
 package opgg.backend.gmakersserver.infra.jwt;
 
+import static opgg.backend.gmakersserver.error.exception.common.response.ExceptionResponseInfo.*;
+
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
@@ -27,6 +29,8 @@ import opgg.backend.gmakersserver.error.exception.common.response.ExceptionRespo
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
 	private final ObjectMapper objectMapper;
+	private final String ERROR_LOG_MESSAGE = "Exception = {} , message = {}";
+	private final String CONTENT_TYPE = "application/json";
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -48,12 +52,11 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 	}
 
 	private void sendErrorMessage(HttpServletResponse response, BusinessException e) throws IOException {
-		response.setContentType("application/json");
-		ExceptionResponseInfo exceptionResponseInfo = ExceptionResponseInfo.from(e);
-		String message = objectMapper.writeValueAsString(exceptionResponseInfo);
+
+		response.setContentType(CONTENT_TYPE);
 		response.setStatus(e.getHttpStatus().value());
-		response.getWriter().write(message);
-		log.error("Exception = {} , message = {}", e.getClass().getSimpleName(),
+		response.getWriter().write(objectMapper.writeValueAsString(from(e)));
+		log.error(ERROR_LOG_MESSAGE, e.getClass().getSimpleName(),
 				e.getLocalizedMessage());
 	}
 

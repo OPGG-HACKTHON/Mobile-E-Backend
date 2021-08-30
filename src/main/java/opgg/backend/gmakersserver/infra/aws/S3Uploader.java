@@ -24,6 +24,7 @@ public class S3Uploader {
 
 	private final AmazonS3Client amazonS3Client;
 	private static final String IMAGE = "image";
+	private static final String PROPERTY_NAME = "user.home";
 
 	@Value("${cloud.aws.s3.bucket}")
 	public String bucket;
@@ -35,8 +36,7 @@ public class S3Uploader {
 		}
 		String originalFilename = multipartFile.getOriginalFilename();
 		String fileName = dirName + "/" + UUID.randomUUID() + "_" + originalFilename;
-		String uploadImageUrl = putS3(fileName, multipartFile);
-		return uploadImageUrl;
+		return putS3(fileName, multipartFile);
 	}
 
 	// S3로 업로드
@@ -57,7 +57,7 @@ public class S3Uploader {
 	}
 
 	private File convert(MultipartFile multipartFile) throws IOException {
-		File convertFile = new File(System.getProperty("user.home") + File.separator + System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename());
+		File convertFile = new File(System.getProperty(PROPERTY_NAME) + File.separator + System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename());
 		if (convertFile.createNewFile()) {
 			try (FileOutputStream fos = new FileOutputStream(convertFile)) {
 				fos.write(multipartFile.getBytes());
