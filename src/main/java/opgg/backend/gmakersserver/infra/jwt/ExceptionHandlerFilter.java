@@ -29,8 +29,8 @@ import opgg.backend.gmakersserver.error.exception.common.response.ExceptionRespo
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
 	private final ObjectMapper objectMapper;
-	private final String ERROR_LOG_MESSAGE = "Exception = {} , message = {}";
-	private final String CONTENT_TYPE = "application/json";
+	private static final String ERROR_LOG_MESSAGE = "Exception = {} , message = {}";
+	private static final String CONTENT_TYPE = "application/json";
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
