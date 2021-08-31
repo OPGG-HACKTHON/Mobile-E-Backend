@@ -61,6 +61,7 @@ public class ExceptionHandlerController {
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	private ExceptionResponse handleHttpRequestMethodNotSupportedException(
 		HttpRequestMethodNotSupportedException exception) {
+		errorLogging(exception);
 		return ExceptionResponse.of(exception);
 	}
 

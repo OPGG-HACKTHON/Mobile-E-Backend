@@ -1,0 +1,59 @@
+Configutation:
+  name: Default
+  status: info
+
+  Properties:
+    Property:
+      - name: log-path
+        value: "logs"
+      - name: layoutPattern
+        value: "%style{%d{yyyy-MM-dd HH:mm:ss.SSS}}{cyan} %highlight{[%-5level]}{FATAL=bg_red, ERROR=Red,
+                            INFO=Green, DEBUG=Blue} --- %style{[%t]}{Blue} %style{[%C]}{Magenta} %style{[line - %L]}{Yellow} - %m%n"
+
+  Appenders:
+    Console:
+      name: Console_Appender
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: ${layoutPattern}
+        disableAnsi: "false"
+    File:
+      name: File_Appender
+      fileName: ${log-path}/logfile.log
+      PatternLayout:
+        pattern: ${layoutPattern}
+        disableAnsi: "false"
+    RollingFile:
+      - name: RollingFile_Appender
+        fileName: ${log-path}/g-makers-server.log
+        filePattern: "logs/archive/g-makers-server.log.%d{yyyy-MM-dd-hh-mm}.gz"
+        PatternLayout:
+          pattern: ${layoutPattern}
+          disableAnsi: "false"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: 200 KB
+        DefaultRollOverStrategy:
+          max: 30
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        - ref: Console_Appender
+        - ref: File_Appender
+        - ref: RollingFile_Appender
+    Logger:
+      - name: opgg.backend
+        additivity: false
+        level: info
+        AppenderRef:
+          - ref: Console_Appender
+          - ref: File_Appender
+          - ref: RollingFile_Appender
+      - name: opgg.backend.error.ExceptionHandlerController
+        additivity: false
+        level: error
+        AppenderRef:
+          - ref: Console_Appender
+          - ref: File_Appender
+          - ref: RollingFile_Appender
