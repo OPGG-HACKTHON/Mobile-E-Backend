@@ -112,9 +112,19 @@ paths:
                 $ref: '#/components/schemas/ExceptionResponse'
 
     get:
-      summary: 프로필 메인 정보 조회 (첫 메인화면의 내 카드 목록 프로필 데이터들)
+      summary: 프로필 메인 정보 조회 (첫 메인화면의 내 카드 목록 프로필 데이터들, queryParam X), 프로필 검색2 (인증된 프로필, 즉 인증된 타 유저의 프로필을 보기 위한 검색, queryParam O)
       tags:
         - Profile
+      operationId: profiles
+      parameters:
+        - in: query
+          name: summonerName
+          required: false
+          schema:
+            type: string
+            example: Hide on bush
+          description: 롤 소환사 닉네임
+
       responses:
         '200':
           description: 조회 성공
@@ -177,11 +187,11 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
-  /summoner/{summonerName}:
+  /summoner:
     get:
       summary: 프로필 검색1 (모든 프로필, 즉 인증을 하기위한 검색)
       parameters:
-        - in: path
+        - in: query
           name: summonerName
           schema:
             type: string
@@ -196,27 +206,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SummonerFindResponse'
-
-
-  /profiles/{summonerName}:
-    get:
-      summary: 프로필 검색2 (인증된 프로필, 즉 인증된 타 유저의 프로필을 보기 위한 검색)
-      parameters:
-        - in: path
-          name: summonerName
-          schema:
-            type: string
-          required: true
-          description: 롤 소환사 닉네임
-      tags:
-        - Profile
-      responses:
-        '200':
-          description: 조회 성공
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProfileFindResponse'
 
 
   /profiles/{profileId}:
