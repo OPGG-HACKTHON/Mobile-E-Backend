@@ -68,3 +68,6 @@ springdoc:
 riot:
   api:
     key: RGAPI-e7d81d94-a963-4535-9f78-e8394bc8c83b
+
+logging:
+  config: classpath:log4j2.yml

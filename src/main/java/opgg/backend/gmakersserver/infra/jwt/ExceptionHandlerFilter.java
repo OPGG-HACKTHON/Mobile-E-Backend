@@ -52,7 +52,6 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 	}
 
 	private void sendErrorMessage(HttpServletResponse response, BusinessException e) throws IOException {
-
 		response.setContentType(CONTENT_TYPE);
 		response.setStatus(e.getHttpStatus().value());
 		response.getWriter().write(objectMapper.writeValueAsString(from(e)));
