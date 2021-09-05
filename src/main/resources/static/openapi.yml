@@ -219,7 +219,6 @@ paths:
           schema:
             type: integer
           required: true
-          description: 사용자 계정(Account) id값
       responses:
         '200':
           description: 조회 성공
