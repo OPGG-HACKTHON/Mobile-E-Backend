@@ -452,7 +452,7 @@ components:
       type: object
       writeOnly: true
       properties:
-        isCertified:
+        Certified:
           type: boolean
           example: true
 
