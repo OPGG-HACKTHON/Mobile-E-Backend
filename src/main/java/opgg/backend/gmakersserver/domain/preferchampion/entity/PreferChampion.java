@@ -1,48 +1,34 @@
 package opgg.backend.gmakersserver.domain.preferchampion.entity;
 
-import static javax.persistence.FetchType.*;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import com.merakianalytics.orianna.types.core.championmastery.ChampionMastery;
 import com.merakianalytics.orianna.types.core.staticdata.Champion;
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
 @Table(name = "PREFER_CHAMPION")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PreferChampion {
 
     @Builder
     public PreferChampion(Profile profile, int championId, int championLevel, int championPoints, int priority, String championName) {
-        this.profile        = profile;
         this.championId     = championId;
         this.championLevel  = championLevel;
         this.championPoints = championPoints;
         this.priority       = priority;
         this.championName   = championName;
+        setProfile(profile);
     }
 
     @Id
@@ -95,6 +81,11 @@ public class PreferChampion {
                 .championPoints(championMastery.getPoints())
                 .priority(preferChampion.getPriority())
                 .build();
+    }
+
+    public void setProfile(Profile profile){
+        this.profile = profile;
+        profile.getPreferChampions().add(this);
     }
 
 }

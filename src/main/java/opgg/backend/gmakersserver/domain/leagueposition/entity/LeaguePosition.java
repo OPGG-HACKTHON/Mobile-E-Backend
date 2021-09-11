@@ -17,12 +17,11 @@ import static opgg.backend.gmakersserver.domain.leagueposition.entity.Tier.*;
 @Getter
 @Table(name = "LEAGUE_POSITION")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LeaguePosition {
 
     @Builder
-    public LeaguePosition(Profile profile, Tier tier, int tierLevel, int level, int winGames, int loseGames, int winRate, int leaguePoint, int championLevel, int championPoints, Queue queue) {
-        this.profile     = profile;
+    public LeaguePosition(Profile profile, Tier tier, int tierLevel, int level, int winGames, int loseGames, int winRate, int leaguePoint, Queue queue) {
         this.tier        = tier;
         this.tierLevel   = tierLevel;
         this.level       = level;
@@ -31,6 +30,7 @@ public class LeaguePosition {
         this.winRate     = winRate;
         this.leaguePoint = leaguePoint;
         this.queue       = queue;
+        setProfile(profile);
     }
 
     @Id
@@ -105,4 +105,8 @@ public class LeaguePosition {
         return this.queue == requestQueue;
     }
 
+    public void setProfile(Profile profile){
+        this.profile = profile;
+        profile.getLeaguePosition().add(this);
+    }
 }

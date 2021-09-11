@@ -1,34 +1,8 @@
 package opgg.backend.gmakersserver.domain.profile.entity;
 
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.LeaguePosition;
@@ -37,6 +11,14 @@ import opgg.backend.gmakersserver.domain.preferKeyword.entity.PreferKeyword;
 import opgg.backend.gmakersserver.domain.preferchampion.entity.PreferChampion;
 import opgg.backend.gmakersserver.domain.preferline.entity.PreferLine;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -49,16 +31,13 @@ import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileReque
 public class Profile extends BaseEntity {
 
 	@Builder
-	public Profile(Account account, boolean isCertified, Integer authProfileIconId, String summonerAccountId, Queue preferQueue, String description, List<LeaguePosition> leaguePosition, List<PreferChampion> preferChampions, List<PreferLine> preferLines, SummonerInfo summonerInfo) {
+	public Profile(Account account, boolean isCertified, Integer authProfileIconId, String summonerAccountId, Queue preferQueue, String description,SummonerInfo summonerInfo) {
 		this.account 			= account;
 		this.isCertified		= isCertified;
 		this.authProfileIconId	= authProfileIconId;
 		this.summonerAccountId 	= summonerAccountId;
 		this.preferQueue 		= preferQueue;
 		this.description 		= description;
-		this.leaguePosition		= leaguePosition;
-		this.preferChampions 	= preferChampions;
-		this.preferLines 		= preferLines;
 		this.summonerInfo 		= summonerInfo;
 	}
 

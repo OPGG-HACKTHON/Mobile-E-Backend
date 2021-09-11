@@ -15,14 +15,14 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Table(name = "PREFER_LINE")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor()
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PreferLine {
 
     @Builder
     public PreferLine(Profile profile, Line line, int priority) {
-        this.profile  = profile;
         this.line     = line;
         this.priority = priority;
+        setProfile(profile);
     }
 
     @Id
@@ -54,6 +54,11 @@ public class PreferLine {
                 .line(preferLine.getLine())
                 .priority(preferLine.getPriority())
                 .build();
+    }
+
+    public void setProfile(Profile profile){
+        this.profile = profile;
+        profile.getPreferLines().add(this);
     }
 
 }

@@ -5,8 +5,6 @@ import lombok.*;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
 import javax.persistence.*;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,13 +14,13 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Table(name = "PREFER_KEYWORD")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PreferKeyword {
 
     @Builder
     public PreferKeyword(Keyword keyword, Profile profile) {
         this.keyword = keyword;
-        this.profile = profile;
+        setProfile(profile);
     }
 
     @Id
@@ -50,6 +48,11 @@ public class PreferKeyword {
                 .keyword(keyword)
                 .profile(profile)
                 .build();
+    }
+
+    public void setProfile(Profile profile){
+        this.profile = profile;
+        profile.getPreferKeywords().add(this);
     }
 
 }
