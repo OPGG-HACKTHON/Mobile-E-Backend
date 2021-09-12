@@ -8,7 +8,7 @@ import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.LeaguePosition;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
-import opgg.backend.gmakersserver.domain.preferKeyword.entity.PreferKeyword;
+import opgg.backend.gmakersserver.domain.preferkeyword.entity.PreferKeyword;
 import opgg.backend.gmakersserver.domain.preferchampion.entity.PreferChampion;
 import opgg.backend.gmakersserver.domain.preferline.entity.PreferLine;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;

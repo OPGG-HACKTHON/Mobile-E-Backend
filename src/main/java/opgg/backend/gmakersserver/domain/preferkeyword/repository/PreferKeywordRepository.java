@@ -1,6 +1,6 @@
-package opgg.backend.gmakersserver.domain.preferKeyword.repository;
+package opgg.backend.gmakersserver.domain.preferkeyword.repository;
 
-import opgg.backend.gmakersserver.domain.preferKeyword.entity.PreferKeyword;
+import opgg.backend.gmakersserver.domain.preferkeyword.entity.PreferKeyword;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 
 import org.springframework.data.jpa.repository.JpaRepository;

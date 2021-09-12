@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
-import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;
+import opgg.backend.gmakersserver.domain.preferkeyword.entity.Keyword;
 import opgg.backend.gmakersserver.domain.preferline.entity.Line;
 
 import javax.validation.constraints.NotBlank;

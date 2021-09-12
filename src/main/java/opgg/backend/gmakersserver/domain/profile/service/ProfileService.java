@@ -21,7 +21,7 @@ import opgg.backend.gmakersserver.application.util.DeduplicationUtils;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
-import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;
+import opgg.backend.gmakersserver.domain.preferkeyword.entity.Keyword;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileDetailResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileFindResponse;

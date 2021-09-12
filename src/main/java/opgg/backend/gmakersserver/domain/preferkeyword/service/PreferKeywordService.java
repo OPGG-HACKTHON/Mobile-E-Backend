@@ -1,15 +1,15 @@
-package opgg.backend.gmakersserver.domain.preferKeyword.service;
+package opgg.backend.gmakersserver.domain.preferkeyword.service;
 
 import lombok.RequiredArgsConstructor;
-import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;
-import opgg.backend.gmakersserver.domain.preferKeyword.repository.PreferKeywordRepository;
+import opgg.backend.gmakersserver.domain.preferkeyword.entity.Keyword;
+import opgg.backend.gmakersserver.domain.preferkeyword.repository.PreferKeywordRepository;
 import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static opgg.backend.gmakersserver.domain.preferKeyword.entity.PreferKeyword.of;
+import static opgg.backend.gmakersserver.domain.preferkeyword.entity.PreferKeyword.of;
 
 @Service
 @RequiredArgsConstructor

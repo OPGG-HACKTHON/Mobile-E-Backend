@@ -1,4 +1,4 @@
-package opgg.backend.gmakersserver.domain.preferKeyword.entity;
+package opgg.backend.gmakersserver.domain.preferkeyword.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
