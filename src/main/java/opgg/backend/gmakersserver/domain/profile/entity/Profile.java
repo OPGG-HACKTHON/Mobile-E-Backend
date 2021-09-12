@@ -1,13 +1,14 @@
 package opgg.backend.gmakersserver.domain.profile.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.merakianalytics.orianna.types.core.league.LeagueEntry;
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
 import lombok.*;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.auditing.BaseEntity;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.LeaguePosition;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
-import opgg.backend.gmakersserver.domain.preferKeyword.entity.PreferKeyword;
+import opgg.backend.gmakersserver.domain.preferkeyword.entity.PreferKeyword;
 import opgg.backend.gmakersserver.domain.preferchampion.entity.PreferChampion;
 import opgg.backend.gmakersserver.domain.preferline.entity.PreferLine;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
@@ -19,6 +20,7 @@ import java.util.Random;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
+import static opgg.backend.gmakersserver.domain.leagueposition.entity.Queue.*;
 
 @Entity
 @Getter
@@ -71,7 +73,7 @@ public class Profile extends BaseEntity {
 	private List<PreferKeyword> preferKeywords = new ArrayList<>();
 
 	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
-	private List<LeaguePosition> leaguePosition = new ArrayList<>();
+	private List<LeaguePosition> leaguePositions = new ArrayList<>();
 
 	@OneToMany(fetch = LAZY, cascade = ALL, mappedBy = "profile")
 	private List<PreferChampion> preferChampions = new ArrayList<>();
@@ -97,6 +99,10 @@ public class Profile extends BaseEntity {
 		this.authProfileIconId = summonerProfileIconId;
 	}
 
+	public void changeProfileIconId(Integer summonerProfileIconId) {
+		summonerInfo.changeProfileIconId(summonerProfileIconId);
+	}
+
 	public void changeIsCertified(boolean isCertified) {
 		this.isCertified = isCertified;
 	}
@@ -111,6 +117,13 @@ public class Profile extends BaseEntity {
 
 	public void changeDescription(String description) {
 		this.description = description;
+	}
+
+	public void changeLeaguePosition(LeagueEntry leagueEntry, Summoner summoner) {
+		this.leaguePositions.stream()
+				.filter(leaguePosition -> leaguePosition.getQueue() == valueOf(String.valueOf(leagueEntry.getQueue())))
+				.findFirst()
+				.ifPresent(leaguePosition -> leaguePosition.changeLeaguePosition(leagueEntry, summoner));
 	}
 
 	public int getRandomIconId() {

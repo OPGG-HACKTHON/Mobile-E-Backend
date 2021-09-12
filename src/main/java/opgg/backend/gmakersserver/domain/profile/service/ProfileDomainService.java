@@ -11,8 +11,8 @@ import com.merakianalytics.orianna.types.core.summoner.Summoner;
 import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
 import opgg.backend.gmakersserver.domain.leagueposition.service.LeaguePositionService;
-import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;
-import opgg.backend.gmakersserver.domain.preferKeyword.service.PreferKeywordService;
+import opgg.backend.gmakersserver.domain.preferkeyword.entity.Keyword;
+import opgg.backend.gmakersserver.domain.preferkeyword.service.PreferKeywordService;
 import opgg.backend.gmakersserver.domain.preferchampion.service.PreferChampionService;
 import opgg.backend.gmakersserver.domain.preferline.service.PreferLineService;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
@@ -28,12 +28,18 @@ public class ProfileDomainService {
 	private final PreferChampionService preferChampionService;
 	private final PreferKeywordService preferKeywordService;
 
+	@Transactional
 	public void createProfileDomain(ProfileRequest.Create profileRequest, Summoner summoner, Profile profile) {
 		preferChampionService.createPreferChampion(profileRequest.getPreferChampions(),
 				profileRequest.getSummonerName(), profile);
 		preferLineService.createPreferLine(profileRequest.getPreferLines(), profile);
 		leaguePositionService.createLeaguePosition(summoner, profile);
 		preferKeywordService.createPreferKeyword(profileRequest.getPreferKeywords(), profile);
+	}
+
+	@Transactional
+	public void updateLeaguePosition(Summoner summoner, Profile profile) {
+		leaguePositionService.updateLeaguePosition(summoner, profile);
 	}
 
 	public Queue getPreferQueue(Queue preferQueue, Profile profile) {

@@ -2,7 +2,7 @@ package opgg.backend.gmakersserver.domain.profile.repository;
 
 import static opgg.backend.gmakersserver.domain.account.entity.QAccount.*;
 import static opgg.backend.gmakersserver.domain.leagueposition.entity.QLeaguePosition.*;
-import static opgg.backend.gmakersserver.domain.preferKeyword.entity.QPreferKeyword.*;
+import static opgg.backend.gmakersserver.domain.preferkeyword.entity.QPreferKeyword.*;
 import static opgg.backend.gmakersserver.domain.preferchampion.entity.QPreferChampion.*;
 import static opgg.backend.gmakersserver.domain.preferline.entity.QPreferLine.*;
 import static opgg.backend.gmakersserver.domain.profile.entity.QProfile.*;
@@ -15,7 +15,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.entity.QAccount;
-import opgg.backend.gmakersserver.domain.preferKeyword.entity.QPreferKeyword;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileDetailResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileFindResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.QProfileDetailResponse;

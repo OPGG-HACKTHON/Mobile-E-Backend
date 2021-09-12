@@ -4,12 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import opgg.backend.gmakersserver.application.util.DeduplicationUtils;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
-import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;
+import opgg.backend.gmakersserver.domain.preferkeyword.entity.Keyword;
 import opgg.backend.gmakersserver.domain.preferline.entity.Line;
-import opgg.backend.gmakersserver.error.exception.preferchampion.PreferChampionPriorityDuplicateException;
-import opgg.backend.gmakersserver.error.exception.preferline.PreferLinePriorityDuplicateException;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;

@@ -40,4 +40,8 @@ public class SummonerInfo {
 				.build();
 	}
 
+	public void changeProfileIconId(int profileIconId) {
+		this.profileIconId = profileIconId;
+	}
+
 }

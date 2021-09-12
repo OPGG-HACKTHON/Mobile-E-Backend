@@ -1,7 +1,9 @@
 package opgg.backend.gmakersserver.domain.profile.service;
 
-import static opgg.backend.gmakersserver.domain.profile.controller.response.ProfileResponse.Auth.from;
+import static opgg.backend.gmakersserver.domain.profile.controller.response.ProfileResponse.Auth.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +21,7 @@ import opgg.backend.gmakersserver.application.util.DeduplicationUtils;
 import opgg.backend.gmakersserver.domain.account.entity.Account;
 import opgg.backend.gmakersserver.domain.account.repository.AccountRepository;
 import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
-import opgg.backend.gmakersserver.domain.preferKeyword.entity.Keyword;
+import opgg.backend.gmakersserver.domain.preferkeyword.entity.Keyword;
 import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileDetailResponse;
 import opgg.backend.gmakersserver.domain.profile.controller.response.ProfileFindResponse;
@@ -49,6 +51,9 @@ public class ProfileService {
 	private final AccountRepository accountRepository;
 	private final ProfileDomainService profileDomainService;
 
+	private boolean isMoreThanTwoMinute(long betweenSecond, long twoMinuteSecond) {
+		return betweenSecond > twoMinuteSecond;
+	}
 
 	private void validUpdateProfile(List<ProfileRequest.Create.PreferChampion> updatePreferChampions,
 			List<ProfileRequest.Create.PreferLine> updatePreferLines, List<Keyword> updatePreferKeywords) {
@@ -210,15 +215,42 @@ public class ProfileService {
 				.orElseThrow(SummonerNotFoundException::new).getAuthConfirm());
 	}
 
+	@Transactional
 	public List<ProfileFindResponse> getProfiles(String summonerName, Long id) {
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
-		List<ProfileFindResponse> profileMainByAccount = getProfileFindResponses(summonerName, account);
-		return new ProfileFindResponse().convert(profileMainByAccount);
+		Profile profile = profileRepository.findById(id).orElseThrow(ProfileNotExistException::new);
+		profile.getLeaguePositions()
+				.forEach(leaguePosition -> refreshProfile(profile));
+		return new ProfileFindResponse().convert(
+				getProfileFindResponses(summonerName, account));
 	}
 
+	private void refreshProfile(Profile profile) {
+		LocalDateTime lastModifiedDate = profile.getLastModifiedDate();
+		LocalDateTime now = LocalDateTime.now();
+		long betweenSecond = Duration.between(lastModifiedDate, now).getSeconds();
+		long twoMinuteSecond = Duration.ofMinutes(2L).getSeconds();
+
+		if (isMoreThanTwoMinute(betweenSecond, twoMinuteSecond)) {
+			Summoner summoner = Summoner.withAccountId(profile.getSummonerAccountId()).get();
+			summoner.load();
+
+			int summonerProfileIconId = summoner.getProfileIcon().getId();
+			int profileIconId = profile.getSummonerInfo().getProfileIconId();
+			if (summonerProfileIconId != profileIconId) {
+				profile.changeProfileIconId(summonerProfileIconId);
+			}
+			profileDomainService.updateLeaguePosition(summoner, profile);
+		}
+
+	}
+
+	@Transactional
 	public ProfileDetailResponse getProfile(Long profileId, Long id) {
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
 		Profile profile = profileRepository.findById(profileId).orElseThrow(ProfileNotExistException::new);
+		profile.getLeaguePositions()
+				.forEach(leaguePosition -> refreshProfile(profile));
 		List<ProfileDetailResponse> profileDetailResponses = profileRepository.findProfileDetailByAccountAndProfile(
 				account, profile);
 		return new ProfileDetailResponse(profileDetailResponses);

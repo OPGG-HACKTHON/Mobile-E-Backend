@@ -107,6 +107,17 @@ public class LeaguePosition {
 
     public void setProfile(Profile profile){
         this.profile = profile;
-        profile.getLeaguePosition().add(this);
+        profile.getLeaguePositions().add(this);
     }
+
+    public void changeLeaguePosition(LeagueEntry leagueEntry, Summoner summoner) {
+        this.tier        = Tier.valueOf(String.valueOf(leagueEntry.getTier()));
+        this.tierLevel   = TierLevel.valueOf(String.valueOf(leagueEntry.getDivision())).getLevel();
+        this.level       = summoner.getLevel();
+        this.winGames    = leagueEntry.getWins();
+        this.loseGames   = leagueEntry.getLosses();
+        this.winRate     = getWinRate(leagueEntry.getWins(), leagueEntry.getLosses());
+        this.leaguePoint = leagueEntry.getLeaguePoints();
+    }
+
 }
