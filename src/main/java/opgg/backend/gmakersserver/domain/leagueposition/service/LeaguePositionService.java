@@ -6,6 +6,8 @@ import static opgg.backend.gmakersserver.domain.leagueposition.entity.Queue.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.merakianalytics.orianna.types.core.league.LeagueEntry;
+import com.merakianalytics.orianna.types.core.league.LeaguePositions;
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
 
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,16 @@ public class LeaguePositionService {
 				.map(leagueEntry -> of(leagueEntry, profile, summoner))
 				.forEach(leaguePositionRepository::save);
 		leaguePositionRepository.save(from(profile, summoner));
+	}
+
+	@Transactional
+	public void updateLeaguePosition(Summoner summoner, Profile profile) {
+		Queue preferQueue = profile.getPreferQueue();
+
+		summoner.getLeaguePositions().stream()
+				.filter(leagueEntry -> preferQueue == valueOf(String.valueOf(leagueEntry.getQueue()))) // 내 선호큐에 맞는 데이터 leagueEntry
+				.findFirst()
+				.ifPresent(leagueEntry -> profile.changeLeaguePosition(leagueEntry, summoner));
 	}
 
 	@Transactional(readOnly = true)

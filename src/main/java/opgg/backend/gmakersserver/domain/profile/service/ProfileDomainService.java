@@ -28,12 +28,18 @@ public class ProfileDomainService {
 	private final PreferChampionService preferChampionService;
 	private final PreferKeywordService preferKeywordService;
 
+	@Transactional
 	public void createProfileDomain(ProfileRequest.Create profileRequest, Summoner summoner, Profile profile) {
 		preferChampionService.createPreferChampion(profileRequest.getPreferChampions(),
 				profileRequest.getSummonerName(), profile);
 		preferLineService.createPreferLine(profileRequest.getPreferLines(), profile);
 		leaguePositionService.createLeaguePosition(summoner, profile);
 		preferKeywordService.createPreferKeyword(profileRequest.getPreferKeywords(), profile);
+	}
+
+	@Transactional
+	public void updateLeaguePosition(Summoner summoner, Profile profile) {
+		leaguePositionService.updateLeaguePosition(summoner, profile);
 	}
 
 	public Queue getPreferQueue(Queue preferQueue, Profile profile) {
