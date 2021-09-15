@@ -152,20 +152,10 @@ public class ProfileService {
 		return count >= 3;
 	}
 
-
-	private boolean isReliable(Profile profile) {
+	private boolean isAuthProfile(Profile profile) {
 		Summoner summoner = Summoner.withId(profile.getSummonerInfo().getSummonerId()).get();
 		int summonerProfileIconId = summoner.getProfileIcon().getId();
-		if (profile.isAuthorizable(summonerProfileIconId)) {
-			profile.changeIsCertified(true);
-			profile.changeAuthProfileIconId(-1);
-			return true;
-		}
-		return false;
-	}
-
-	private boolean isAuthProfile(Profile profile) {
-		return !profile.isCertified() && !isReliable(profile);
+		return !profile.isCertified() && !profile.isReliable(summonerProfileIconId);
 	}
 
 	@Transactional
@@ -216,8 +206,10 @@ public class ProfileService {
 
 	@Transactional
 	public ProfileResponse.AuthConfirm authConfirm(ProfileRequest.Auth auth, Long id) {
+		Summoner summoner = Summoner.withId(auth.getSummonerId()).get();
+		int summonerProfileIconId = summoner.getProfileIcon().getId();
 		return ProfileResponse.AuthConfirm.from(profileRepository.findBySummonerIdAndAccountId(auth.getSummonerId(), id)
-				.orElseThrow(SummonerNotFoundException::new).getAuthConfirm());
+				.orElseThrow(SummonerNotFoundException::new).getAuthConfirm(summonerProfileIconId));
 	}
 
 	@Transactional

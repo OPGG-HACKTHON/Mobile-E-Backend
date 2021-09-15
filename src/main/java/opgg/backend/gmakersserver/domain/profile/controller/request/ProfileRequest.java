@@ -31,6 +31,7 @@ public class ProfileRequest {
 		@Size(min = 2, max = 2)
 		private final List<PreferLine> preferLines = new ArrayList<>();
 
+		@NotEmpty
 		@Size(max = 3)
 		private List<Keyword> preferKeywords = new ArrayList<>();
 

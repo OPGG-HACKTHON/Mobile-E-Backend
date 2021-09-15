@@ -137,13 +137,11 @@ public class Profile extends BaseEntity {
 		return iconId;
 	}
 
-	public boolean getAuthConfirm() {
-		return isCertified || isReliable();
+	public boolean getAuthConfirm(int summonerProfileIconId) {
+		return isCertified || isReliable(summonerProfileIconId);
 	}
 
-	private boolean isReliable() {
-		Summoner summoner = Summoner.withId(getSummonerInfo().getSummonerId()).get();
-		int summonerProfileIconId = summoner.getProfileIcon().getId();
+	public boolean isReliable(int summonerProfileIconId) {
 		if (isAuthorizable(summonerProfileIconId)) {
 			changeIsCertified(true);
 			changeAuthProfileIconId(-1);
