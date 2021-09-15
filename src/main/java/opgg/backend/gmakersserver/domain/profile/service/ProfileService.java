@@ -215,9 +215,6 @@ public class ProfileService {
 	@Transactional
 	public List<ProfileFindResponse> getProfiles(String summonerName, Long id) {
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
-		Profile profile = profileRepository.findById(id).orElseThrow(ProfileNotExistException::new);
-		profile.getLeaguePositions()
-				.forEach(leaguePosition -> refreshProfile(profile));
 		return new ProfileFindResponse().convert(
 				getProfileFindResponses(summonerName, account));
 	}
