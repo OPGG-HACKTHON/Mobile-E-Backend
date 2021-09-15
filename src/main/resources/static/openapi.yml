@@ -383,10 +383,10 @@ components:
           type: string
           example: 저는 망나니 입니다. 칼챔을 좋아하며 스플릿 위주입니다
           nullable: false
-        preferKeyword:
+        preferKeywords:
           type: array
           items:
-            example: 망나니, 스플릿
+            example: HEADSMAN, SPLIT
           nullable: true
         preferChampions:
           type: array
@@ -602,13 +602,13 @@ components:
               preferLinePriority: 1
             - line: MID
               preferLinePriority: 2
-        preferKeyword:
+        preferKeywords:
           type: array
           items:
             type: object
           example:
-            - keyword: 망나니
-            - keyword: 스플릿
+            - keyword: HEADSMAN
+            - keyword: SPLIT
         certified:
           example: true
     Queue:
