@@ -24,4 +24,6 @@ public interface ProfileRepositoryCustom {
 
     Optional<Profile> findByAccountAndProfileId(Account account, Long profileId);
 
+    long findBySummonerName(String summonerName);
+
 }

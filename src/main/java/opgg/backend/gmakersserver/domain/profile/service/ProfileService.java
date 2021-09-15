@@ -175,6 +175,11 @@ public class ProfileService {
 		validCreateProfile(profileRequest, summoner);
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
 		validAccount(account);
+		long countProfile = profileRepository.findBySummonerName(summoner.getName());
+		if (countProfile > 0) {
+			throw new ProfileExistException();
+		}
+
 		profileRepository.findByAccountAndSummonerName(account.getAccountId(), summoner.getName())
 				.ifPresent(profile -> {
 					throw new ProfileExistException();

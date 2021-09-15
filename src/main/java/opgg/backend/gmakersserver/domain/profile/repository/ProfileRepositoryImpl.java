@@ -181,4 +181,13 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 				.fetchOne());
 	}
 
+	@Override
+	public long findBySummonerName(String summonerName) {
+		return queryFactory.selectFrom(profile)
+				.where(
+						profile.summonerInfo.summonerName.eq(summonerName)
+								.and(profile.isCertified.eq(true))
+				)
+				.fetchCount();
+	}
 }
