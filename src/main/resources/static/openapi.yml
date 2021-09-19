@@ -20,7 +20,7 @@ tags:
 
 paths:
   ### ChampionInfo ###
-  /champion-info:
+  /champions-info:
     get:
       summary: 챔피언 이름과 id값 목록
       tags:
@@ -112,7 +112,7 @@ paths:
                 $ref: '#/components/schemas/ExceptionResponse'
 
     get:
-      summary: 프로필 메인 정보 조회 (첫 메인화면의 내 카드 목록 프로필 데이터들, queryParam X), 프로필 검색2 (인증된 프로필, 즉 인증된 타 유저의 프로필을 보기 위한 검색, queryParam O)
+      summary: 프로필 메인 정보 조회 (메인화면의 내 카드 목록 프로필 데이터들, queryParam X), 프로필 검색 (인증된 프로필만 검색 가능, 즉 인증된 타 유저의 프로필을 보기 위한 검색, queryParam O)
       tags:
         - Profile
       operationId: profiles
@@ -187,9 +187,9 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
-  /summoner:
+  /summoners:
     get:
-      summary: 프로필 검색1 (모든 프로필, 즉 인증을 하기위한 검색)
+      summary: 프로필 검색 (모든 프로필 검색 가능)
       parameters:
         - in: query
           name: summonerName
