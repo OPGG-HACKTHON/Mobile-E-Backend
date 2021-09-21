@@ -20,7 +20,7 @@ tags:
 
 paths:
   ### ChampionInfo ###
-  /champions-info:
+  /champion-info:
     get:
       summary: 챔피언 이름과 id값 목록
       tags:
@@ -187,7 +187,7 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
-  /summoners:
+  /summoner:
     get:
       summary: 프로필 검색 (모든 프로필 검색 가능)
       parameters:
