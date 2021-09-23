@@ -8,6 +8,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.merakianalytics.orianna.Orianna;
+import opgg.backend.gmakersserver.domain.summoner.service.SummonerService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +52,7 @@ public class ProfileService {
 	private final ProfileRepository profileRepository;
 	private final AccountRepository accountRepository;
 	private final ProfileDomainService profileDomainService;
+	private final SummonerService summonerService;
 
 	private boolean isMoreThanTwoMinute(long betweenSecond, long twoMinuteSecond) {
 		return betweenSecond > twoMinuteSecond;
@@ -160,8 +163,8 @@ public class ProfileService {
 
 	@Transactional
 	public void createProfile(ProfileRequest.Create profileRequest, Long id) {
-		Summoner summoner = Summoner.named(profileRequest.getSummonerName()).get();
-		summoner.load();
+		Summoner summoner = summonerService.validSummoner(profileRequest.getSummonerName());
+
 		validCreateProfile(profileRequest, summoner);
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
 		validAccount(account);
@@ -214,6 +217,7 @@ public class ProfileService {
 
 	@Transactional
 	public List<ProfileFindResponse> getProfiles(String summonerName, Long id) {
+		summonerName = summonerService.convertSummonerName(summonerName);
 		Account account = accountRepository.findByAccountId(id).orElseThrow(AccountNotFoundException::new);
 		return new ProfileFindResponse().convert(
 				getProfileFindResponses(summonerName, account));

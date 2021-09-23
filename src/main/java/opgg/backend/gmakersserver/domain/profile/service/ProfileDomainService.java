@@ -1,22 +1,20 @@
 package opgg.backend.gmakersserver.domain.profile.service;
 
-import java.util.List;
-
+import com.merakianalytics.orianna.types.core.summoner.Summoner;
+import lombok.RequiredArgsConstructor;
+import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
+import opgg.backend.gmakersserver.domain.leagueposition.service.LeaguePositionService;
+import opgg.backend.gmakersserver.domain.preferchampion.service.PreferChampionService;
+import opgg.backend.gmakersserver.domain.preferkeyword.entity.Keyword;
+import opgg.backend.gmakersserver.domain.preferkeyword.service.PreferKeywordService;
+import opgg.backend.gmakersserver.domain.preferline.service.PreferLineService;
+import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
+import opgg.backend.gmakersserver.domain.profile.entity.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import com.merakianalytics.orianna.types.core.summoner.Summoner;
-
-import lombok.RequiredArgsConstructor;
-import opgg.backend.gmakersserver.domain.leagueposition.entity.Queue;
-import opgg.backend.gmakersserver.domain.leagueposition.service.LeaguePositionService;
-import opgg.backend.gmakersserver.domain.preferkeyword.entity.Keyword;
-import opgg.backend.gmakersserver.domain.preferkeyword.service.PreferKeywordService;
-import opgg.backend.gmakersserver.domain.preferchampion.service.PreferChampionService;
-import opgg.backend.gmakersserver.domain.preferline.service.PreferLineService;
-import opgg.backend.gmakersserver.domain.profile.controller.request.ProfileRequest;
-import opgg.backend.gmakersserver.domain.profile.entity.Profile;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -31,7 +29,7 @@ public class ProfileDomainService {
 	@Transactional
 	public void createProfileDomain(ProfileRequest.Create profileRequest, Summoner summoner, Profile profile) {
 		preferChampionService.createPreferChampion(profileRequest.getPreferChampions(),
-				profileRequest.getSummonerName(), profile);
+				summoner.getName(), profile);
 		preferLineService.createPreferLine(profileRequest.getPreferLines(), profile);
 		leaguePositionService.createLeaguePosition(summoner, profile);
 		preferKeywordService.createPreferKeyword(profileRequest.getPreferKeywords(), profile);

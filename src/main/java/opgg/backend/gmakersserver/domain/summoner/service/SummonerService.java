@@ -21,10 +21,25 @@ public class SummonerService {
 
     private final ProfileRepository profileRepository;
 
-    @Transactional(readOnly = true)
-    public SummonerResponse getSummoner(String summonerName) {
+    public String convertSummonerName(String summonerName) {
+        if (!StringUtils.isBlank(summonerName) && summonerName.length() == 2) {
+            summonerName = summonerName.charAt(0) + " " + summonerName.charAt(1);
+        }
+
+        return summonerName;
+    }
+
+    public Summoner validSummoner(String summonerName) {
+        summonerName = convertSummonerName(summonerName);
         Summoner summoner = Orianna.summonerNamed(summonerName).get();
         summoner.load();
+
+        return summoner;
+    }
+
+    @Transactional(readOnly = true)
+    public SummonerResponse getSummoner(String summonerName) {
+        Summoner summoner = validSummoner(summonerName);
 
         if (StringUtils.isBlank(summoner.getId())) {
             throw new SummonerNotFoundException();
